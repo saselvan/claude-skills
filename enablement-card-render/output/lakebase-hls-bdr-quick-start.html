@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lakebase HLS — Your Quick Start</title>
+  <style>
+    @page { size: letter; margin: 0.5in; }
+    @media print { * { -webkit-print-color-adjust: exact; } }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 11pt;
+      line-height: 1.4;
+      color: #1B3139;
+      margin: 0;
+      padding: 0;
+      background: #FFFFFF;
+    }
+
+    .page { width: 7.5in; margin: 0 auto; padding: 0; }
+
+    /* Title */
+    h1 {
+      font-size: 22pt;
+      color: #0B2026;
+      margin: 0 0 12pt 0;
+      padding-bottom: 8pt;
+      border-bottom: 3pt solid #FF3621;
+    }
+
+    /* Stat Bar */
+    .stat-bar {
+      background: #0B2026;
+      color: #FFFFFF;
+      padding: 14pt 18pt;
+      font-size: 12pt;
+      font-weight: bold;
+      border-radius: 4pt;
+      margin-bottom: 14pt;
+    }
+    .stat-bar span { margin-right: 16pt; }
+    .stat-bar .accent { color: #FF3621; }
+
+    /* Section Header */
+    h2 {
+      font-size: 12pt;
+      color: #1B3139;
+      margin: 16pt 0 8pt 0;
+      text-transform: uppercase;
+      letter-spacing: 1pt;
+      font-weight: 600;
+    }
+
+    /* Elevator Pitch */
+    .pitch {
+      font-size: 12pt;
+      color: #1B3139;
+      margin: 0 0 14pt 0;
+      line-height: 1.5;
+    }
+
+    /* Read-Do Script Box */
+    .script-box {
+      background: #F5F7F8;
+      border-left: 4pt solid #00A972;
+      padding: 10pt 14pt;
+      margin: 8pt 0;
+    }
+    .script-box .timing {
+      font-size: 9pt;
+      color: #618794;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5pt;
+    }
+    .script-box .script {
+      font-size: 11pt;
+      font-style: italic;
+      margin-top: 4pt;
+      color: #1B3139;
+    }
+
+    /* AI Assistant Card */
+    .ai-card {
+      background: #0B2026;
+      color: #FFFFFF;
+      padding: 12pt 16pt;
+      border-radius: 4pt;
+      margin: 12pt 0;
+    }
+    .ai-card h3 {
+      margin: 0 0 6pt 0;
+      font-size: 12pt;
+      font-weight: 600;
+    }
+    .ai-card a {
+      color: #00A972;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .ai-card .examples {
+      font-size: 9pt;
+      color: #90A5B1;
+      font-family: 'SF Mono', Menlo, Monaco, monospace;
+      margin-top: 6pt;
+    }
+
+    /* Situation Router Grid */
+    .router-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0 14pt 0;
+    }
+    .router-table td {
+      padding: 7pt 10pt;
+      border-bottom: 1pt solid #E5E9EC;
+      vertical-align: middle;
+      font-size: 10.5pt;
+    }
+    .router-table .icon { width: 28pt; text-align: center; font-size: 13pt; }
+    .router-table .situation { color: #1B3139; }
+    .router-table .link { text-align: right; }
+    .router-table a {
+      color: #2272B4;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Persona Table */
+    .persona-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8pt 0 14pt 0;
+      font-size: 10pt;
+    }
+    .persona-table th {
+      background: #1B3139;
+      color: #FFFFFF;
+      text-align: left;
+      padding: 6pt 10pt;
+      font-weight: 500;
+      font-size: 9pt;
+    }
+    .persona-table td {
+      padding: 6pt 10pt;
+      border-bottom: 1pt solid #E5E9EC;
+      vertical-align: top;
+    }
+    .persona-table tr:nth-child(even) td { background: #F9FAFB; }
+
+    /* Handoff Checklist */
+    .handoff-section {
+      margin: 10pt 0;
+    }
+    .handoff-section p {
+      margin: 4pt 0;
+      font-size: 10pt;
+    }
+    .handoff-link {
+      font-size: 9pt;
+      color: #2272B4;
+    }
+
+    /* Proof Drop */
+    .proof-drop {
+      background: #0D1F2D;
+      border-left: 3pt solid #2272B4;
+      padding: 10pt 14pt;
+      margin: 10pt 0;
+      color: #FFFFFF;
+      font-style: italic;
+      font-size: 11pt;
+    }
+
+    /* Collateral Links */
+    .collateral {
+      font-size: 9pt;
+      color: #618794;
+      margin: 10pt 0;
+    }
+    .collateral a {
+      color: #2272B4;
+      text-decoration: none;
+    }
+
+    /* Footer */
+    .footer {
+      font-size: 8pt;
+      color: #90A5B1;
+      border-top: 1pt solid #E5E9EC;
+      padding-top: 8pt;
+      margin-top: 14pt;
+    }
+    .footer a { color: #2272B4; text-decoration: none; }
+
+    /* Two Column Layout */
+    .two-col {
+      display: table;
+      width: 100%;
+      margin: 8pt 0;
+    }
+    .two-col .col {
+      display: table-cell;
+      width: 50%;
+      vertical-align: top;
+      padding-right: 12pt;
+    }
+    .two-col .col:last-child { padding-right: 0; padding-left: 12pt; }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Lakebase HLS — Your Quick Start</h1>
+
+  <div class="stat-bar">
+    <span><span class="accent">2x</span> quota</span>
+    <span><span class="accent">$5K</span> SPIF/acct</span>
+    <span><span class="accent"><10ms</span> response</span>
+    <span><span class="accent">70-80%</span> cost savings</span>
+    <span><span class="accent">60+</span> PG extensions</span>
+  </div>
+
+  <p class="pitch">Lakebase is serverless Postgres on Databricks. Lakehouse data — risk scores, care gaps, operational insights — syncs to apps natively. No pipelines. Existing Postgres tools work unchanged.</p>
+
+  <div class="ai-card">
+    <h3><a href="#">Open AI Assistant →</a></h3>
+    <p style="margin:0;font-size:10pt;">Knows all 16 enablement docs. Ask anything in plain English.</p>
+    <p class="examples">Try: "HIPAA script" · "DBA voicemail" · "Aurora vs us" · "pricing objection"</p>
+  </div>
+
+  <div class="two-col">
+    <div class="col">
+      <h2>Cold Call Opener</h2>
+      <div class="script-box">
+        <div class="timing">⏱ 10 seconds</div>
+        <div class="script">"Hi [Name], this is [You] from Databricks. I work with healthcare teams building patient apps and AI chatbots. Do you have 2 minutes?"</div>
+      </div>
+    </div>
+    <div class="col">
+      <h2>HIPAA — You'll Get Asked</h2>
+      <div class="script-box">
+        <div class="timing">⏱ 15 seconds</div>
+        <div class="script">"Lakebase runs on Databricks' secure infrastructure — encrypted data, private networking, access controls. HIPAA certification is on the roadmap. Many health systems start with a non-patient-data pilot to prove the fit."</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>I Need Help Right Now</h2>
+  <table class="router-table">
+    <tr>
+      <td class="icon">📞</td>
+      <td class="situation">Someone picked up</td>
+      <td class="link"><a href="#">Call Tracks →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">📬</td>
+      <td class="situation">Got voicemail</td>
+      <td class="link"><a href="#">VM Scripts →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">✉️</td>
+      <td class="situation">Need email sequence</td>
+      <td class="link"><a href="#">5-Touch Sequence →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">❓</td>
+      <td class="situation">Don't know the answer</td>
+      <td class="link"><a href="#">FAQ Sheet →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">🏥</td>
+      <td class="situation">Asked about HIPAA</td>
+      <td class="link"><a href="#">FAQ #6-8 →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">⚔️</td>
+      <td class="situation">Mentioned Aurora/RDS</td>
+      <td class="link"><a href="#">FAQ #9-11 →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">💰</td>
+      <td class="situation">Asked about pricing</td>
+      <td class="link"><a href="#">FAQ #12-14 →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">✅</td>
+      <td class="situation">Need to qualify</td>
+      <td class="link"><a href="#">ICP & Qualification →</a></td>
+    </tr>
+    <tr>
+      <td class="icon">🤝</td>
+      <td class="situation">Ready to hand off</td>
+      <td class="link"><a href="#">AE Handoff →</a></td>
+    </tr>
+  </table>
+
+  <h2>4 Personas — Lead With</h2>
+  <table class="persona-table">
+    <tr>
+      <th>Persona</th>
+      <th>Lead With</th>
+    </tr>
+    <tr>
+      <td><strong>IT Leader / CIO</strong></td>
+      <td>Cost of keeping analytics + apps in sync</td>
+    </tr>
+    <tr>
+      <td><strong>DBA / Platform</strong></td>
+      <td>Ops burden — patching, backups, 3am pages</td>
+    </tr>
+    <tr>
+      <td><strong>App Dev / Eng</strong></td>
+      <td>Pipeline code between Lakehouse and app DBs</td>
+    </tr>
+    <tr>
+      <td><strong>Clinical / Biz Ops</strong></td>
+      <td>Insights stuck in dashboards, not reaching clinicians</td>
+    </tr>
+  </table>
+
+  <div class="two-col">
+    <div class="col">
+      <h2>Handoff Quick-Check</h2>
+      <div class="handoff-section">
+        <p>Ready to hand off when:</p>
+        <p>✓ Persona confirmed (DBA, Engineer, or VP)</p>
+        <p>✓ Operational use case identified (not just "interested")</p>
+        <p>✓ Timeline <6 months</p>
+        <p>✓ Budget pathway identified</p>
+        <p class="handoff-link">→ <a href="#">Full Handoff Checklist</a></p>
+      </div>
+    </div>
+    <div class="col">
+      <h2>Drop This</h2>
+      <div class="proof-drop">
+        "A Fortune 500 healthcare provider cut their data sync from 20+ hours to 4 minutes."
+      </div>
+      <div class="collateral">
+        📎 <strong>After qualifying:</strong> <a href="#">One-Pager</a> &nbsp;|&nbsp;
+        <strong>Before AE meeting:</strong> <a href="#">Customer Brief</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Internal Use Only • v2.0 • 2026-02-07 • <a href="#">Full Enablement Kit (16 docs) →</a>
+  </div>
+
+</div>
+</body>
+</html>

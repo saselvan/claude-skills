@@ -1,0 +1,18 @@
+{
+  "fonts": {
+    "header": "Trebuchet MS",
+    "body": "Calibri"
+  },
+  "sizes": {
+    "title": 44,
+    "subtitle": 24,
+    "heading": 28,
+    "body": 14,
+    "sectionLabel": 10,
+    "caption": 11
+  },
+  "spacing": {
+    "paraSpaceAfter": 12,
+    "charSpacing": 3
+  }
+}

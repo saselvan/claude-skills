@@ -1,0 +1,34 @@
+{
+  "pres_id": "1dvP4eyRH9tp1P5fBIbe1vDjfnFF8goZZ-NscngTXBEY",
+  "theme": "dark",
+  "title": "Why Databricks for Healthcare Data Intelligence",
+  "slide_ids": [
+    "obj_c343291d5d87",
+    "obj_0c245e5c3ca5",
+    "obj_c9510c5feb85",
+    "obj_044a1afeaa94",
+    "obj_8ae3def91b8c"
+  ],
+  "slide_meta": [
+    {
+      "layout": "title",
+      "title": ""
+    },
+    {
+      "layout": "content_basic",
+      "title": "Clinical teams wait days for answers\nthat should take minutes"
+    },
+    {
+      "layout": "content_basic",
+      "title": "Behind every delayed report is a clinician\nmaking decisions without complete data"
+    },
+    {
+      "layout": "content_basic",
+      "title": "One platform replaces fragmented tools\nwith unified clinical intelligence"
+    },
+    {
+      "layout": "content_basic",
+      "title": "Health systems are already transforming\nwith Databricks"
+    }
+  ]
+}

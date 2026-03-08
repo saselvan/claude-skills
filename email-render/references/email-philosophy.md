@@ -1,0 +1,1 @@
+/Users/samuel.selvan/obsidian/sa-intel/_System/prompts/email-drafting-philosophy.md

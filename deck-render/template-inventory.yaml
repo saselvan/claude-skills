@@ -1,0 +1,3791 @@
+template:
+  id: 12HWqnLB_0X49H9GsqjvC4lwQrH9CBZK92hsf8Hj6PhU
+  title: ' Databricks Corporate Slide Template (MAKE A COPY)'
+  master_count: 2
+  layout_count: 39
+  slide_count: 98
+masters:
+- objectId: simple-light-2
+  display_name: Simple Light
+- objectId: ge78152d236_2_0
+  display_name: Databricks Theme
+layouts:
+- key: title_slide
+  display_name: Title slide
+  objectId: p2
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p2_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 1.086
+    width_inches: 12.421
+    height_inches: 2.993
+    placeholder_type: CENTERED_TITLE
+    placeholder_index: 0
+  - objectId: p2_i1
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 4.133
+    width_inches: 12.421
+    height_inches: 1.156
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: p2_i2
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-title_slide.png
+- key: section_header
+  display_name: Section header
+  objectId: p3
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p3_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 3.136
+    width_inches: 12.421
+    height_inches: 1.227
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p3_i1
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-section_header.png
+- key: title_and_body
+  display_name: Title and body
+  objectId: p4
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p4_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 0.649
+    width_inches: 12.421
+    height_inches: 0.835
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p4_i1
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 1.68
+    width_inches: 12.421
+    height_inches: 4.982
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: p4_i2
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-title_and_body.png
+- key: title_and_two_columns
+  display_name: Title and two columns
+  objectId: p5
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p5_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 0.649
+    width_inches: 12.421
+    height_inches: 0.835
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p5_i1
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 1.68
+    width_inches: 5.831
+    height_inches: 4.982
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: p5_i2
+    type: placeholder
+    x_inches: 7.045
+    y_inches: 1.68
+    width_inches: 5.831
+    height_inches: 4.982
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: p5_i3
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-title_and_two_columns.png
+- key: title_only
+  display_name: Title only
+  objectId: p6
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p6_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 0.649
+    width_inches: 12.421
+    height_inches: 0.835
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p6_i1
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-title_only.png
+- key: one_column_text
+  display_name: One column text
+  objectId: p7
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p7_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 0.81
+    width_inches: 4.094
+    height_inches: 1.102
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p7_i1
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 2.026
+    width_inches: 4.094
+    height_inches: 4.636
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: p7_i2
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-one_column_text.png
+- key: main_point
+  display_name: Main point
+  objectId: p8
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p8_i0
+    type: placeholder
+    x_inches: 0.715
+    y_inches: 0.656
+    width_inches: 9.283
+    height_inches: 5.965
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p8_i1
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-main_point.png
+- key: section_title_and_description
+  display_name: Section title and description
+  objectId: p9
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p9_i1
+    type: placeholder
+    x_inches: 0.387
+    y_inches: 1.798
+    width_inches: 5.897
+    height_inches: 2.161
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p9_i2
+    type: placeholder
+    x_inches: 0.387
+    y_inches: 4.087
+    width_inches: 5.897
+    height_inches: 1.801
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: p9_i3
+    type: placeholder
+    x_inches: 7.201
+    y_inches: 1.056
+    width_inches: 5.594
+    height_inches: 5.388
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: p9_i4
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: p9_i0
+    type: shape
+    x_inches: 6.665
+    y_inches: -0.0
+    width_inches: 6.665
+    height_inches: 7.5
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: decorative
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-section_title_and_description.png
+- key: caption
+  display_name: Caption
+  objectId: p10
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p10_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 6.169
+    width_inches: 8.745
+    height_inches: 0.882
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: p10_i1
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-caption.png
+- key: big_number
+  display_name: Big number
+  objectId: p11
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p11_i0
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 1.613
+    width_inches: 12.421
+    height_inches: 2.863
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: p11_i1
+    type: placeholder
+    x_inches: 0.454
+    y_inches: 4.596
+    width_inches: 12.421
+    height_inches: 1.897
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: p11_i2
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-big_number.png
+- key: blank
+  display_name: Blank
+  objectId: p12
+  masterObjectId: simple-light-2
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: p12_i0
+    type: placeholder
+    x_inches: 12.351
+    y_inches: 6.8
+    width_inches: 0.8
+    height_inches: 0.574
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Simple Light
+  thumbnail: rendered/layouts/layout-blank.png
+- key: title_slide_a_light
+  display_name: 1 Title Slide A - Light
+  objectId: ge78152d236_2_6
+  masterObjectId: ge78152d236_2_0
+  theme: light
+  background_fill: null
+  placeholders:
+  - objectId: ge78152d236_2_7
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 1.298
+    width_inches: 5.832
+    height_inches: 2.611
+    placeholder_type: CENTERED_TITLE
+    placeholder_index: 0
+  - objectId: ge78152d236_2_8
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 4.194
+    width_inches: 6.748
+    height_inches: 1.339
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_78
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 6.295
+    width_inches: 5.755
+    height_inches: 0.538
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: geba5681a0d_1_2070
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_18
+    type: image
+    x_inches: 0.833
+    y_inches: 0.667
+    width_inches: 2.798
+    height_inches: 0.443
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcUpBWa5xcoKNrk3c2sW2kohmEIuUXOiXa-MG4pyMZVx8oeGZ1AvD1Y7dO2d3Lwga1f2dK
+    role: content
+  - objectId: gee94437484_1_60
+    type: line
+    x_inches: 0.833
+    y_inches: 6.143
+    width_inches: 0.613
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: gf7b9ec9ce5_0_118
+    type: image
+    x_inches: 7.15
+    y_inches: 0.665
+    width_inches: 6.18
+    height_inches: 6.17
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUdLxB_x8Vr87ElsslOk8XLFTfelzGt6Qh8fRnpWxWZLeDSXqXq1ECt9hosljLwTXn2yr2B
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/title_slide_a_light.png
+- key: title_slide_a_dark
+  display_name: 2 Title Slide A - Dark
+  objectId: gee94437484_1_11
+  masterObjectId: ge78152d236_2_0
+  theme: dark
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: gee94437484_1_12
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 1.298
+    width_inches: 5.832
+    height_inches: 2.611
+    placeholder_type: CENTERED_TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_13
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 4.194
+    width_inches: 6.748
+    height_inches: 1.339
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_95
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 6.295
+    width_inches: 5.755
+    height_inches: 0.538
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: geba5681a0d_1_2071
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_19
+    type: image
+    x_inches: 0.833
+    y_inches: 0.667
+    width_inches: 2.798
+    height_inches: 0.445
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUewxAwQVjZ-2h_fWOWXQh_kpyyPoRj4R-7aaB7kFTncFmbs_yVi9HeBv3wHgRaDVdukIAc
+    role: content
+  - objectId: gee94437484_1_94
+    type: line
+    x_inches: 0.833
+    y_inches: 6.143
+    width_inches: 0.613
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: gf7b9ec9ce5_0_119
+    type: image
+    x_inches: 7.15
+    y_inches: 0.665
+    width_inches: 6.18
+    height_inches: 6.17
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUfK16jtYajDnuVueASdxEx0jZDRoVP3OWwqCFEPtxmrSfP_TTA3eKVEKMwQsya357WGUp9
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/title_slide_a_dark.png
+- key: title_slide_b_light
+  display_name: 3 Title Slide B - Light
+  objectId: gee94437484_1_41
+  masterObjectId: ge78152d236_2_0
+  theme: light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_42
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 1.298
+    width_inches: 5.832
+    height_inches: 2.611
+    placeholder_type: CENTERED_TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_43
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 4.194
+    width_inches: 6.748
+    height_inches: 1.339
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_99
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 6.295
+    width_inches: 5.755
+    height_inches: 0.538
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: geba5681a0d_1_2072
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_46
+    type: image
+    x_inches: 0.833
+    y_inches: 0.667
+    width_inches: 2.798
+    height_inches: 0.443
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcUpBWa5xcoKNrk3c2sW2kohmEIuUXOiXa-MG4pyMZVx8oeGZ1AvD1Y7dO2d3Lwga1f2dK
+    role: content
+  - objectId: gee94437484_1_98
+    type: line
+    x_inches: 0.833
+    y_inches: 6.143
+    width_inches: 0.613
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/title_slide_b_light.png
+- key: title_slide_b_dark
+  display_name: 4 Title Slide B - Dark
+  objectId: gee94437484_1_53
+  masterObjectId: ge78152d236_2_0
+  theme: dark
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: gee94437484_1_54
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 1.298
+    width_inches: 5.832
+    height_inches: 2.611
+    placeholder_type: CENTERED_TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_55
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 4.194
+    width_inches: 6.748
+    height_inches: 1.339
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_97
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 6.295
+    width_inches: 5.755
+    height_inches: 0.538
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: geba5681a0d_1_2073
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_57
+    type: image
+    x_inches: 0.833
+    y_inches: 0.667
+    width_inches: 2.798
+    height_inches: 0.445
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUewxAwQVjZ-2h_fWOWXQh_kpyyPoRj4R-7aaB7kFTncFmbs_yVi9HeBv3wHgRaDVdukIAc
+    role: content
+  - objectId: gee94437484_1_96
+    type: line
+    x_inches: 0.833
+    y_inches: 6.143
+    width_inches: 0.613
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/title_slide_b_dark.png
+- key: content_a_basic
+  display_name: 7 Content A - Basic
+  objectId: gee94437484_1_176
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: LIGHT1
+  placeholders:
+  - objectId: gee94437484_1_178
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_180
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_248
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 2.175
+    width_inches: 11.657
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2076
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_a_basic.png
+- key: content_a_basic_white_1
+  display_name: 8 Content A - Basic White 1
+  objectId: gee94437484_1_897
+  masterObjectId: ge78152d236_2_0
+  theme: light
+  background_fill:
+    type: rgb
+    value: '#ffffff'
+  placeholders:
+  - objectId: gee94437484_1_899
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_900
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_902
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 2.175
+    width_inches: 11.657
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2077
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_a_basic_white_1.png
+- key: content_b_2_column
+  display_name: 9 Content B - 2 Column
+  objectId: gee94437484_1_541
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_543
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_544
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_548
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 2.944
+    width_inches: 4.942
+    height_inches: 3.682
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_549
+    type: placeholder
+    x_inches: 7.564
+    y_inches: 2.944
+    width_inches: 4.942
+    height_inches: 3.682
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_551
+    type: placeholder
+    x_inches: 0.87
+    y_inches: 2.155
+    width_inches: 4.904
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 3
+  - objectId: gee94437484_1_552
+    type: placeholder
+    x_inches: 7.583
+    y_inches: 2.155
+    width_inches: 4.905
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 4
+  - objectId: geba5681a0d_1_2078
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_547
+    type: line
+    x_inches: 6.669
+    y_inches: 2.069
+    width_inches: 3.281
+    height_inches: 4.84
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_b_2_column.png
+- key: content_b_2_column_with_icon_spot
+  display_name: 10 Content B - 2 Column w/ Icon Spot
+  objectId: gee94437484_1_587
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_589
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_590
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 4.36
+    width_inches: 4.942
+    height_inches: 2.473
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_591
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_593
+    type: placeholder
+    x_inches: 7.581
+    y_inches: 4.36
+    width_inches: 4.916
+    height_inches: 2.473
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_594
+    type: placeholder
+    x_inches: 0.87
+    y_inches: 3.419
+    width_inches: 4.904
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: gee94437484_1_595
+    type: placeholder
+    x_inches: 7.599
+    y_inches: 3.419
+    width_inches: 4.879
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 2
+  - objectId: geba5681a0d_1_2079
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_599
+    type: line
+    x_inches: 6.67
+    y_inches: 2.069
+    width_inches: 3.281
+    height_inches: 4.84
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_b_2_column_with_icon_spot.png
+- key: content_c_3_column
+  display_name: 11 Content C - 3 Column
+  objectId: gee94437484_1_373
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_375
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_376
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_380
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 3.09
+    width_inches: 3.526
+    height_inches: 3.536
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_381
+    type: placeholder
+    x_inches: 4.902
+    y_inches: 3.09
+    width_inches: 3.526
+    height_inches: 3.536
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_382
+    type: placeholder
+    x_inches: 8.932
+    y_inches: 3.09
+    width_inches: 3.526
+    height_inches: 3.536
+    placeholder_type: BODY
+    placeholder_index: 2
+  - objectId: gee94437484_1_383
+    type: placeholder
+    x_inches: 0.86
+    y_inches: 2.155
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 3
+  - objectId: gee94437484_1_384
+    type: placeholder
+    x_inches: 4.915
+    y_inches: 2.155
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 4
+  - objectId: gee94437484_1_385
+    type: placeholder
+    x_inches: 8.946
+    y_inches: 2.155
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 5
+  - objectId: geba5681a0d_1_2080
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_378
+    type: line
+    x_inches: 8.677
+    y_inches: 2.069
+    width_inches: 3.281
+    height_inches: 4.84
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: gee94437484_1_379
+    type: line
+    x_inches: 4.633
+    y_inches: 2.069
+    width_inches: 3.281
+    height_inches: 4.84
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_c_3_column.png
+- key: content_c_3_column_with_icon_spot
+  display_name: 12 Content C - 3 Column w/ Icon Spot
+  objectId: gee94437484_1_399
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_401
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_402
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 4.36
+    width_inches: 3.526
+    height_inches: 2.473
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_403
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_405
+    type: placeholder
+    x_inches: 4.902
+    y_inches: 4.36
+    width_inches: 3.526
+    height_inches: 2.473
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_406
+    type: placeholder
+    x_inches: 0.86
+    y_inches: 3.419
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: gee94437484_1_407
+    type: placeholder
+    x_inches: 4.915
+    y_inches: 3.419
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 2
+  - objectId: gee94437484_1_408
+    type: placeholder
+    x_inches: 8.932
+    y_inches: 4.36
+    width_inches: 3.526
+    height_inches: 2.473
+    placeholder_type: BODY
+    placeholder_index: 2
+  - objectId: gee94437484_1_409
+    type: placeholder
+    x_inches: 8.946
+    y_inches: 3.419
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 5
+  - objectId: geba5681a0d_1_2081
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_410
+    type: line
+    x_inches: 8.677
+    y_inches: 2.069
+    width_inches: 3.281
+    height_inches: 4.84
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: gee94437484_1_411
+    type: line
+    x_inches: 4.633
+    y_inches: 2.069
+    width_inches: 3.281
+    height_inches: 4.84
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_c_3_column_with_icon_spot.png
+- key: content_c_3_column_cards
+  display_name: 13 Content C - 3 Column Cards
+  objectId: gee94437484_1_426
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_431
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_432
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 3.09
+    width_inches: 3.526
+    height_inches: 3.536
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_433
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_435
+    type: placeholder
+    x_inches: 4.902
+    y_inches: 3.09
+    width_inches: 3.526
+    height_inches: 3.536
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_436
+    type: placeholder
+    x_inches: 8.932
+    y_inches: 3.09
+    width_inches: 3.526
+    height_inches: 3.536
+    placeholder_type: BODY
+    placeholder_index: 2
+  - objectId: gee94437484_1_437
+    type: placeholder
+    x_inches: 0.86
+    y_inches: 2.155
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: gee94437484_1_438
+    type: placeholder
+    x_inches: 4.915
+    y_inches: 2.155
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 2
+  - objectId: gee94437484_1_439
+    type: placeholder
+    x_inches: 8.946
+    y_inches: 2.155
+    width_inches: 3.499
+    height_inches: 0.703
+    placeholder_type: SUBTITLE
+    placeholder_index: 3
+  - objectId: geba5681a0d_1_2082
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_427
+    type: shape
+    x_inches: 8.727
+    y_inches: 1.997
+    width_inches: 3.936
+    height_inches: 4.837
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  - objectId: gee94437484_1_428
+    type: shape
+    x_inches: 4.697
+    y_inches: 1.997
+    width_inches: 3.936
+    height_inches: 4.837
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  - objectId: gee94437484_1_429
+    type: shape
+    x_inches: 0.666
+    y_inches: 1.997
+    width_inches: 3.936
+    height_inches: 4.837
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_c_3_column_cards.png
+- key: content_d_card_right
+  display_name: 14 Content D - Card Right
+  objectId: gee94437484_1_189
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_191
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_249
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 2.175
+    width_inches: 4.762
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_440
+    type: placeholder
+    x_inches: 6.742
+    y_inches: 2.175
+    width_inches: 5.735
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_458
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2083
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_195
+    type: shape
+    x_inches: 6.588
+    y_inches: 1.997
+    width_inches: 6.075
+    height_inches: 4.837
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_d_card_right.png
+- key: content_d_card_left
+  display_name: 15 Content D - Card Left
+  objectId: gee94437484_1_448
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_450
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_453
+    type: placeholder
+    x_inches: 7.735
+    y_inches: 2.175
+    width_inches: 4.762
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_454
+    type: placeholder
+    x_inches: 0.83
+    y_inches: 2.175
+    width_inches: 5.735
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 1
+  - objectId: gee94437484_1_459
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2084
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_452
+    type: shape
+    x_inches: 0.666
+    y_inches: 1.997
+    width_inches: 6.075
+    height_inches: 4.837
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_d_card_left.png
+- key: content_d_card_large
+  display_name: 16 Content D - Card Large
+  objectId: gee94437484_1_203
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_205
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_206
+    type: placeholder
+    x_inches: 0.833
+    y_inches: 2.175
+    width_inches: 11.657
+    height_inches: 4.538
+    placeholder_type: BODY
+    placeholder_index: 0
+  - objectId: gee94437484_1_207
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2085
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_209
+    type: shape
+    x_inches: 0.666
+    y_inches: 1.997
+    width_inches: 11.997
+    height_inches: 4.837
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_d_card_large.png
+- key: content_d_card_quad
+  display_name: 17 Content D - Card Quad
+  objectId: gee94437484_1_468
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_472
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_474
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 1.285
+    width_inches: 11.657
+    height_inches: 0.638
+    placeholder_type: SUBTITLE
+    placeholder_index: 0
+  - objectId: gee94437484_1_483
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 2.175
+    width_inches: 5.589
+    height_inches: 1.952
+    placeholder_type: SUBTITLE
+    placeholder_index: 1
+  - objectId: gee94437484_1_484
+    type: placeholder
+    x_inches: 6.905
+    y_inches: 2.175
+    width_inches: 5.589
+    height_inches: 1.952
+    placeholder_type: SUBTITLE
+    placeholder_index: 2
+  - objectId: gee94437484_1_485
+    type: placeholder
+    x_inches: 0.836
+    y_inches: 4.705
+    width_inches: 5.589
+    height_inches: 1.952
+    placeholder_type: SUBTITLE
+    placeholder_index: 3
+  - objectId: gee94437484_1_486
+    type: placeholder
+    x_inches: 6.905
+    y_inches: 4.705
+    width_inches: 5.589
+    height_inches: 1.952
+    placeholder_type: SUBTITLE
+    placeholder_index: 4
+  - objectId: geba5681a0d_1_2086
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_479
+    type: shape
+    x_inches: 6.738
+    y_inches: 4.536
+    width_inches: 5.922
+    height_inches: 2.303
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  - objectId: gee94437484_1_481
+    type: shape
+    x_inches: 0.666
+    y_inches: 4.536
+    width_inches: 5.922
+    height_inches: 2.303
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  - objectId: gee94437484_1_477
+    type: shape
+    x_inches: 6.738
+    y_inches: 1.997
+    width_inches: 5.922
+    height_inches: 2.303
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  - objectId: gee94437484_1_470
+    type: shape
+    x_inches: 0.666
+    y_inches: 1.997
+    width_inches: 5.922
+    height_inches: 2.303
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_d_card_quad.png
+- key: content_e_power_statement_1
+  display_name: Content E - Power Statement 1
+  objectId: gee94437484_1_636
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gee94437484_1_638
+    type: placeholder
+    x_inches: 1.833
+    y_inches: 0.586
+    width_inches: 9.664
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2087
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_e_power_statement_1.png
+- key: content_e_blank
+  display_name: Content E - Blank
+  objectId: gf7b9ec9ce5_0_1078
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill: null
+  placeholders:
+  - objectId: gf7b9ec9ce5_0_1080
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gf7b9ec9ce5_0_1081
+    type: shape
+    x_inches: -0.0
+    y_inches: 0.0
+    width_inches: 13.33
+    height_inches: 7.5
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: LIGHT1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/layout-content_e_blank.png
+- key: content_e_power_statement_2
+  display_name: Content E - Power Statement 2
+  objectId: gee94437484_1_650
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: gee94437484_1_652
+    type: placeholder
+    x_inches: 1.833
+    y_inches: 0.586
+    width_inches: 9.664
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2088
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_e_power_statement_2.png
+- key: content_e_power_statement_3
+  display_name: Content E - Power Statement 3
+  objectId: gee94437484_1_660
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: ACCENT4
+  placeholders:
+  - objectId: gee94437484_1_662
+    type: placeholder
+    x_inches: 1.833
+    y_inches: 0.586
+    width_inches: 9.664
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2089
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements: []
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_e_power_statement_3.png
+- key: content_e_power_statement_4
+  display_name: Content E - Power Statement 4
+  objectId: gee94437484_1_668
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: ACCENT1
+  placeholders:
+  - objectId: gee94437484_1_670
+    type: placeholder
+    x_inches: 1.833
+    y_inches: 0.586
+    width_inches: 9.664
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2090
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2093
+    type: image
+    x_inches: 11.665
+    y_inches: 7.08
+    width_inches: 0.206
+    height_inches: 0.206
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUfjjPLeQ26r45Yfmokd2kiZKNeU7a3vvXOqWOdY8oql9SwW0XSrJJfXy4Q-oUlgTREx2Ox
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_e_power_statement_4.png
+- key: content_f_artistic_divider_1
+  display_name: Content F - Artistic Divider 1
+  objectId: geba5681a0d_1_2483
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: LIGHT1
+  placeholders:
+  - objectId: geba5681a0d_1_2484
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 9.709
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2485
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2493
+    type: shape
+    x_inches: 12.276
+    y_inches: 0.0
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: decorative
+  - objectId: geba5681a0d_1_2487
+    type: shape
+    x_inches: 11.161
+    y_inches: 0.0
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: content
+  - objectId: geba5681a0d_1_2489
+    type: shape
+    x_inches: 13.336
+    y_inches: 6.833
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: content
+  - objectId: geba5681a0d_1_2492
+    type: shape
+    x_inches: 12.276
+    y_inches: 3.591
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ff3621'
+    role: decorative
+  - objectId: geba5681a0d_1_2494
+    type: shape
+    x_inches: 12.267
+    y_inches: 4.66
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: content
+  - objectId: geba5681a0d_1_2495
+    type: shape
+    x_inches: 9.011
+    y_inches: 1.067
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: decorative
+  - objectId: geba5681a0d_1_2496
+    type: shape
+    x_inches: 9.699
+    y_inches: 6.307
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: content
+  - objectId: geba5681a0d_1_2497
+    type: shape
+    x_inches: 10.902
+    y_inches: 3.332
+    width_inches: 0.259
+    height_inches: 0.259
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_f_artistic_divider_1.png
+- key: content_f_artistic_divider_2
+  display_name: Content F - Artistic Divider 2
+  objectId: geba5681a0d_1_2509
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: LIGHT1
+  placeholders:
+  - objectId: geba5681a0d_1_2510
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 9.709
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2512
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2521
+    type: shape
+    x_inches: 12.276
+    y_inches: 3.123
+    width_inches: 0.947
+    height_inches: 0.947
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#42ba91'
+    role: content
+  - objectId: geba5681a0d_1_2522
+    type: shape
+    x_inches: 12.276
+    y_inches: 2.96
+    width_inches: 0.784
+    height_inches: 0.784
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#42ba91'
+    role: content
+  - objectId: geba5681a0d_1_2523
+    type: shape
+    x_inches: 12.276
+    y_inches: 2.802
+    width_inches: 0.625
+    height_inches: 0.626
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#42ba91'
+    role: content
+  - objectId: geba5681a0d_1_2527
+    type: line
+    x_inches: 11.65
+    y_inches: 2.489
+    width_inches: 3.281
+    height_inches: 0.322
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2524
+    type: line
+    x_inches: 11.33
+    y_inches: 2.649
+    width_inches: 3.281
+    height_inches: 0.48
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2526
+    type: line
+    x_inches: 11.493
+    y_inches: 2.568
+    width_inches: 3.281
+    height_inches: 0.399
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2528
+    type: line
+    x_inches: 11.963
+    y_inches: 2.802
+    width_inches: 0.356
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2529
+    type: line
+    x_inches: 11.884
+    y_inches: 2.96
+    width_inches: 0.52
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2530
+    type: line
+    x_inches: 11.803
+    y_inches: 3.123
+    width_inches: 0.499
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2511
+    type: shape
+    x_inches: 11.21
+    y_inches: 0.0
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: decorative
+  - objectId: geba5681a0d_1_2513
+    type: shape
+    x_inches: 11.161
+    y_inches: 4.657
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: content
+  - objectId: geba5681a0d_1_2514
+    type: shape
+    x_inches: 11.161
+    y_inches: 2.176
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: content
+  - objectId: geba5681a0d_1_2515
+    type: shape
+    x_inches: 12.276
+    y_inches: 2.176
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: decorative
+  - objectId: geba5681a0d_1_2516
+    type: shape
+    x_inches: 12.267
+    y_inches: 3.245
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#ff3621'
+    role: content
+  - objectId: geba5681a0d_1_2517
+    type: shape
+    x_inches: 10.634
+    y_inches: 6.307
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: decorative
+  - objectId: geba5681a0d_1_2518
+    type: shape
+    x_inches: 9.699
+    y_inches: 0.541
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: content
+  - objectId: geba5681a0d_1_2520
+    type: shape
+    x_inches: 11.155
+    y_inches: 4.657
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_f_artistic_divider_2.png
+- key: content_f_artistic_divider_3
+  display_name: Content F - Artistic Divider 3
+  objectId: geba5681a0d_1_2551
+  masterObjectId: ge78152d236_2_0
+  theme: inferred_light
+  background_fill:
+    type: themeColor
+    value: LIGHT1
+  placeholders:
+  - objectId: geba5681a0d_1_2561
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 9.709
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2563
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2562
+    type: shape
+    x_inches: 11.177
+    y_inches: 2.176
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: decorative
+  - objectId: geba5681a0d_1_2566
+    type: shape
+    x_inches: 12.263
+    y_inches: 3.243
+    width_inches: 1.073
+    height_inches: 2.176
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ff3621'
+    role: decorative
+  - objectId: geba5681a0d_1_2564
+    type: shape
+    x_inches: 13.333
+    y_inches: 5.419
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ELLIPSE
+    fill:
+      type: rgb
+      value: '#ffffff'
+    role: content
+  - objectId: geba5681a0d_1_2565
+    type: shape
+    x_inches: 11.161
+    y_inches: 2.176
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: content
+  - objectId: geba5681a0d_1_2567
+    type: shape
+    x_inches: 9.063
+    y_inches: 0.525
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: content
+  - objectId: geba5681a0d_1_2568
+    type: shape
+    x_inches: 12.804
+    y_inches: 6.307
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: decorative
+  - objectId: geba5681a0d_1_2569
+    type: shape
+    x_inches: 10.634
+    y_inches: 0.586
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: content
+  - objectId: geba5681a0d_1_2570
+    type: shape
+    x_inches: 13.333
+    y_inches: 5.419
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ARC
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: content
+  - objectId: geba5681a0d_1_2571
+    type: shape
+    x_inches: 11.158
+    y_inches: 5.419
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: ARC
+    fill:
+      type: themeColor
+      value: LIGHT2
+    role: content
+  - objectId: geba5681a0d_1_2573
+    type: line
+    x_inches: 12.437
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2574
+    type: line
+    x_inches: 12.618
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2575
+    type: line
+    x_inches: 12.8
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2576
+    type: line
+    x_inches: 12.981
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2577
+    type: line
+    x_inches: 13.162
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/layout-content_f_artistic_divider_3.png
+- key: content_f_artistic_divider_dark_1
+  display_name: Content F - Artistic Divider Dark 1
+  objectId: geba5681a0d_1_2589
+  masterObjectId: ge78152d236_2_0
+  theme: dark
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: geba5681a0d_1_2590
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 9.709
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2592
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2591
+    type: shape
+    x_inches: 12.276
+    y_inches: 0.0
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: decorative
+  - objectId: geba5681a0d_1_2593
+    type: shape
+    x_inches: 11.161
+    y_inches: 0.0
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ELLIPSE
+    fill:
+      type: rgb
+      value: '#ff5f46'
+    role: content
+  - objectId: geba5681a0d_1_2594
+    type: shape
+    x_inches: 13.336
+    y_inches: 6.833
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: content
+  - objectId: geba5681a0d_1_2595
+    type: shape
+    x_inches: 12.276
+    y_inches: 3.591
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ff3621'
+    role: decorative
+  - objectId: geba5681a0d_1_2596
+    type: shape
+    x_inches: 12.267
+    y_inches: 4.66
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  - objectId: geba5681a0d_1_2597
+    type: shape
+    x_inches: 9.011
+    y_inches: 1.067
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: decorative
+  - objectId: geba5681a0d_1_2598
+    type: shape
+    x_inches: 9.699
+    y_inches: 6.307
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: ELLIPSE
+    fill:
+      type: rgb
+      value: '#ff5f46'
+    role: content
+  - objectId: geba5681a0d_1_2599
+    type: shape
+    x_inches: 10.902
+    y_inches: 3.332
+    width_inches: 0.259
+    height_inches: 0.259
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_f_artistic_divider_dark_1.png
+- key: content_f_artistic_divider_dark_2
+  display_name: Content F - Artistic Divider Dark 2
+  objectId: geba5681a0d_1_2620
+  masterObjectId: ge78152d236_2_0
+  theme: dark
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: geba5681a0d_1_2630
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 9.709
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2632
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2621
+    type: shape
+    x_inches: 12.276
+    y_inches: 3.123
+    width_inches: 0.947
+    height_inches: 0.947
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#42ba91'
+    role: content
+  - objectId: geba5681a0d_1_2622
+    type: shape
+    x_inches: 12.276
+    y_inches: 2.96
+    width_inches: 0.784
+    height_inches: 0.784
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#42ba91'
+    role: content
+  - objectId: geba5681a0d_1_2623
+    type: shape
+    x_inches: 12.276
+    y_inches: 2.802
+    width_inches: 0.625
+    height_inches: 0.626
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#42ba91'
+    role: content
+  - objectId: geba5681a0d_1_2624
+    type: line
+    x_inches: 11.65
+    y_inches: 2.489
+    width_inches: 3.281
+    height_inches: 0.322
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2625
+    type: line
+    x_inches: 11.33
+    y_inches: 2.649
+    width_inches: 3.281
+    height_inches: 0.48
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2626
+    type: line
+    x_inches: 11.493
+    y_inches: 2.568
+    width_inches: 3.281
+    height_inches: 0.399
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2627
+    type: line
+    x_inches: 11.963
+    y_inches: 2.802
+    width_inches: 0.356
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2628
+    type: line
+    x_inches: 11.884
+    y_inches: 2.96
+    width_inches: 0.52
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2629
+    type: line
+    x_inches: 11.803
+    y_inches: 3.123
+    width_inches: 0.499
+    height_inches: 3.281
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2631
+    type: shape
+    x_inches: 11.21
+    y_inches: 0.0
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: decorative
+  - objectId: geba5681a0d_1_2633
+    type: shape
+    x_inches: 11.161
+    y_inches: 4.657
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: content
+  - objectId: geba5681a0d_1_2634
+    type: shape
+    x_inches: 11.161
+    y_inches: 2.176
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  - objectId: geba5681a0d_1_2635
+    type: shape
+    x_inches: 12.276
+    y_inches: 2.176
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: decorative
+  - objectId: geba5681a0d_1_2636
+    type: shape
+    x_inches: 12.267
+    y_inches: 3.245
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#ff3621'
+    role: content
+  - objectId: geba5681a0d_1_2637
+    type: shape
+    x_inches: 10.634
+    y_inches: 6.307
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ff5f46'
+    role: decorative
+  - objectId: geba5681a0d_1_2638
+    type: shape
+    x_inches: 9.699
+    y_inches: 0.541
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: ELLIPSE
+    fill:
+      type: rgb
+      value: '#ff5f46'
+    role: content
+  - objectId: geba5681a0d_1_2639
+    type: shape
+    x_inches: 11.155
+    y_inches: 4.657
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_f_artistic_divider_dark_2.png
+- key: content_f_artistic_divider_dark_3
+  display_name: Content F - Artistic Divider Dark 3
+  objectId: geba5681a0d_1_2657
+  masterObjectId: ge78152d236_2_0
+  theme: dark
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: geba5681a0d_1_2658
+    type: placeholder
+    x_inches: 0.819
+    y_inches: 0.586
+    width_inches: 9.709
+    height_inches: 6.248
+    placeholder_type: TITLE
+    placeholder_index: 0
+  - objectId: geba5681a0d_1_2661
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: geba5681a0d_1_2659
+    type: shape
+    x_inches: 11.177
+    y_inches: 2.176
+    width_inches: 1.067
+    height_inches: 1.067
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: decorative
+  - objectId: geba5681a0d_1_2660
+    type: shape
+    x_inches: 12.263
+    y_inches: 3.243
+    width_inches: 1.073
+    height_inches: 2.176
+    shape_type: RECTANGLE
+    fill:
+      type: rgb
+      value: '#ff3621'
+    role: decorative
+  - objectId: geba5681a0d_1_2662
+    type: shape
+    x_inches: 13.333
+    y_inches: 5.419
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: DARK2
+    role: content
+  - objectId: geba5681a0d_1_2663
+    type: shape
+    x_inches: 11.161
+    y_inches: 2.176
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  - objectId: geba5681a0d_1_2664
+    type: shape
+    x_inches: 9.063
+    y_inches: 0.525
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: RIGHT_TRIANGLE
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  - objectId: geba5681a0d_1_2665
+    type: shape
+    x_inches: 12.804
+    y_inches: 6.307
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: RECTANGLE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: decorative
+  - objectId: geba5681a0d_1_2666
+    type: shape
+    x_inches: 10.634
+    y_inches: 0.586
+    width_inches: 0.526
+    height_inches: 0.526
+    shape_type: ELLIPSE
+    fill:
+      type: themeColor
+      value: ACCENT1
+    role: content
+  - objectId: geba5681a0d_1_2667
+    type: shape
+    x_inches: 13.333
+    y_inches: 5.419
+    width_inches: 2.175
+    height_inches: 2.176
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  - objectId: geba5681a0d_1_2668
+    type: shape
+    x_inches: 11.158
+    y_inches: 5.419
+    width_inches: 3.281
+    height_inches: 3.281
+    shape_type: ARC
+    fill:
+      type: rgb
+      value: '#143d4a'
+    role: content
+  - objectId: geba5681a0d_1_2669
+    type: line
+    x_inches: 12.437
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2670
+    type: line
+    x_inches: 12.618
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2671
+    type: line
+    x_inches: 12.8
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2672
+    type: line
+    x_inches: 12.981
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  - objectId: geba5681a0d_1_2673
+    type: line
+    x_inches: 13.162
+    y_inches: 2.172
+    width_inches: 3.281
+    height_inches: 1.067
+    line_type: STRAIGHT_CONNECTOR_1
+    role: decorative
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/content_f_artistic_divider_dark_3.png
+- key: z_closing_light
+  display_name: Z - Closing Light
+  objectId: gee94437484_1_683
+  masterObjectId: ge78152d236_2_0
+  theme: light
+  background_fill: null
+  placeholders:
+  - objectId: geba5681a0d_1_2091
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_706
+    type: image
+    x_inches: 3.304
+    y_inches: 3.084
+    width_inches: 6.722
+    height_inches: 1.065
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUcUpBWa5xcoKNrk3c2sW2kohmEIuUXOiXa-MG4pyMZVx8oeGZ1AvD1Y7dO2d3Lwga1f2dK
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/layout-z_closing_light.png
+- key: z_closing_dark
+  display_name: Z - Closing Dark
+  objectId: gee94437484_1_699
+  masterObjectId: ge78152d236_2_0
+  theme: dark
+  background_fill:
+    type: themeColor
+    value: DARK1
+  placeholders:
+  - objectId: geba5681a0d_1_2092
+    type: placeholder
+    x_inches: 12.137
+    y_inches: 7.079
+    width_inches: 0.355
+    height_inches: 0.204
+    placeholder_type: SLIDE_NUMBER
+    placeholder_index: 0
+  visual_elements:
+  - objectId: gee94437484_1_703
+    type: image
+    x_inches: 3.304
+    y_inches: 3.084
+    width_inches: 6.722
+    height_inches: 1.069
+    image_url: https://lh7-rt.googleusercontent.com/slidesz/AGV_vUewxAwQVjZ-2h_fWOWXQh_kpyyPoRj4R-7aaB7kFTncFmbs_yVi9HeBv3wHgRaDVdukIAc
+    role: content
+  master_name: Databricks Theme
+  thumbnail: rendered/layouts/layout-z_closing_dark.png
+sample_slides:
+- index: 0
+  objectId: gf7b9ec9ce5_0_1087
+  layoutObjectId: gee94437484_1_11
+  layout_name: 2 Title Slide A - Dark
+  element_count: 4
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-00-2_title_slide_a_dark.png
+  section: intro
+  category: Cover
+- index: 1
+  objectId: geba5681a0d_1_7
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 5
+  visible_text:
+  - 'Instructions: Read me!'
+  - Getting started with our slide template
+  - Focused, priority approach. Build trust fast. Grew EY-Servic
+  thumbnail: rendered/layouts/slide-01-7_content_a_basic.png
+  section: intro
+  category: Instructions
+- index: 2
+  objectId: g1d58ff199e0_0_1
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Databricks Elite GSIs - in EMEA
+  - Accenture, Avanade, Capgemini, Cognizant, Deloitte, EY, Info
+  - 70% attach (sourced/influencers) of our business (committ, c
+  thumbnail: rendered/layouts/slide-02-7_content_a_basic.png
+  section: intro
+  category: GSI Partners
+- index: 3
+  objectId: geba5681a0d_1_2036
+  layoutObjectId: gee94437484_1_426
+  layout_name: 13 Content C - 3 Column Cards
+  element_count: 9
+  visible_text:
+  - Presentation best practices
+  - Less is more
+  - Don’t cram too much content onto your slides. An optimal num
+  thumbnail: rendered/layouts/slide-03-13_content_c_3_column_cards.png
+  section: guidance
+  category: Presentation Best Practices
+- index: 4
+  objectId: geba5681a0d_1_2057
+  layoutObjectId: geba5681a0d_1_2589
+  layout_name: Content F - Artistic Divider Dark 1
+  element_count: 2
+  visible_text:
+  - Presentation best practices
+  thumbnail: rendered/layouts/slide-04-content_f_artistic_divider_dark_1.png
+  section: guidance
+  category: Presentation Best Practices (divider)
+- index: 5
+  objectId: g113a84e7c6a_1_0
+  layoutObjectId: gee94437484_1_426
+  layout_name: 13 Content C - 3 Column Cards
+  element_count: 9
+  visible_text: []
+  thumbnail: rendered/layouts/slide-05-13_content_c_3_column_cards.png
+  section: guidance
+  category: Presentation Best Practices
+- index: 6
+  objectId: geba5681a0d_1_2050
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 10
+  visible_text:
+  - Font Guidance
+  - Font selection
+  - All text in our slide decks should use our new brand font, D
+  thumbnail: rendered/layouts/slide-06-7_content_a_basic.png
+  section: guidance
+  category: Font Guidance
+- index: 7
+  objectId: gf7b9ea4272_0_36
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Font Guidance (Cont.)
+  - Using fonts in Powerpoint or Pages
+  - To use the fonts in a desktop program such as Microsoft Powe
+  thumbnail: rendered/layouts/slide-07-7_content_a_basic.png
+  section: guidance
+  category: Font Guidance (Cont.)
+- index: 8
+  objectId: geba5681a0d_1_2139
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 21
+  visible_text:
+  - Font Guidance (Cont.)
+  - Font sizing
+  - Using consistent type sizing is a good way to help our slide
+  thumbnail: rendered/layouts/slide-08-7_content_a_basic.png
+  section: guidance
+  category: Font Sizing
+- index: 9
+  objectId: geba5681a0d_1_2043
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 5
+  visible_text:
+  - Grid Guidance
+  - Keep it orderly
+  - Our presentation template has a 12 column grid to help you o
+  thumbnail: rendered/layouts/slide-09-7_content_a_basic.png
+  section: guidance
+  category: Grid Guidance
+- index: 10
+  objectId: geba5681a0d_1_2316
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 34
+  visible_text:
+  - Color Guidance
+  - Keep it on brand
+  - 'When customizing charts or adding other visual elements, do '
+  thumbnail: rendered/layouts/slide-10-7_content_a_basic.png
+  section: guidance
+  category: Color Guidance
+- index: 11
+  objectId: geba5681a0d_1_2303
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 5
+  visible_text:
+  - Chart design
+  - Adding and customizing charts
+  - To insert a chart, navigate to | Insert > Chart | and select
+  thumbnail: rendered/layouts/slide-11-7_content_a_basic.png
+  section: guidance
+  category: Chart Design
+- index: 12
+  objectId: geba5681a0d_1_14
+  layoutObjectId: geba5681a0d_1_2620
+  layout_name: Content F - Artistic Divider Dark 2
+  element_count: 2
+  visible_text:
+  - Example Slides
+  thumbnail: rendered/layouts/slide-12-content_f_artistic_divider_dark_2.png
+  section: examples
+  category: Example Slides (divider)
+- index: 13
+  objectId: geba5681a0d_1_2170
+  layoutObjectId: geba5681a0d_1_2509
+  layout_name: Content F - Artistic Divider 2
+  element_count: 2
+  visible_text:
+  - Title Slides
+  thumbnail: rendered/layouts/slide-13-content_f_artistic_divider_2.png
+  section: examples
+  category: Title Slides (divider)
+- index: 14
+  objectId: gee94437484_1_707
+  layoutObjectId: ge78152d236_2_6
+  layout_name: 1 Title Slide A - Light
+  element_count: 4
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-14-1_title_slide_a_light.png
+  section: examples
+  category: Title Slide A - Light
+- index: 15
+  objectId: geba5681a0d_1_1724
+  layoutObjectId: gee94437484_1_11
+  layout_name: 2 Title Slide A - Dark
+  element_count: 4
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-15-2_title_slide_a_dark.png
+  section: examples
+  category: Title Slide A - Dark
+- index: 16
+  objectId: geba5681a0d_1_1731
+  layoutObjectId: gee94437484_1_41
+  layout_name: 3 Title Slide B - Light
+  element_count: 4
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-16-3_title_slide_b_light.png
+  section: examples
+  category: Title Slide B - Light
+- index: 17
+  objectId: geba5681a0d_1_1738
+  layoutObjectId: gee94437484_1_53
+  layout_name: 4 Title Slide B - Dark
+  element_count: 4
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-17-4_title_slide_b_dark.png
+  section: examples
+  category: Title Slide B - Dark
+- index: 18
+  objectId: geba5681a0d_1_2799
+  layoutObjectId: gee94437484_1_41
+  layout_name: 3 Title Slide B - Light
+  element_count: 9
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-18-3_title_slide_b_light.png
+  section: examples
+  category: Title Slide B - Light (variant 1)
+- index: 19
+  objectId: geba5681a0d_1_2810
+  layoutObjectId: gee94437484_1_41
+  layout_name: 3 Title Slide B - Light
+  element_count: 9
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-19-3_title_slide_b_light.png
+  section: examples
+  category: Title Slide B - Light (variant 2)
+- index: 20
+  objectId: geba5681a0d_1_2821
+  layoutObjectId: gee94437484_1_41
+  layout_name: 3 Title Slide B - Light
+  element_count: 9
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep 2021
+  thumbnail: rendered/layouts/slide-20-3_title_slide_b_light.png
+  section: examples
+  category: Title Slide B - Light (variant 3)
+- index: 21
+  objectId: geba5681a0d_1_2832
+  layoutObjectId: gee94437484_1_41
+  layout_name: 3 Title Slide B - Light
+  element_count: 9
+  visible_text:
+  - Corporate Slide Deck Template
+  - Your starting point for great presentation designs
+  - Brand Design Team | Last updated Sep | 2021
+  thumbnail: rendered/layouts/slide-21-3_title_slide_b_light.png
+  section: examples
+  category: Title Slide B - Light (variant 4)
+- index: 22
+  objectId: geba5681a0d_1_2191
+  layoutObjectId: geba5681a0d_1_2483
+  layout_name: Content F - Artistic Divider 1
+  element_count: 2
+  visible_text:
+  - Content Slides
+  thumbnail: rendered/layouts/slide-22-content_f_artistic_divider_1.png
+  section: examples
+  category: Content Slides (divider)
+- index: 23
+  objectId: geba5681a0d_1_1759
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Basic Content
+  - Your subtitle here
+  - This slide is an all-purpose slide with our default warm-gra
+  thumbnail: rendered/layouts/slide-23-7_content_a_basic.png
+  section: examples
+  category: Basic Content
+- index: 24
+  objectId: geba5681a0d_1_1766
+  layoutObjectId: gee94437484_1_897
+  layout_name: 8 Content A - Basic White 1
+  element_count: 4
+  visible_text:
+  - Basic Content (White)
+  - Your subtitle here
+  - This slide is an all-purpose slide with a white background.
+  thumbnail: rendered/layouts/slide-24-8_content_a_basic_white_1.png
+  section: examples
+  category: Basic Content (White)
+- index: 25
+  objectId: geba5681a0d_1_1773
+  layoutObjectId: gee94437484_1_541
+  layout_name: 9 Content B - 2 Column
+  element_count: 7
+  visible_text:
+  - Two-column content
+  - Your subtitle here
+  - Your content goes here. | default bulleted list style | defa
+  thumbnail: rendered/layouts/slide-25-9_content_b_2_column.png
+  section: examples
+  category: Two-column content
+- index: 26
+  objectId: geba5681a0d_1_1783
+  layoutObjectId: gee94437484_1_587
+  layout_name: 10 Content B - 2 Column w/ Icon Spot
+  element_count: 9
+  visible_text:
+  - Two column with icon space
+  - Your content goes here. | default bulleted list style | defa
+  - Your subtitle here
+  thumbnail: rendered/layouts/slide-26-10_content_b_2_column_with_icon_spot.png
+  section: examples
+  category: Two column with icon space
+- index: 27
+  objectId: geba5681a0d_1_1793
+  layoutObjectId: gee94437484_1_373
+  layout_name: 11 Content C - 3 Column
+  element_count: 9
+  visible_text:
+  - Three-column text
+  - Your subtitle here
+  - Your content goes here. | default bulleted list style | defa
+  thumbnail: rendered/layouts/slide-27-11_content_c_3_column.png
+  section: examples
+  category: Three-column text
+- index: 28
+  objectId: geba5681a0d_1_1805
+  layoutObjectId: gee94437484_1_399
+  layout_name: 12 Content C - 3 Column w/ Icon Spot
+  element_count: 12
+  visible_text:
+  - Three-column with icon space
+  - Your content goes here. | default bulleted list style | defa
+  - Your subtitle here
+  thumbnail: rendered/layouts/slide-28-12_content_c_3_column_with_icon_spot.png
+  section: examples
+  category: Three-column with icon space
+- index: 29
+  objectId: geba5681a0d_1_1862
+  layoutObjectId: gee94437484_1_636
+  layout_name: Content E - Power Statement 1
+  element_count: 2
+  visible_text:
+  - This is your power statement slide. Use it to feature an imp
+  thumbnail: rendered/layouts/slide-29-content_e_power_statement_1.png
+  section: examples
+  category: Power Statement 1
+- index: 30
+  objectId: geba5681a0d_1_2679
+  layoutObjectId: gee94437484_1_650
+  layout_name: Content E - Power Statement 2
+  element_count: 2
+  visible_text:
+  - This is your power statement slide. Use it to feature an imp
+  thumbnail: rendered/layouts/slide-30-content_e_power_statement_2.png
+  section: examples
+  category: Power Statement 2
+- index: 31
+  objectId: geba5681a0d_1_2684
+  layoutObjectId: gee94437484_1_660
+  layout_name: Content E - Power Statement 3
+  element_count: 2
+  visible_text:
+  - This is your power statement slide. Use it to feature an imp
+  thumbnail: rendered/layouts/slide-31-content_e_power_statement_3.png
+  section: examples
+  category: Power Statement 3
+- index: 32
+  objectId: geba5681a0d_1_2689
+  layoutObjectId: gee94437484_1_668
+  layout_name: Content E - Power Statement 4
+  element_count: 2
+  visible_text:
+  - This is your power statement slide. Use it to feature an imp
+  thumbnail: rendered/layouts/slide-32-content_e_power_statement_4.png
+  section: examples
+  category: Power Statement 4
+- index: 33
+  objectId: geba5681a0d_1_2202
+  layoutObjectId: geba5681a0d_1_2483
+  layout_name: Content F - Artistic Divider 1
+  element_count: 2
+  visible_text:
+  - Card-based content Slides
+  thumbnail: rendered/layouts/slide-33-content_f_artistic_divider_1.png
+  section: examples
+  category: Card-based content (divider)
+- index: 34
+  objectId: geba5681a0d_1_1817
+  layoutObjectId: gee94437484_1_426
+  layout_name: 13 Content C - 3 Column Cards
+  element_count: 9
+  visible_text:
+  - Three card columns
+  - These cards are great for showing a 3-stage process, compari
+  - Your subtitle here
+  thumbnail: rendered/layouts/slide-34-13_content_c_3_column_cards.png
+  section: examples
+  category: Three card columns
+- index: 35
+  objectId: g19c8655fda6_1_0
+  layoutObjectId: gee94437484_1_587
+  layout_name: 10 Content B - 2 Column w/ Icon Spot
+  element_count: 7
+  visible_text: []
+  thumbnail: rendered/layouts/slide-35-10_content_b_2_column_with_icon_spot.png
+  section: examples
+  category: Two column icon spot (variant)
+- index: 36
+  objectId: geba5681a0d_1_1829
+  layoutObjectId: gee94437484_1_189
+  layout_name: 14 Content D - Card Right
+  element_count: 5
+  visible_text:
+  - Righthand card
+  - Add your content here. | Bullet one | Bullet two | Bullet th
+  - This spot is great for a diagram, image, small table, code s
+  thumbnail: rendered/layouts/slide-36-14_content_d_card_right.png
+  section: examples
+  category: Card Right
+- index: 37
+  objectId: geba5681a0d_1_1837
+  layoutObjectId: gee94437484_1_448
+  layout_name: 15 Content D - Card Left
+  element_count: 5
+  visible_text:
+  - Lefthand card
+  - Add your content here. | Bullet one | Bullet two | Bullet th
+  - This spot is great for a diagram, image, small table, code s
+  thumbnail: rendered/layouts/slide-37-15_content_d_card_left.png
+  section: examples
+  category: Card Left
+- index: 38
+  objectId: geba5681a0d_1_1845
+  layoutObjectId: gee94437484_1_203
+  layout_name: 16 Content D - Card Large
+  element_count: 4
+  visible_text:
+  - Full width card
+  - This card is good for larger diagrams, tables, or other gene
+  - Your subtitle here
+  thumbnail: rendered/layouts/slide-38-16_content_d_card_large.png
+  section: examples
+  category: Card Large
+- index: 39
+  objectId: geba5681a0d_1_1852
+  layoutObjectId: gee94437484_1_468
+  layout_name: 17 Content D - Card Quad
+  element_count: 7
+  visible_text:
+  - Four card quadrant
+  - Your subtitle here
+  - These cards are for general use when four items need to be s
+  thumbnail: rendered/layouts/slide-39-17_content_d_card_quad.png
+  section: examples
+  category: Card Quad
+- index: 40
+  objectId: geba5681a0d_1_2293
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Table samples
+  thumbnail: rendered/layouts/slide-40-7_content_a_basic.png
+  section: examples
+  category: Table samples
+- index: 41
+  objectId: geba5681a0d_1_2694
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 16
+  visible_text:
+  - Timeline style one
+  - Timeline Item D
+  - Your subtitle here
+  thumbnail: rendered/layouts/slide-41-7_content_a_basic.png
+  section: examples
+  category: Timeline style one
+- index: 42
+  objectId: geba5681a0d_1_2756
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 17
+  visible_text:
+  - Timeline style two
+  - Your subtitle here
+  - Timeline Item A
+  thumbnail: rendered/layouts/slide-42-7_content_a_basic.png
+  section: examples
+  category: Timeline style two
+- index: 43
+  objectId: geba5681a0d_1_2721
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 16
+  visible_text:
+  - Timeline style three
+  - Your subtitle here
+  - Your gantt chart item
+  thumbnail: rendered/layouts/slide-43-7_content_a_basic.png
+  section: examples
+  category: Timeline style three
+- index: 44
+  objectId: geba5681a0d_1_1719
+  layoutObjectId: geba5681a0d_1_2657
+  layout_name: Content F - Artistic Divider Dark 3
+  element_count: 2
+  visible_text:
+  - 'Resources: General slide items'
+  thumbnail: rendered/layouts/slide-44-content_f_artistic_divider_dark_3.png
+  section: resources
+  category: General slide items (divider)
+- index: 45
+  objectId: geba5681a0d_1_2212
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 18
+  visible_text:
+  - Helper objects
+  - Things for you to copy/paste
+  - This card element has the correct drop shadow settings alrea
+  thumbnail: rendered/layouts/slide-45-7_content_a_basic.png
+  section: resources
+  category: Helper objects
+- index: 46
+  objectId: geba5681a0d_1_2207
+  layoutObjectId: geba5681a0d_1_2589
+  layout_name: Content F - Artistic Divider Dark 1
+  element_count: 2
+  visible_text:
+  - 'Resources: Logos'
+  thumbnail: rendered/layouts/slide-46-content_f_artistic_divider_dark_1.png
+  section: resources-logos
+  category: Logos (divider)
+- index: 47
+  objectId: geba5681a0d_1_1657
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 8
+  visible_text:
+  - Logos
+  - Databricks Logos
+  thumbnail: rendered/layouts/slide-47-7_content_a_basic.png
+  section: resources-logos
+  category: Databricks Logos
+- index: 48
+  objectId: geba5681a0d_1_1669
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 12
+  visible_text:
+  - Logos
+  - Open Source Logos
+  thumbnail: rendered/layouts/slide-48-7_content_a_basic.png
+  section: resources-logos
+  category: Open Source Logos
+- index: 49
+  objectId: geba5681a0d_1_1688
+  layoutObjectId: gee94437484_1_897
+  layout_name: 8 Content A - Basic White 1
+  element_count: 18
+  visible_text:
+  - Logos
+  - Partner Logos
+  thumbnail: rendered/layouts/slide-49-8_content_a_basic_white_1.png
+  section: resources-logos
+  category: Partner Logos
+- index: 50
+  objectId: geba5681a0d_1_1652
+  layoutObjectId: geba5681a0d_1_2620
+  layout_name: Content F - Artistic Divider Dark 2
+  element_count: 2
+  visible_text:
+  - 'Resources: Diagrams'
+  thumbnail: rendered/layouts/slide-50-content_f_artistic_divider_dark_2.png
+  section: resources-diagrams
+  category: Diagrams (divider)
+- index: 51
+  objectId: geba5681a0d_1_2445
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 5
+  visible_text:
+  - Diagrams
+  - Marketecture
+  thumbnail: rendered/layouts/slide-51-7_content_a_basic.png
+  section: resources-diagrams
+  category: Marketecture
+- index: 52
+  objectId: geba5681a0d_1_2440
+  layoutObjectId: geba5681a0d_1_2589
+  layout_name: Content F - Artistic Divider Dark 1
+  element_count: 2
+  visible_text:
+  - 'Resources: Icons and illustrations'
+  thumbnail: rendered/layouts/slide-52-content_f_artistic_divider_dark_1.png
+  section: resources-icons
+  category: Icons and illustrations (divider)
+- index: 53
+  objectId: geba5681a0d_1_38
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 18
+  visible_text:
+  - Icons
+  - High Level Icons
+  - Simple
+  thumbnail: rendered/layouts/slide-53-7_content_a_basic.png
+  section: resources-icons
+  category: High Level Icons
+- index: 54
+  objectId: geba5681a0d_1_1928
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Industry Icons
+  - Advertising and marketing technology
+  thumbnail: rendered/layouts/slide-54-7_content_a_basic.png
+  section: resources-icons
+  category: Industry Icons
+- index: 55
+  objectId: geba5681a0d_1_1988
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 15
+  visible_text:
+  - Icons
+  - ERGs
+  - Veterans | Network
+  thumbnail: rendered/layouts/slide-55-7_content_a_basic.png
+  section: resources-icons
+  category: ERGs
+- index: 56
+  objectId: geba5681a0d_1_1878
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Platform
+  - Analytics
+  thumbnail: rendered/layouts/slide-56-7_content_a_basic.png
+  section: resources-icons
+  category: Platform
+- index: 57
+  objectId: geba5681a0d_1_19
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Platform (Cont.)
+  - Analytics
+  thumbnail: rendered/layouts/slide-57-7_content_a_basic.png
+  section: resources-icons
+  category: Platform (Cont.)
+- index: 58
+  objectId: geba5681a0d_1_396
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Feature
+  - Accelerator-Aware | Scheduler
+  thumbnail: rendered/layouts/slide-58-7_content_a_basic.png
+  section: resources-icons
+  category: Feature
+- index: 59
+  objectId: geba5681a0d_1_358
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Monitoring
+  - Event Log Rollover
+  thumbnail: rendered/layouts/slide-59-7_content_a_basic.png
+  section: resources-icons
+  category: Monitoring
+- index: 60
+  objectId: geba5681a0d_1_434
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Connectors
+  - CSV Filter Pushdown
+  thumbnail: rendered/layouts/slide-60-7_content_a_basic.png
+  section: resources-icons
+  category: Connectors
+- index: 61
+  objectId: geba5681a0d_1_473
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Performance
+  - Adaptive Query | Execution
+  thumbnail: rendered/layouts/slide-61-7_content_a_basic.png
+  section: resources-icons
+  category: Performance
+- index: 62
+  objectId: geba5681a0d_1_511
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - SQL Compatibility
+  - Overflow Checking
+  thumbnail: rendered/layouts/slide-62-7_content_a_basic.png
+  section: resources-icons
+  category: SQL Compatibility
+- index: 63
+  objectId: geba5681a0d_1_549
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - PySpark and SparkR
+  - Eager Execution | in R Shell
+  thumbnail: rendered/layouts/slide-63-7_content_a_basic.png
+  section: resources-icons
+  category: PySpark and SparkR
+- index: 64
+  objectId: geba5681a0d_1_587
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Extensibility & Document
+  - Extensibility & Document
+  thumbnail: rendered/layouts/slide-64-7_content_a_basic.png
+  section: resources-icons
+  category: Extensibility & Document
+- index: 65
+  objectId: geba5681a0d_1_626
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Usability and Stability
+  - Describe Query
+  thumbnail: rendered/layouts/slide-65-7_content_a_basic.png
+  section: resources-icons
+  category: Usability and Stability
+- index: 66
+  objectId: geba5681a0d_1_85
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Financial Services
+  - Credit Analysis
+  thumbnail: rendered/layouts/slide-66-7_content_a_basic.png
+  section: resources-icons
+  category: Financial Services
+- index: 67
+  objectId: geba5681a0d_1_132
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Healthcare and Life Sciences
+  - Clinical Data
+  thumbnail: rendered/layouts/slide-67-7_content_a_basic.png
+  section: resources-icons
+  category: Healthcare and Life Sciences
+- index: 68
+  objectId: geba5681a0d_1_187
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Media and Entertainment
+  - Personalization
+  thumbnail: rendered/layouts/slide-68-7_content_a_basic.png
+  section: resources-icons
+  category: Media and Entertainment
+- index: 69
+  objectId: geba5681a0d_1_241
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Retail / CPG
+  - Data Driven Inventory
+  thumbnail: rendered/layouts/slide-69-7_content_a_basic.png
+  section: resources-icons
+  category: Retail / CPG
+- index: 70
+  objectId: geba5681a0d_1_298
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Public Sector
+  - Smart Social Services
+  thumbnail: rendered/layouts/slide-70-7_content_a_basic.png
+  section: resources-icons
+  category: Public Sector
+- index: 71
+  objectId: geba5681a0d_1_662
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Platform Technologies
+  - Redash-SQL Analytics
+  thumbnail: rendered/layouts/slide-71-7_content_a_basic.png
+  section: resources-icons
+  category: Platform Technologies
+- index: 72
+  objectId: geba5681a0d_1_1090
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Security
+  - Breach
+  thumbnail: rendered/layouts/slide-72-7_content_a_basic.png
+  section: resources-icons
+  category: Security
+- index: 73
+  objectId: geba5681a0d_1_1149
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Security (Cont.)
+  - Data Parser, Normalizer, ETL-ELT
+  thumbnail: rendered/layouts/slide-73-7_content_a_basic.png
+  section: resources-icons
+  category: Security (Cont. 1)
+- index: 74
+  objectId: geba5681a0d_1_1218
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Security (Cont.)
+  - Incident Investigation
+  thumbnail: rendered/layouts/slide-74-7_content_a_basic.png
+  section: resources-icons
+  category: Security (Cont. 2)
+- index: 75
+  objectId: geba5681a0d_1_1350
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Security (Cont.)
+  - Malicious Document
+  thumbnail: rendered/layouts/slide-75-7_content_a_basic.png
+  section: resources-icons
+  category: Security (Cont. 3)
+- index: 76
+  objectId: geba5681a0d_1_1419
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Security (Cont.)
+  - Office Building
+  thumbnail: rendered/layouts/slide-76-7_content_a_basic.png
+  section: resources-icons
+  category: Security (Cont. 4)
+- index: 77
+  objectId: geba5681a0d_1_1488
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Security (Cont.)
+  - Security Analysts - Defenders
+  thumbnail: rendered/layouts/slide-77-7_content_a_basic.png
+  section: resources-icons
+  category: Security (Cont. 5)
+- index: 78
+  objectId: geba5681a0d_1_1591
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Security (Cont.)
+  - Security Monitoring
+  thumbnail: rendered/layouts/slide-78-7_content_a_basic.png
+  section: resources-icons
+  category: Security (Cont. 6)
+- index: 79
+  objectId: geba5681a0d_1_719
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 27
+  visible_text:
+  - Icons
+  - Miscellaneous
+  - Connectors
+  thumbnail: rendered/layouts/slide-79-7_content_a_basic.png
+  section: resources-icons
+  category: Miscellaneous
+- index: 80
+  objectId: geba5681a0d_1_782
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Miscellaneous (Cont.)
+  - Deploy
+  thumbnail: rendered/layouts/slide-80-7_content_a_basic.png
+  section: resources-icons
+  category: Miscellaneous (Cont. 1)
+- index: 81
+  objectId: geba5681a0d_1_900
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Miscellaneous (Cont.)
+  - Program
+  thumbnail: rendered/layouts/slide-81-7_content_a_basic.png
+  section: resources-icons
+  category: Miscellaneous (Cont. 2)
+- index: 82
+  objectId: g1a7c37d3c1f_0_0
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Miscellaneous (Cont.)
+  - Program
+  thumbnail: rendered/layouts/slide-82-7_content_a_basic.png
+  section: resources-icons
+  category: Miscellaneous (Cont. 3)
+- index: 83
+  objectId: geba5681a0d_1_999
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 31
+  visible_text:
+  - Icons
+  - Miscellaneous (Cont.)
+  - Users
+  thumbnail: rendered/layouts/slide-83-7_content_a_basic.png
+  section: resources-icons
+  category: Miscellaneous (Cont. 4)
+- index: 84
+  objectId: geba5681a0d_1_943
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 19
+  visible_text:
+  - Icons
+  - Miscellaneous (Cont.)
+  - Gold
+  thumbnail: rendered/layouts/slide-84-7_content_a_basic.png
+  section: resources-icons
+  category: Miscellaneous (Cont. 5)
+- index: 85
+  objectId: geba5681a0d_1_845
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 33
+  visible_text:
+  - Icons
+  - Arrows
+  thumbnail: rendered/layouts/slide-85-7_content_a_basic.png
+  section: resources-icons
+  category: Arrows
+- index: 86
+  objectId: gf7b9ea4272_0_25
+  layoutObjectId: geba5681a0d_1_2620
+  layout_name: Content F - Artistic Divider Dark 2
+  element_count: 2
+  visible_text:
+  - 'Resources: Illustrations'
+  thumbnail: rendered/layouts/slide-86-content_f_artistic_divider_dark_2.png
+  section: resources-illustrations
+  category: Illustrations (divider)
+- index: 87
+  objectId: gf7b9ec9ce5_0_1
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Careers
+  thumbnail: rendered/layouts/slide-87-7_content_a_basic.png
+  section: resources-illustrations
+  category: Careers
+- index: 88
+  objectId: gf7b9ec9ce5_0_38
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Company
+  thumbnail: rendered/layouts/slide-88-7_content_a_basic.png
+  section: resources-illustrations
+  category: Company
+- index: 89
+  objectId: gf7b9ec9ce5_0_46
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Customers
+  thumbnail: rendered/layouts/slide-89-7_content_a_basic.png
+  section: resources-illustrations
+  category: Customers
+- index: 90
+  objectId: gf7b9ec9ce5_0_54
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Delta Live Tables
+  thumbnail: rendered/layouts/slide-90-7_content_a_basic.png
+  section: resources-illustrations
+  category: Delta Live Tables
+- index: 91
+  objectId: gf7b9ec9ce5_0_62
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Lakehouse
+  thumbnail: rendered/layouts/slide-91-7_content_a_basic.png
+  section: resources-illustrations
+  category: Lakehouse
+- index: 92
+  objectId: gf7b9ec9ce5_0_70
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Learn
+  thumbnail: rendered/layouts/slide-92-7_content_a_basic.png
+  section: resources-illustrations
+  category: Learn
+- index: 93
+  objectId: gf7b9ec9ce5_0_78
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Partners
+  thumbnail: rendered/layouts/slide-93-7_content_a_basic.png
+  section: resources-illustrations
+  category: Partners
+- index: 94
+  objectId: gf7b9ec9ce5_0_86
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Solutions
+  thumbnail: rendered/layouts/slide-94-7_content_a_basic.png
+  section: resources-illustrations
+  category: Solutions
+- index: 95
+  objectId: gf7b9ec9ce5_0_94
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - SQL Analytics
+  thumbnail: rendered/layouts/slide-95-7_content_a_basic.png
+  section: resources-illustrations
+  category: SQL Analytics
+- index: 96
+  objectId: gf7b9ec9ce5_0_102
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Unity Catalog
+  thumbnail: rendered/layouts/slide-96-7_content_a_basic.png
+  section: resources-illustrations
+  category: Unity Catalog
+- index: 97
+  objectId: gf7b9ec9ce5_0_110
+  layoutObjectId: gee94437484_1_176
+  layout_name: 7 Content A - Basic
+  element_count: 4
+  visible_text:
+  - Illustrations
+  - Data Engineering
+  thumbnail: rendered/layouts/slide-97-7_content_a_basic.png
+  section: resources-illustrations
+  category: Data Engineering
+resource_sections:
+  guidance:
+    slides: 0-11
+    description: Cover, instructions, font/grid/color/chart guidance
+  examples:
+    slides: 12-43
+    description: 'Layout demos: titles, content, power statements, cards, timelines, tables'
+  resources:
+    slides: 44-45
+    description: Helper objects (cards with shadows, callout boxes, code blocks, numbered bullets)
+  resources-logos:
+    slides: 46-49
+    description: Databricks logos (light/dark), OSS logos, partner logos
+  resources-diagrams:
+    slides: 50-51
+    description: Marketecture diagram
+  resources-icons:
+    slides: 52-85
+    description: 34 slides of brand icons in 3-weight style (light/medium/bold = Databricks red)
+    categories:
+    - High Level Icons (Simple, Open, Collaborative, Training, Support, Professional Services)
+    - Industry Icons (14 industries with illustrated square tiles)
+    - ERGs
+    - Platform (Analytics, Business Insights, Collaborative Data Science, Data Pipelines, etc.)
+    - Feature (Accelerator-Aware Scheduler, Built-in Functions, JDK 11, Join Hints)
+    - Monitoring
+    - Connectors
+    - Performance
+    - SQL Compatibility
+    - PySpark and SparkR
+    - Extensibility & Document
+    - Usability and Stability
+    - Financial Services (Credit Analysis, Customer Analysis, Financial Modeling, etc.)
+    - Healthcare and Life Sciences (Clinical Data, Genomics, Healthcare, Medical Imaging, Medical IoT, Social Medicine)
+    - Media and Entertainment
+    - Retail / CPG
+    - Public Sector
+    - Platform Technologies
+    - Security (7 pages)
+    - Miscellaneous (6 pages)
+    - Arrows
+  resources-illustrations:
+    slides: 86-97
+    description: 11 full-bleed Databricks brand illustrations (flat geometric style)
+    categories:
+    - Careers
+    - Company
+    - Customers
+    - Delta Live Tables
+    - Lakehouse
+    - Learn
+    - Partners
+    - Solutions
+    - SQL Analytics
+    - Unity Catalog
+    - Data Engineering

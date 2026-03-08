@@ -1,0 +1,48 @@
+{
+  "name": "Databricks Corporate",
+  "version": "1.0.0",
+  "description": "Official Databricks corporate presentation theme for pptxgenjs",
+  "author": "Databricks SA Team",
+  "canvas": {
+    "width": 10,
+    "height": 5.625,
+    "layout": "LAYOUT_16x9"
+  },
+  "files": {
+    "colors": "./colors.json",
+    "typography": "./typography.json",
+    "layouts": "./layouts.js"
+  },
+  "layouts": [
+    {
+      "name": "title_dark",
+      "function": "addTitleSlideDark",
+      "description": "Dark title slide with lava accent bar"
+    },
+    {
+      "name": "section_break",
+      "function": "addSectionBreak",
+      "description": "Section divider with centered text"
+    },
+    {
+      "name": "content_basic",
+      "function": "addContentBasic",
+      "description": "Basic content slide with section label, title, and body"
+    },
+    {
+      "name": "content_2col",
+      "function": "addContent2Col",
+      "description": "Two-column content layout"
+    },
+    {
+      "name": "card_grid_3col",
+      "function": "addCardGrid3Col",
+      "description": "Three white cards with colored accent bars"
+    },
+    {
+      "name": "comparison",
+      "function": "addComparison",
+      "description": "Side-by-side comparison with colored borders"
+    }
+  ]
+}
