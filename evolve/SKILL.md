@@ -9,7 +9,9 @@ Auto-research applied to individual Claude Code skills. Based on Karpathy's auto
 
 **Core principle:** Prompts are noisy distributions. You cannot evaluate a skill by running it once. Run it N times, score with binary evals, compare medians. Only keep improvements.
 
-**Key constraint:** The agent that generates the output MUST NOT be the same context that scores it. Use a fresh `claude -p` invocation for each execution AND a separate `claude -p` invocation for scoring. Same-context scoring inflates results because the scorer remembers what it intended, not what it produced.
+**Key constraint:** The agent that generates the output MUST NOT be the same context that scores it. Use a fresh Agent subagent for each execution AND a separate Agent subagent for scoring. Same-context scoring inflates results because the scorer remembers what it intended, not what it produced.
+
+**Implementation:** Use the `Agent` tool (subagent_type: "general-purpose") for all isolated execution and scoring. NEVER use `claude -p` — it has unreliable flag support and fails silently. Launch multiple subagents in parallel for efficiency. Each subagent writes its output to a file, which the orchestrator reads only after completion.
 
 ---
 
@@ -23,8 +25,7 @@ Auto-research applied to individual Claude Code skills. Based on Karpathy's auto
 - Target skill must be in `~/.claude/skills/{skill-name}/SKILL.md`
 - Eval file must exist at `~/.claude/skills/{skill-name}/evals.md` (generate with `/evolve evals`)
 - Git must be initialized in `~/.claude/` (for baseline/challenger ratchet)
-- `claude` CLI must be available (for isolated execution via `claude -p`)
-- If the target skill depends on MCP servers, verify they're accessible from `claude -p` by running: `claude -p "list your available MCP tools" --no-input`. MCP servers configured in user settings should carry over, but project-scoped servers may not.
+- Agent tool must be available (for isolated execution and scoring via subagents)
 
 ### Flags
 - `--dry-run` — run ONE execution + ONE score + validate JSON parsing + check git status. No commits, no branch. Use this to verify the pipeline works before burning tokens on a full evolution.
@@ -33,23 +34,20 @@ Auto-research applied to individual Claude Code skills. Based on Karpathy's auto
 Before starting, verify:
 ```
 1. git -C ~/.claude/skills status       (clean working tree, or commit first)
-2. which claude                          (CLI available)
-3. Test: claude -p "echo hello" --no-input  (CLI responding)
-4. Read ~/.claude/skills/{skill-name}/SKILL.md
-5. Read ~/.claude/skills/{skill-name}/evals.md
-6. Validate evals.md has: ≥1 test input, 6-12 binary evals, YES/NO examples
-7. If skill uses MCP: claude -p "list your available MCP tools" --no-input
-   → Verify the required servers appear in the output
+2. Agent tool is available               (for spawning isolated subagents)
+3. Read ~/.claude/skills/{skill-name}/SKILL.md
+4. Read ~/.claude/skills/{skill-name}/evals.md
+5. Validate evals.md has: ≥1 test input, 6-12 binary evals, YES/NO examples
 ```
 
 ### --dry-run mode
 
 If `--dry-run` is set, run a minimal pipeline check and stop:
 ```
-1. Run pre-flight checks (all 7 steps above)
-2. Execute skill ONCE with Input 1 (isolated claude -p)
-3. Score the output ONCE (isolated claude -p)
-4. Parse the score JSON (strip preamble, validate with jq)
+1. Run pre-flight checks (all steps above)
+2. Execute skill ONCE with Input 1 (isolated Agent subagent)
+3. Score the output ONCE (isolated Agent subagent)
+4. Parse the score JSON (strip preamble, validate)
 5. Report:
    - "Dry run complete"
    - Pre-flight: PASS/FAIL per check
@@ -80,23 +78,29 @@ The branch isolates evolution work from the main skill. Like autoresearch, each 
 
 ## Step 2: Baseline Run
 
-### Execution (isolated)
+### Execution (isolated via Agent subagents)
 
-For each test input in evals.md, for each run 1..N:
-```bash
-# Execute skill in isolated context — the executor has NO knowledge of evals
-# IMPORTANT: Tell the executor to OUTPUT the artifact directly, not call MCP tools.
-# claude -p runs non-interactively — MCP tool approvals will block.
-claude -p "You have access to the skill at ~/.claude/skills/{skill-name}/SKILL.md. \
-  Read it, then complete this task: {test_input} \
-  \
-  IMPORTANT: Output the result directly as text with code blocks. \
-  Do NOT attempt to call MCP tools (they are not available in this context). \
-  Write the diagram/code/artifact inline in your response." \
-  > ~/.claude/skills/{skill-name}/runs/baseline-input{I}-run{J}.md 2>/dev/null
+For each test input in evals.md, for each run 1..N, launch an Agent subagent:
+
+```
+Agent(
+  description: "evolve-exec-{variant}-input{I}-run{J}",
+  prompt: "Read the skill at ~/.claude/skills/{skill-name}/SKILL.md, then complete this task:
+    {test_input}
+
+    IMPORTANT: Output the result directly as text with code blocks.
+    Do NOT attempt to call MCP tools.
+    Write the diagram/code/artifact inline in your response.
+
+    After generating the output, write the COMPLETE output to:
+    ~/.claude/skills/{skill-name}/runs/{variant}-input{I}-run{J}.md",
+  run_in_background: true
+)
 ```
 
-**CRITICAL:** Redirect stderr to /dev/null (not stdout). Output goes to the file. This is directly from Karpathy's program.md — the agent redirects `train.py` output to `run.log` and reads only the metrics afterward.
+**Launch all runs in parallel** — send multiple Agent calls in a single message for maximum throughput. Each subagent is an isolated context with no knowledge of evals.
+
+**CRITICAL:** The subagent writes its output to a file. The orchestrator reads only the file afterward — never the subagent's return value. This keeps the orchestrator's context clean.
 
 ### Render Hook (optional, declared in evals.md)
 
@@ -126,55 +130,38 @@ The renderer is a **deterministic transform** — same code always produces the 
 
 ### Scoring (isolated, separate context)
 
-The scorer receives BOTH the source text AND the rendered image (if render hook produced one).
+The scorer receives BOTH the source text AND the rendered image (if render hook produced one). Launch scoring subagents AFTER all execution subagents complete.
 
-For each output file:
-```bash
-# Score in a DIFFERENT context — the scorer never saw the execution
-# If a rendered image exists, include it for visual evals
-RENDER_ARG=""
-if [ -f "runs/baseline-input{I}-run{J}.png" ]; then
-  RENDER_ARG="A rendered PNG of this diagram is attached. Use it to evaluate visual quality evals (legibility, layout, contrast, flow direction)."
-fi
+For each output file, launch a scoring Agent subagent:
 
-claude -p "You are an eval scorer. Read this output and answer each question YES or NO. \
-  Output ONLY a valid JSON object: {\"E1\": true/false, \"E2\": true/false, ...} \
-  \
-  EVALS: \
-  $(cat ~/.claude/skills/{skill-name}/evals.md) \
-  \
-  SOURCE OUTPUT TO SCORE: \
-  $(cat ~/.claude/skills/{skill-name}/runs/baseline-input{I}-run{J}.md) \
-  \
-  ${RENDER_ARG}" \
-  $([ -f "runs/baseline-input{I}-run{J}.png" ] && echo "--files runs/baseline-input{I}-run{J}.png") \
-  > score.json 2>/dev/null
+```
+Agent(
+  description: "evolve-score-{variant}-input{I}-run{J}",
+  prompt: "You are an eval scorer. You must NOT generate or modify any artifacts.
+
+    Read the evals at: ~/.claude/skills/{skill-name}/evals.md
+    Read the output to score at: ~/.claude/skills/{skill-name}/runs/{variant}-input{I}-run{J}.md
+
+    For each eval (E1, E2, ..., EN), answer YES or NO based on the output.
+
+    Write ONLY a valid JSON object to: ~/.claude/skills/{skill-name}/runs/score-{variant}-input{I}-run{J}.json
+    Format: {\"E1\": true, \"E2\": false, ...}
+    No preamble, no explanation — just the JSON file.",
+  run_in_background: true
+)
 ```
 
+**Launch all scoring subagents in parallel.** Each scorer is a fresh context that never saw the execution.
+
 **Structural evals** (syntax, format, arrow labels) are scored from the source text.
-**Visual evals** (legibility, contrast, layout, spaghetti) are scored from the rendered PNG.
-The scorer sees both and judges each eval against the appropriate artifact.
+**Visual evals** (legibility, contrast, layout, spaghetti) are scored from the rendered PNG (if available).
 
 ### Scoring JSON parsing (defensive)
 
-The scorer may emit preamble text before the JSON. Always strip it:
-```bash
-# Extract JSON from scorer output — strip any preamble/explanation
-RAW=$(cat score.json)
-JSON=$(echo "$RAW" | grep -o '{.*}' | head -1)
-
-# Validate with jq
-echo "$JSON" | jq . > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-  # Retry once — re-run the scoring call with stricter instructions
-  claude -p "Output ONLY valid JSON, nothing else. {same scoring prompt}" \
-    --no-input > score-retry.json 2>&1
-  JSON=$(cat score-retry.json | grep -o '{.*}' | head -1)
-  echo "$JSON" | jq . > /dev/null 2>&1 || echo "PARSE_FAILURE" > score-final.json
-fi
-```
-
-If a score file has `PARSE_FAILURE` after retry, exclude that run from aggregation and log a warning. If >50% of runs fail to parse, abort the evolution — the scoring prompt needs fixing.
+After scoring subagents complete, read each score JSON file. The subagent should write clean JSON directly, but if parsing fails:
+1. Re-launch a scoring subagent with stricter instructions ("Output ONLY valid JSON, nothing else")
+2. If retry also fails, mark as PARSE_FAILURE and exclude from aggregation
+3. If >50% of runs fail to parse, abort — the scoring prompt needs fixing.
 
 ### Aggregation
 
@@ -234,8 +221,8 @@ Identical process to Step 2 (isolated execution + isolated scoring) but against 
 
 ```
 For each test input in evals.md, for each run 1..N:
-  1. Execute skill with SAME inputs as baseline (isolated claude -p)
-  2. Score output with SAME evals (isolated claude -p, separate context)
+  1. Execute skill with SAME inputs as baseline (isolated Agent subagent)
+  2. Score output with SAME evals (isolated Agent subagent, separate context)
   3. Record scores
 
 Challenger score = median(total_scores across all runs)
@@ -468,7 +455,7 @@ Auto-maintained per skill. Append-only.
 
 5. **Eval quality > run count.** Bad evals with 100 runs produce garbage. Good evals with 3 runs produce signal. Invest time in `/evolve evals` first.
 
-6. **Separate generator and judge.** Every execution and every scoring call uses a fresh `claude -p` context. The same context must never both generate and score output. This is the equivalent of Karpathy's separation between `train.py` (generates the model) and `prepare.py`'s eval function (scores it).
+6. **Separate generator and judge.** Every execution and every scoring call uses a fresh Agent subagent. NEVER use `claude -p` — it has unreliable flags and fails silently. The same context must never both generate and score output. This is the equivalent of Karpathy's separation between `train.py` (generates the model) and `prepare.py`'s eval function (scores it).
 
 7. **Read from disk, not memory.** Before generating each challenger, re-read SKILL.md from the filesystem. After each keep/discard, the file state changed. Your memory of what's in it may be stale.
 
@@ -489,8 +476,8 @@ Creating branch: evolve/diagram/2026-03-22
 Committing current SKILL.md as baseline...
 
 ── Baseline Run (3 runs × 2 inputs = 6 executions) ──
-Executing via claude -p (isolated)... ████████████ done
-Scoring via claude -p (isolated)... ████████████ done
+Executing via Agent subagents (isolated)... ████████████ done
+Scoring via Agent subagents (isolated)... ████████████ done
 
 Per-eval pass rates:
   E1 (legible text):      6/6 (100%)
