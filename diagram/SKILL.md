@@ -1,8 +1,9 @@
 ---
 name: diagram
-version: "3.1"
+version: "3.2"
 description: "Technical architecture diagrams for solutions architects. Multi-format via uml-mcp (D2, PlantUML, C4, Mermaid, Graphviz, ERD, BPMN). Excalidraw for presentations. USE WHEN diagram, architecture, data flow, state diagram, sequence diagram, system design, medallion, lakehouse, pipeline, Unity Catalog, C4."
 changelog: |
+  v3.2: Auto-layout vs positioned layout decision framework — Excalidraw required for reference architectures with spanning bars. Updated tool selection, format guide, layout spine, and anti-patterns.
   v3.1: Border conventions (solid/dashed), icon conventions (teal steps vs orange Databricks icons), cloud platform foundation layer, lifecycle exception for circular flows, expanded product naming (Lakeflow Connect, AI Agent Systems, Delta Sharing, AI/BI Genie, Lakeflow Spark Declarative Pipelines).
   v3.0: Databricks reference architecture visual standards — palette, layout spine, governance positioning, numbered flow steps, medallion descriptive labels, foundation bar. Extracted from official Databricks reference architectures (Data Intelligence Platform, Healthcare Patient Personalization, DASF).
   v2.1: Added Databricks GTM use cases, audience-intent workflow, D2 styling guide, interactive diagram cross-ref, version tracking, live reload workflow
@@ -13,23 +14,45 @@ changelog: |
 
 Generate technical architecture diagrams using multiple formats. Built for solutions architects working with Databricks, AWS, and data platforms.
 
-**v3.1 note:** Databricks-facing diagrams now follow the official reference architecture visual language. See "Databricks Visual Standards" section below.
+**v3.2 note:** Databricks-facing diagrams now follow the official reference architecture visual language. See "Databricks Visual Standards" section below.
 
 ## Tool Selection
 
 ```
-C4 architecture (Context/Container/Component)?  → uml-mcp (PlantUML C4)
-Clean, modern layout with good theming?          → uml-mcp (D2)
-Needs to render in GitHub markdown?              → uml-mcp (Mermaid) or mermaid server (live reload)
-Graph/network topology?                          → uml-mcp (Graphviz)
-Entity-relationship / data model?                → uml-mcp (ERD)
-Business process / workflow?                     → uml-mcp (BPMN)
-Presentation-ready, hand-drawn aesthetic?         → Excalidraw
-Quick preview with live reload?                  → mermaid server (fallback)
-Interactive, clickable nodes / tooltips?         → See interactive-diagrams skill
+Auto-layout OK (linear flows, sequences, ERDs)?            → uml-mcp (D2, Mermaid, PlantUML)
+Positioned layout required (reference architectures,        → Excalidraw
+  multi-zone diagrams, Databricks layout spine)?
+C4 architecture (Context/Container/Component)?              → uml-mcp (PlantUML C4)
+Needs to render in GitHub markdown?                         → uml-mcp (Mermaid)
+Graph/network topology?                                     → uml-mcp (Graphviz)
+Entity-relationship / data model?                           → uml-mcp (ERD)
+Business process / workflow?                                → uml-mcp (BPMN)
+Quick preview with live reload?                             → mermaid server (fallback)
+Interactive, clickable nodes / tooltips?                    → See interactive-diagrams skill
 ```
 
-**Default to uml-mcp** — it covers the most formats via Kroki. Use the dedicated `mermaid` server only when you need live browser reload during iteration. For interactive, clickable diagrams, cross-reference the **interactive-diagrams** skill.
+**Default to uml-mcp** for auto-layout diagrams — it covers the most formats via Kroki. **Default to Excalidraw** for reference architectures with spanning bars or deliberate zone positioning. Use the dedicated `mermaid` server only when you need live browser reload during iteration. For interactive, clickable diagrams, cross-reference the **interactive-diagrams** skill.
+
+### Auto-Layout vs Positioned Layout
+
+This is the most important format decision. Get it wrong and the diagram looks like a dependency graph instead of an architecture.
+
+**Use auto-layout (D2, Mermaid, PlantUML)** when:
+- The diagram is a linear flow (A → B → C → D)
+- Sequence diagrams (message arrows between participants)
+- ERDs and class diagrams (node-link with no spatial meaning)
+- Simple flowcharts with <15 nodes and no spanning elements
+- The spatial position of nodes doesn't carry meaning
+
+**Use positioned layout (Excalidraw)** when:
+- The diagram has horizontal spanning bars (governance, orchestration, foundation)
+- Zones must be deliberately placed (sources left, consumers right, platform center)
+- The Databricks layout spine is required (any customer-facing reference architecture)
+- The diagram has >15 nodes across 4+ logical zones
+- Color fills, branded elements, or zone backgrounds need precise control
+- You need it to look like an official Databricks reference architecture
+
+**The test:** If the diagram has ANY full-width horizontal bar (governance, foundation, orchestration), it CANNOT use auto-layout. Auto-layout engines treat bars as regular nodes and scatter them. Use Excalidraw.
 
 ## MCP Tools Available
 
@@ -64,6 +87,7 @@ Interactive, clickable nodes / tooltips?         → See interactive-diagrams sk
 | Business process flows | **BPMN** | Industry standard |
 | Quick iteration with live preview | **Mermaid** (via mermaid server) | Live browser reload |
 | Customer-facing slides | **Excalidraw** | Hand-drawn aesthetic |
+| Databricks reference architecture (multi-zone, branded) | **Excalidraw** | Only tool that supports positioned layout with zone control |
 | Clickable, interactive, zooming | **D3.js / Cytoscape** | See interactive-diagrams skill |
 
 ---
@@ -91,6 +115,8 @@ Every Databricks reference architecture follows the same horizontal structure:
 - Consumers/applications on the far right as a vertical stack with icons.
 - The Databricks platform occupies the center as a large bounded region.
 - The platform banner ("Data Intelligence Platform") spans the full width of the center section at the top, in coral/salmon.
+
+**Format implication:** The Databricks layout spine with its horizontal spanning bars (platform banner, orchestration, governance, foundation) REQUIRES positioned layout. D2 and Mermaid auto-layout engines will scatter these bars as regular nodes, destroying the visual hierarchy. Use Excalidraw for any diagram that follows this spine.
 
 **Lifecycle exception:** Iterative or lifecycle processes (e.g., AI Agent Systems, MLOps loops) use a CIRCULAR layout instead of left-to-right linear flow. The Databricks AI Agent lifecycle shows: Prepare data → Build agents → Evaluate agents → Deploy agents → Govern agents in a cycle. When a lifecycle process appears within a linear diagram, it occupies its own zone with a circular internal layout while the surrounding data flow remains left-to-right.
 
@@ -1139,6 +1165,7 @@ A diagram that is stale is worse than no diagram. If you can't maintain it, don'
 - **Unity Catalog as a side-node** — governance is structural. It's a bar, not a box.
 - **Generic product names** — "data catalog" instead of "Unity Catalog", "ETL" instead of "Lakeflow Jobs"
 - **Unlabeled medallion tiers** — "Bronze (Raw)" without saying what raw means for THIS use case
+- **Auto-layout for reference architectures** — D2/Mermaid auto-layout cannot produce the Databricks layout spine. Governance bars end up as floating nodes, zones scatter randomly. Use Excalidraw for any diagram with spanning bars or deliberate zone positioning.
 
 ---
 
@@ -1172,7 +1199,8 @@ Use this when iterating on diagrams with a user in real-time:
 
 **Changelog & Cross-References:**
 
-- v3.1 (current): Border conventions (solid/dashed), icon conventions (teal steps vs orange Databricks icons), cloud platform foundation layer, lifecycle exception for circular flows, expanded product naming (Lakeflow Connect, AI Agent Systems, Delta Sharing, AI/BI Genie, Lakeflow Spark Declarative Pipelines).
+- v3.2 (current): Auto-layout vs positioned layout decision framework — Excalidraw required for reference architectures with spanning bars. Updated tool selection, format guide, layout spine, and anti-patterns.
+- v3.1: Border conventions (solid/dashed), icon conventions (teal steps vs orange Databricks icons), cloud platform foundation layer, lifecycle exception for circular flows, expanded product naming (Lakeflow Connect, AI Agent Systems, Delta Sharing, AI/BI Genie, Lakeflow Spark Declarative Pipelines).
 - v3.0: Databricks reference architecture visual standards — palette, layout spine, governance positioning, numbered flow steps, medallion descriptive labels, foundation technology bar, Databricks product naming. Updated all GTM examples and pattern library to match.
 - v2.1: Added Databricks GTM use cases, audience-intent workflow, D2 styling guide, interactive diagram cross-ref, version tracking, live reload workflow
 - v2.0: Initial skill with uml-mcp, patterns library, C4 examples
