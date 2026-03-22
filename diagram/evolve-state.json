@@ -1,0 +1,33 @@
+{
+  "skill": "diagram",
+  "branch": "evolve/diagram/2026-03-22",
+  "phase": "ROUND_2_READY",
+  "baseline_median": 9,
+  "baseline_max": 10,
+  "rounds_completed": 1,
+  "rounds_total": 5,
+  "round1": {
+    "hypothesis": "Add governance arrow sprawl anti-pattern with dashed lines for cross-cutting components",
+    "result": "LOSS",
+    "challenger_median": 9,
+    "note": "Tied on median but E10 got worse (67%→56%). Helped D2 (input3) but hurt PlantUML (input2 dropped from 9-10 to 8). Reverted.",
+    "lesson": "Format-specific advice doesn't generalize — PlantUML C4 defaults override color semantics, causing E6 failures. Need format-aware guidance, not one-size-fits-all."
+  },
+  "weakest_evals": {
+    "E10": {"rate": "67%", "issue": "Unity Catalog governance arrows break directional flow in PlantUML and D2"},
+    "E3": {"rate": "89%", "issue": "Gold-to-SQL arrows sometimes unlabeled in Mermaid"},
+    "E6": {"rate": "100% baseline but 67% in challenger", "issue": "PlantUML C4 ignores custom colors — systemic format limitation"}
+  },
+  "next_hypothesis_ideas": [
+    "Target E3 instead of E10 — add explicit step: 'verify every arrow has a label before outputting'",
+    "E10 may be an eval problem not a skill problem — PlantUML C4 auto-layouts, flow direction is not controllable via source code",
+    "Fetch Databricks reference architectures (https://www.databricks.com/resources/architectures) for better pattern templates"
+  ],
+  "render_notes": {
+    "mermaid": "kroki.io/mermaid/png — works",
+    "plantuml": "kroki.io/plantuml/png — works",
+    "d2": "kroki.io/d2/svg — SVG only, PNG not supported"
+  },
+  "scoring_method": "single scorer agent reads all 9 outputs + rendered images, writes JSON files",
+  "runs_per_variant": 3
+}
