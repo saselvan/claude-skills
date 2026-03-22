@@ -85,28 +85,75 @@ The branch isolates evolution work from the main skill. Like autoresearch, each 
 For each test input in evals.md, for each run 1..N:
 ```bash
 # Execute skill in isolated context — the executor has NO knowledge of evals
+# IMPORTANT: Tell the executor to OUTPUT the artifact directly, not call MCP tools.
+# claude -p runs non-interactively — MCP tool approvals will block.
 claude -p "You have access to the skill at ~/.claude/skills/{skill-name}/SKILL.md. \
-  Read it, then complete this task: {test_input}" \
-  > ~/.claude/skills/{skill-name}/runs/baseline-input{I}-run{J}.md 2>&1
+  Read it, then complete this task: {test_input} \
+  \
+  IMPORTANT: Output the result directly as text with code blocks. \
+  Do NOT attempt to call MCP tools (they are not available in this context). \
+  Write the diagram/code/artifact inline in your response." \
+  > ~/.claude/skills/{skill-name}/runs/baseline-input{I}-run{J}.md 2>/dev/null
 ```
 
-**CRITICAL:** Redirect output. Do NOT let execution output flood your context. This is directly from Karpathy's program.md — the agent redirects `train.py` output to `run.log` and reads only the metrics afterward.
+**CRITICAL:** Redirect stderr to /dev/null (not stdout). Output goes to the file. This is directly from Karpathy's program.md — the agent redirects `train.py` output to `run.log` and reads only the metrics afterward.
+
+### Render Hook (optional, declared in evals.md)
+
+Some skills produce artifacts that need transformation before scoring. For example, diagram skills produce source code that must be **rendered to an image** before visual evals can be scored.
+
+If evals.md declares a `## Render Pipeline` section, the orchestrator runs it between execution and scoring:
+
+```bash
+# Example: diagram skill render hook
+# 1. Extract code block from execution output
+CODE=$(sed -n '/^```/,/^```/p' runs/baseline-input{I}-run{J}.md | sed '1d;$d')
+FORMAT=$(head -1 <<< "$CODE" | tr -d '`')  # e.g., "mermaid", "d2", "plantuml"
+
+# 2. Render to PNG via deterministic tool (no LLM involved)
+# Option A: Kroki public API (works for all formats)
+curl -s -X POST https://kroki.io/${FORMAT}/png \
+  --data-raw "$CODE" \
+  -o runs/baseline-input{I}-run{J}.png
+
+# Option B: mermaid CLI (local, Mermaid only)
+echo "$CODE" | mmdc -i - -o runs/baseline-input{I}-run{J}.png -t dark
+
+# Option C: uml-mcp generate_uml (if available in orchestrator context)
+```
+
+The renderer is a **deterministic transform** — same code always produces the same image. It adds no noise to the eval.
 
 ### Scoring (isolated, separate context)
+
+The scorer receives BOTH the source text AND the rendered image (if render hook produced one).
 
 For each output file:
 ```bash
 # Score in a DIFFERENT context — the scorer never saw the execution
+# If a rendered image exists, include it for visual evals
+RENDER_ARG=""
+if [ -f "runs/baseline-input{I}-run{J}.png" ]; then
+  RENDER_ARG="A rendered PNG of this diagram is attached. Use it to evaluate visual quality evals (legibility, layout, contrast, flow direction)."
+fi
+
 claude -p "You are an eval scorer. Read this output and answer each question YES or NO. \
-  Output ONLY a JSON object: {\"E1\": true/false, \"E2\": true/false, ...} \
+  Output ONLY a valid JSON object: {\"E1\": true/false, \"E2\": true/false, ...} \
   \
   EVALS: \
   $(cat ~/.claude/skills/{skill-name}/evals.md) \
   \
-  OUTPUT TO SCORE: \
-  $(cat ~/.claude/skills/{skill-name}/runs/baseline-input{I}-run{J}.md)" \
-  --no-input > score.json 2>&1
+  SOURCE OUTPUT TO SCORE: \
+  $(cat ~/.claude/skills/{skill-name}/runs/baseline-input{I}-run{J}.md) \
+  \
+  ${RENDER_ARG}" \
+  $([ -f "runs/baseline-input{I}-run{J}.png" ] && echo "--files runs/baseline-input{I}-run{J}.png") \
+  > score.json 2>/dev/null
 ```
+
+**Structural evals** (syntax, format, arrow labels) are scored from the source text.
+**Visual evals** (legibility, contrast, layout, spaghetti) are scored from the rendered PNG.
+The scorer sees both and judges each eval against the appropriate artifact.
 
 ### Scoring JSON parsing (defensive)
 
@@ -301,6 +348,15 @@ Generate binary evals for a skill. This is the measurement tool — get this rig
 ```markdown
 # Evals: {skill-name}
 
+## Render Pipeline (optional)
+Declares how to transform execution output before scoring.
+Omit this section if the skill produces text-only output.
+
+render_tool: kroki | mmdc | none
+render_format_detect: "extract first code block, use language tag as format"
+render_output: PNG
+scorer_receives: source + rendered_image
+
 ## Test Inputs
 Inputs the skill will be run against during evolution.
 Include 2-3 inputs that cover different use cases of the skill.
@@ -316,6 +372,7 @@ Include 2-3 inputs that cover different use cases of the skill.
 
 ## Binary Evals
 Answer YES or NO for each. Score = count(YES) / total.
+Mark each eval as [source], [visual], or [both] to indicate what artifact the scorer judges it against.
 
 ### E1: {eval name}
 {Question about the output that can be answered YES or NO}
