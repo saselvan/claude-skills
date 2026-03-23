@@ -5,14 +5,18 @@
 # instead of "do they look right." This rubric converts visual quality into
 # mechanical pass/fail checks that can be applied to a rendered thumbnail.
 #
-# WHEN TO USE: After every render of add_architecture_advanced().
-# Read the thumbnail PNG, then run every check below. Any FAIL = fix and re-render.
+# WHEN TO USE: After every render of an architecture diagram slide.
+# Read the rendered PNG, then run every check below. Any FAIL = fix and re-render.
+#
+# NOTE: Architecture diagrams should be generated using the diagram or arch-diagram
+# skills and embedded as images. This rubric evaluates the rendered image regardless
+# of how it was generated.
 
 ## How to evaluate
 
-When you get_thumbnail_png() and read the image, do NOT just glance at it and say
+When you read the rendered PNG, do NOT just glance at it and say
 "looks good." Instead, run every check below in order. Write out each check result
-explicitly. If you catch yourself writing "✓" without actually verifying the specific
+explicitly. If you catch yourself writing "PASS" without actually verifying the specific
 thing described, you are cheating. Stop and look again.
 
 ---
@@ -20,8 +24,8 @@ thing described, you are cheating. Stop and look again.
 ## Check 0: Narrative Intent
 
 Before evaluating any visual element, verify the diagram has a defined
-narrative. Look for a comment block at the top of the rendering script
-with these three items:
+narrative. Look for a comment block at the top of the rendering code or
+the strategy notes with these three items:
 
 1. **ARGUMENT:** What should the audience conclude from this diagram?
    One sentence. Must be a claim, not a description.
@@ -58,24 +62,24 @@ of how clean the layout is.
 
 ## Check 1: Containment
 
-For EACH tier band (the full-width gray rectangle):
-- List every component that belongs to this tier
-- Is each component VISUALLY INSIDE the band? (component edges do not extend beyond band edges)
-- Is the tier label VISUALLY INSIDE the band and not overlapping any component?
+For EACH tier band or container (full-width rectangle, zone boundary, etc.):
+- List every component that belongs to this container
+- Is each component VISUALLY INSIDE the container? (component edges do not extend beyond container edges)
+- Is the container label VISUALLY INSIDE the container and not overlapping any component?
 
 FAIL conditions:
-- Any component box/cylinder extends beyond its tier band boundary
-- Any tier label overlaps a component
-- Any component appears to float between two tier bands
+- Any component box/cylinder extends beyond its container boundary
+- Any container label overlaps a component
+- Any component appears to float between two containers
 
-This is the most common failure. Components that overflow their tier make the diagram
+This is the most common failure. Components that overflow their container make the diagram
 look broken even if the data is correct.
 
 ---
 
 ## Check 2: Label Placement Accuracy
 
-For EACH flow label (writes, reads, WAL stream, archive, persist):
+For EACH flow label:
 - What flow does this label describe?
 - What two components does that flow connect?
 - Is the label positioned ON or NEAR the arrow connecting those two components?
@@ -83,7 +87,6 @@ For EACH flow label (writes, reads, WAL stream, archive, persist):
 
 FAIL conditions:
 - A label is placed on or near a component it doesn't relate to
-  (e.g., "reads" label on Safekeepers — reads don't touch Safekeepers)
 - A label is placed far from its arrow, near a different arrow
 - Two labels overlap each other and are unreadable
 
@@ -97,7 +100,7 @@ that may not correspond to the visual location of the flow.
 Scan the entire slide for ANY case where:
 - Two text elements overlap (even partially)
 - A text element overlaps a shape it doesn't belong to
-- The legend overlaps any tier band or component
+- The legend overlaps any container or component
 - An arrow overlaps a label it doesn't belong to
 - Any element is clipped by the slide edge
 
@@ -114,47 +117,42 @@ not on top of the last tier.
 For EACH flow arrow on the slide:
 - What color is it?
 - Trace it from start to end. What component does it start from? What component does it end at?
-- Does that match the architectural reality?
-
-Cross-reference with the actual architecture:
-- Writes (red/lava): R/W Compute → Safekeepers. ONLY.
-- Reads (green): Read Replicas → Pageservers. ONLY. Reads do NOT touch Safekeepers or WAL.
-- WAL stream (yellow): Safekeepers → Pageservers
-- Archive (yellow dashed): Safekeepers → Object Storage
-- Persist (yellow): Pageservers → Object Storage
+- Does that match the architecture being diagrammed? Do different flow types use distinct colors?
+- Are any expected flows missing from the diagram?
 
 FAIL conditions:
 - An arrow connects two components that shouldn't be connected
 - An arrow has the wrong color for its flow type
 - An arrow is missing (a flow that should exist doesn't have a visible arrow)
+- Different flow types use the same color (making them indistinguishable)
 
 ---
 
 ## Check 5: Corridor Separation
 
-- Are ALL red/lava arrows on the LEFT side of the slide?
-- Are ALL green arrows on the RIGHT side of the slide?
-- Do any red and green arrows cross each other?
+- Are different flow types visually separated?
+- Do any flow arrows of different types cross each other?
+- Zero crossings between different flow types is the target.
 
 FAIL conditions:
-- A red arrow appears on the right side
-- A green arrow appears on the left side
-- Any crossing between different-colored flows
+- Flow arrows of different types cross each other unnecessarily
+- Different flow types are interleaved rather than spatially grouped
+- The diagram could be reorganized to eliminate crossings but wasn't
 
 ---
 
 ## Check 6: Visual Hierarchy
 
-- Are the "scales independently" boundary labels visible and readable?
-- Are they between every adjacent pair of tiers?
-- Are the tier bands visually distinct from the slide background? (not the same shade)
-- Is there a clear visual gap between each tier?
+- Are boundary or tier labels visible and readable?
+- Are they between every adjacent pair of zones/tiers?
+- Are the container bands visually distinct from the slide background? (not the same shade)
+- Is there a clear visual gap between each tier/zone?
 - Is the title at the top of the slide, not overlapping any content?
 
 FAIL conditions:
-- Scaling boundaries are missing, invisible, or overlapping content
-- Tier bands blend into the background (no contrast)
-- Tiers touch each other with no gap
+- Boundary labels are missing, invisible, or overlapping content
+- Containers blend into the background (no contrast)
+- Tiers/zones touch each other with no gap
 - Title overlaps content
 
 ---
@@ -164,7 +162,7 @@ FAIL conditions:
 Imagine this slide projected on a screen in a conference room:
 - Can you read every component name?
 - Can you read every flow label?
-- Can you read every tier label?
+- Can you read every tier/zone label?
 - Can you read the legend?
 - Is any text smaller than ~9pt equivalent?
 
@@ -208,13 +206,13 @@ Count PASS checks out of 9 total.
 ## Common Positioning Bugs and Fixes
 
 ### Legend overlaps last tier
-The legend y-position is calculated relative to CONTENT_HEIGHT but doesn't account for
+The legend y-position is calculated relative to content height but doesn't account for
 the last tier's actual bottom edge. Fix: calculate legend_y from the actual bottom of
-the last tier band + padding, not from CONTENT_HEIGHT.
+the last tier band + padding, not from the content area height.
 
-### Components overflow tier bands
-Component y-position + component height > tier band y-position + tier band height.
-Fix: clamp component dimensions to fit within band_y + band_h with padding.
+### Components overflow containers
+Component y-position + component height > container y-position + container height.
+Fix: clamp component dimensions to fit within container_y + container_h with padding.
 
 ### Labels on wrong components
 Label x/y is calculated from flow midpoint, but the midpoint falls inside a different
@@ -223,26 +221,23 @@ Check every label position against every component bounding box — if it's insi
 a box it doesn't belong to, shift it.
 
 ### Tier labels collide with flow labels
-Both occupy the left side of the tier band. Fix: reserve a label column on the far left
+Both occupy the left side of the container band. Fix: reserve a label column on the far left
 (inside the band, before the component zone) and ensure flow labels are placed in the
 gutter or on the arrow, not in the label column.
 
 ### Middle tiers have no visible background
-Only first and last tiers get bgCard fills. Fix: ensure every tier gets a band background
+Only first and last tiers get background fills. Fix: ensure every tier gets a band background
 shape, regardless of position.
 
 ---
 
 ## Integration with deck-render skill
 
-Add this to the render→evaluate→fix loop in SKILL.md's guidance:
-
-After rendering any slide with `add_architecture_advanced()`:
-1. Get thumbnail
-2. Read thumbnail with vision
-3. Run all 8 checks from this rubric (write out each result)
-4. If any check FAILS: fix the code, re-render, go to step 1
-5. If 7/8+ PASS: include honest assessment in output, present to user
+After rendering any slide with an architecture diagram:
+1. Read the rendered PNG
+2. Run all 9 checks from this rubric (write out each result)
+3. If any check FAILS: fix the issue, re-render, go to step 1
+4. If 8/9+ PASS: include honest assessment in output, present to user
 
 This rubric is NOT optional. Architecture diagrams are the highest-risk slide type
 for visual quality issues. The default "looks reasonable" evaluation is insufficient.

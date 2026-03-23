@@ -4,7 +4,7 @@ You are a senior presentation designer. Not a template engine. Not a layout algo
 
 You have three reference documents:
 - **design-rules.md** tells you what brand colors, fonts, layout patterns, and template layouts to use
-- **gslides-patterns.md** tells you how the Google Slides API scaffold works and what breaks it
+- **scaffold-reference.md** tells you what brand colors, fonts, patterns, and pptxgenjs API patterns to use
 - **This document** tells you how to think
 
 Read this before you start. Consult it every time you evaluate a rendered slide.
@@ -639,11 +639,66 @@ If a message is important enough to repeat, it should escalate — each repetiti
 
 ## Section 9: "Where Are the Visuals?"
 
-**What you're diagnosing:** Visual poverty. The slide is text-only when the design calls for visual support — icons, illustrations, or imagery from the template library.
+**What you're diagnosing:** Visual poverty. The slide relies on text and shapes when a stronger visual element exists — a template icon, a brand illustration, or a real image (documentation diagram, product screenshot, workflow visual).
 
-**Why this matters:** The Databricks template includes 34 slides of brand icons (slides 52-85) and 11 illustration categories (slides 87-97). These are professionally designed, on-brand visual assets. A text-only slide on a topic where relevant icons or illustrations exist is a missed opportunity.
+**Why this matters:** Visual elements ground abstract concepts in reality. An official architecture diagram establishes credibility faster than any arrangement of colored boxes. A product screenshot proves the thing exists. A workflow diagram from documentation shows the audience "this is real, not theoretical." But the wrong image — too dense, too generic, mismatched to the narrative moment — is worse than no image.
 
-**The evaluation checklist:**
+### Three Tiers of Visual Support
+
+| Tier | What | When to Use | When NOT to Use |
+|---|---|---|---|
+| **Template icons** | Brand icons from template slides 52-85 | Category markers in card grids, industry-specific visual anchors, disambiguation aids | Don't decorate — a clipboard next to "project management" adds nothing |
+| **Template illustrations** | Full illustrations from template slides 87-97 | Hero visuals on section dividers, WARM slides, breather slides | Don't use as small decorative elements — they're designed to dominate |
+| **Real images** | Documentation diagrams, product screenshots, workflow visuals | When the content describes something that exists visually AND the image matches the audience's density budget | Don't reach for a real image when a simpler shape-based diagram would give you better hierarchy control |
+
+### When to Use Real Images vs Shape-Based Diagrams
+
+This is the critical judgment call. Both are valid — the wrong choice in either direction hurts the slide.
+
+**Use a real image when:**
+- An official diagram exists that shows exactly what you're discussing. One real diagram grounds the conversation faster than shapes ever will.
+- You're building confidence (SOLVE, PROVE phases). Real images signal "this is a real product, not a concept."
+- The audience needs to see what they'll actually experience — workspace screenshots, catalog UI, dashboard views. This is especially powerful in EQUIP/ACTION slides.
+- You're showing a before/after and the "after" has a real product view to contrast against the shape-based "before."
+
+**Use shape-based diagrams when:**
+- You need visual hierarchy control. A real image has fixed visual weight — you can't make one component 2-3x larger to signal it's the hero. Shape-based lets you control what the audience sees first.
+- The architecture is customer-specific. No official diagram shows THEIR pipeline. Build it with the scaffold and run the architecture eval rubric.
+- You need simplicity. A 15-component documentation diagram will fail the density check (Section 2) for executive audiences. Build a 4-box simplified version instead.
+- You're in a REFRAME moment. The reframe is conceptual, not visual. A sparse shape-based sketch signals "I'm thinking with you" (Section 4, visual register). A polished product image signals "I'm pitching you." Wrong register for disruption.
+
+**Use text-only when:**
+- Power statements, quotes, stat heroes, section dividers. These are intentionally text-dominant. An image dilutes the emotional beat.
+- FEEL slides. The power is in a single sentence or number with human meaning. Adding visual clutter undermines the gut punch.
+
+### Image Quality Gate
+
+Before embedding any real image, check:
+
+| Check | Pass | Fail |
+|---|---|---|
+| **Resolution** | Crisp at projection size (cheap LCD TV in bright room — not your Retina display) | Pixelated, blurry, or compression artifacts |
+| **Density match** | Image complexity fits the audience's chunk budget (Section 2) | More components than the audience can absorb — use a simplified shape version instead |
+| **Background contrast** | White-bg images get a white frame on dark slides (see design-rules.md Image Placement Standards) | White-bg image placed directly on dark bg with no frame — invisible edges |
+| **Content safety** | No PHI, credentials, internal URLs, or customer data visible | Any identifiable sensitive information |
+| **Recency** | Reflects current product UI and architecture | Deprecated features, old branding, retired components |
+| **Narrative fit** | Serves this slide's narrative role (see above) | Generic overview image that doesn't match the specific point being made |
+
+### Image and Narrative Arc
+
+Images interact with the persuasion arc differently than icons or shapes:
+
+| Phase | Image role | Good image use | Bad image use |
+|---|---|---|---|
+| WARM | Authenticity — "this is your world" | Real workspace screenshot showing familiar data patterns | Stock photo of doctors looking at screens |
+| REFRAME | Usually none — concept over visual | Sparse. If used, a single striking diagram that reveals the insight | Polished product screenshot — wrong register for disruption |
+| DROWN | Evidence stacking | Data visualization showing the scale of the problem | Marketing infographic with too many colors |
+| FEEL | Almost never — simplicity IS the design | At most, one understated image that humanizes the data | Complex diagram that competes with the emotional beat |
+| SOLVE | Confidence building | Architecture diagram showing how the solution works | Dense engineering diagram that overwhelms non-technical audience |
+| PROVE | Credibility — "it's real" | Product screenshots, customer results, benchmark visuals | Mockups or wireframes — they undermine the "it's real" claim |
+| EQUIP | Walkthrough — "here's your next step" | UI screenshots showing where to click, workspace views | Abstract architecture — the audience needs concrete next steps |
+
+### Template Icon & Illustration Checklist
 
 | Slide Content | Expected Visual Element | Source |
 |---------------|------------------------|--------|
@@ -658,11 +713,13 @@ If a message is important enough to repeat, it should escalate — each repetiti
 
 **Rules for visual elements:**
 - **1-3 icons per content slide maximum.** More becomes an "icon wall" (Section 5).
-- **Icons disambiguate, not decorate.** Only use an icon if it helps the audience scan categories or distinguish items. A clipboard icon next to "project management" adds nothing.
+- **Icons disambiguate, not decorate.** Only use an icon if it helps the audience scan categories or distinguish items.
 - **Illustrations work as hero visuals.** Use a template illustration as a large background or side element on section dividers, WARM slides, or breather slides.
-- **Match the industry.** If the pitch is healthcare, use HLS icons (slide 68), not generic Platform icons. The audience notices when visuals match their world.
+- **Match the industry.** Healthcare pitch = HLS icons (slide 68), not generic Platform icons. The audience notices when visuals match their world.
+- **Real images trump shapes for SOLVE/PROVE.** If an official diagram exists for the architecture you're about to build from shapes, use the diagram. It carries more authority than any arrangement of rectangles and arrows.
+- **Real images must pass the Image Quality Gate above.** A bad image is worse than no image.
 
-**Self-check question:** "Does this slide have appropriate visual elements from the template library, or is it text-only when the design calls for visual support?"
+**Self-check question:** "Is this slide using the strongest available visual element — template icon, brand illustration, or real image — or is it text-only when something better exists? And does the visual element match the narrative role and audience density budget?"
 
 ---
 

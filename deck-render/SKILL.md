@@ -1,409 +1,294 @@
 ---
 name: deck-render
-description: "Render a polished PowerPoint deck one slide at a time with visual evaluation after each. USE WHEN: user says 'render deck', 'build slides', 'make pptx', 'create presentation from brief', or when a /deck prompt package needs visual execution. Takes either a prompt package file path, strategy YAML, or topic description as input. Produces an executive-ready .pptx via per-slide render→evaluate→fix loop."
+description: "Render a polished PowerPoint deck one slide at a time with visual evaluation after each. USE WHEN: user says 'render deck', 'build slides', 'make pptx', 'create presentation from brief', or when a /deck prompt package needs visual execution. Takes either a strategy YAML, prompt package, or topic description. Produces executive-ready .pptx via per-slide render-evaluate-fix loop with mandatory deck-qa visual QA."
 allowed-tools: Read, Write, Bash, Task, Glob, Grep
 runtime-requires: multimodal-vision
 ---
 
-> **Runtime Requirement:** This skill requires a multimodal environment where the Read tool can ingest images (PNG). The per-slide visual eval loop depends on the agent actually seeing rendered slides — not simulating a critique from code. In Cursor with Claude, this works natively. If ported to a text-only environment, the visual QA degrades to code-only heuristics and the quality guarantee is void.
+# Deck Render v2.0
 
-# Deck Render
+You are a presentation designer, not a template engine. You render one slide at a time, look at what you made, judge it honestly, get independent QA from the deck-qa agent, fix what's wrong, then move on.
 
-You are a presentation designer, not a template engine. You render one slide at a time, look at what you made, judge it honestly, fix what's wrong, then move on.
-
-## CRITICAL: Visual Polish Standards
-
-**Before rendering ANY slide, read the "Visual Polish Standards" section in `references/design-rules.md`.**
-
-The #1 failure mode is creating text-wall slides that look like copy-pasted Word docs. Key rules:
-- **NO TEXT WALLS** — Use cards/boxes for visual grouping
-- **SPACING IS MANDATORY** — Cramped = unprofessional
-- **COLOR-CODE BY MEANING** — Red/yellow/blue for severity/priority
-- **COMPARISON SLIDES NEED COLUMN HEADERS** — "Vanilla PostgreSQL" vs "Lakebase" must be visible
-- **CARD LAYOUTS FOR LISTS** — Use `addWarningCards` or `addCardGrid3Col`, not 2-column text
-
-If a slide "looks like random crap," you violated these standards. Fix it before moving on.
-
-### Evaluation Rubrics
-
-"Judge it honestly" is not sufficient. Different slide types have specific visual failure modes. After rendering each slide, apply the appropriate rubric:
-
-| Slide Type | Rubric | Location |
-|---|---|---|
-| Architecture diagrams | Architecture Eval Rubric | `references/architecture-eval-rubric.md` |
-| All other slides | General Slide Eval (below) | This file |
-
-**Architecture diagrams are the highest-risk slide type.** They have the most visual failure modes (overlapping labels, components outside tiers, wrong flow routing, legend collisions). The architecture rubric has 8 specific checks. Do not skip it.
-
-### General Slide Eval (for non-architecture slides)
-
-After rendering any slide, verify:
-1. **No overlaps**: No text overlaps other text or shapes it doesn't belong to
-2. **No clipping**: No text is truncated or extends beyond the slide edge
-3. **Readability**: All text readable at projection size (nothing below ~9pt equivalent)
-4. **Contrast**: All text has sufficient contrast against its background
-5. **Layout match**: The rendered output matches the intended layout from layout-intelligence.md
-6. **Content accuracy**: Text content matches the brief/strategy — no hallucinated stats or quotes
+**Runtime:** pptxgenjs only. All code is JavaScript. No Python, no Google Slides.
 
 ## Before Writing Any Code
 
-**Read ALL FIVE reference files. They serve different purposes:**
+Read THREE reference files at startup:
+1. `references/scaffold-reference.md` — Palette, fonts, spacing, icon pipeline, fitText(), pitfalls. Use DURING rendering.
+2. `references/layout-intelligence.md` — Unified layout keys, strategy-to-scaffold mapping, code patterns, anti-patterns. Consult BEFORE each slide.
+3. `references/eval-checklist.md` — Per-slide evaluation checks S1-S11. Re-read BEFORE each eval.
 
-1. `references/design-rules.md` — **Brand DNA.** Palettes, fonts, layout patterns, code snippets. Use DURING rendering.
-2. `references/pptxgenjs-patterns.md` — **Tool mastery.** pptxgenjs API patterns, icon pipeline, pitfall avoidance. Use DURING rendering.
-3. `references/deck-philosophy.md` — **Expert judgment.** How to evaluate what you rendered. Use AFTER rendering each slide.
-4. `references/layout-intelligence.md` — **Layout selection.** Intent → content pattern → template layout. Consult BEFORE rendering each slide to pick the right layout. Never guess — look it up.
-5. `references/architecture-eval-rubric.md` — **Architecture diagram QA.** Use AFTER rendering any architecture slide.
+Read ON DEMAND (not at startup):
+- `references/deck-philosophy.md` — Full narrative philosophy. Read ONCE at deck-level review (after all slides).
+- `references/architecture-eval-rubric.md` — Architecture diagram QA. Read ONLY when evaluating architecture slides.
+- `references/board-protocol.md` — Board read/write for coordinated mode. Read ONLY if `_meta.board_dir` present in strategy.
 
-Do not skip any of these. design-rules and pptxgenjs-patterns tell you HOW. deck-philosophy tells you WHETHER. layout-intelligence tells you WHICH LAYOUT. architecture-eval-rubric tells you IF IT PASSES.
+### Audience Tailoring (HLS domains)
 
-### Audience Tailoring Engine (HLS domains)
+If healthcare/HLS content, read `_System/tailoring/hls-tailoring-map.yaml` and match audience to closest profile.
 
-If the deck's audience or domain involves healthcare/HLS/clinical content, read the shared tailoring map:
+## Board Protocol (Coordinated Mode)
 
-```
-_System/tailoring/hls-tailoring-map.yaml   (relative to workspace/vault root)
-```
-
-This file defines 4 audience profiles (`clinical_executive`, `technical_gatekeeper`, `commercial_lead`, `customer_success`) with per-profile: content priority order, kill lists (what to exclude), lava element (hero metric in #FF3621), red alert rules, and competitive positioning strategy. Match the deck's `audience.role` to the closest profile and use its `f_pattern_priority` to inform slide ordering, its `kill_list` to exclude irrelevant slides, and its `lava_element` for the hero data slide.
-
-## Board Read Protocol (Coordinated Mode)
-
-Check the strategy contract (strategy YAML or strategy-contract.yaml) for a `_meta.board_dir` field.
-
-**If `_meta.board_dir` is present** — you are running inside a coordinator pipeline:
-1. Read `{board_dir}/invariants.yaml` if it exists (enablement-kit coordinator). These are HARD constraints:
-   - `hero_message` — must appear verbatim (or semantic equivalent) in the deck
-   - `proof_points[].assigned_to` — only use proof points assigned to "deck" or "all"
-   - `competitive_frame` — use this positioning, do not invent your own
-   - `call_to_action` — unified CTA
-2. Read `{board_dir}/board/` for any prior skill outputs. Deck is typically rendered FIRST in an enablement-kit, so the board may be empty. When it's not empty (e.g., content-factory re-renders after consistency failure), read prior outputs to understand what the coordinator wants fixed.
-3. `{board_dir}/strategy-contract.yaml` (at the coordinator root, NOT in `board/`) is the LIVING strategy. Use it instead of any stale copy. Check its `version` field — higher = more recent amendments.
-
-**If `_meta.board_dir` is absent** — standalone mode. Ignore this section entirely. Zero cost.
-
-## Board Write Protocol (Coordinated Mode)
-
-**Only when `_meta.board_dir` is present.**
-
-After completing the deck-level review (after all slides pass per-slide eval AND the deck-level arc/rhythm check passes), write a board entry to `{board_dir}/board/deck-render-output.yaml`:
-
-```yaml
-skill_name: "deck-render"
-invoked_at: "{ISO 8601 timestamp}"
-invoked_by: "{coordinator name from _meta.coordinator}"
-
-artifact_path: "{absolute path to final .pptx}"
-artifact_type: "deck"
-
-# What the deck actually contains (for downstream skills to read)
-hero_message_as_rendered: "{exact hero text from the deck}"
-proof_points_used:
-  - point: "{proof point text}"
-    slide_number: N
-    treatment: "{how it was presented — stat hero, supporting evidence, etc.}"
-competitive_frame_as_rendered: "{how competitive positioning landed}"
-slide_count: N
-
-# Quality from existing per-slide evaluation
-quality_score: N                        # count of slides with CLEAN verdict
-quality_max: N                          # total slides
-quality_pass: true/false                # all slides CLEAN?
-quality_notes: "{summary of any fixes applied}"
-per_slide_scores:
-  slide_1: { verdict: "CLEAN", layout: "title_slide" }
-  slide_2: { verdict: "CLEAN", layout: "stat_hero" }
-  # ... one entry per slide
-
-# Amendments the deck discovered
-strategy_contract_amendments:
-  - field: "{e.g., design_decisions.color_system}"
-    current_value: "{what strategy said}"
-    recommended_value: "{what actually worked better}"
-    reason: "{why}"
-discovered_entities: []
-coverage_gaps: []
-
-recommendations_for_downstream:
-  - target_skill: "cheatsheet-render"
-    recommendation: "{e.g., 'cheatsheet should reference slide 4 terminology for consistency'}"
-    priority: "medium"
-```
-
-Use the Write tool to create this file. If the file already exists (retry scenario), overwrite it.
-
-**If `_meta.board_dir` is absent** — skip board write entirely. Do not create any files.
+If `_meta.board_dir` is present in the strategy YAML, read and follow `references/board-protocol.md`. If absent — standalone mode, ignore entirely. Zero overhead.
 
 ## Input Modes
 
 ### Mode 1: From Strategy YAML + Knowledge (preferred)
-```
-/deck-render path/to/strategy.yaml
-```
-Strategy provides per-slide: narrative_role, intent (emotion + action), audience_class, relationships (continues_from, sets_up, parallel_to), content hierarchy, talk tracks. Knowledge.md provides the atoms of content with confidence levels and sources.
+Strategy provides per-slide directives including:
+- narrative_role, register (high/low), audience_chunks, loss_frame (bool)
+- Image manifest (paths or "shape-based" fallback)
+- Explicit cta block for closing slide
 
 ### Mode 2: From Prompt Package
-```
-/deck-render path/to/prompt-package.md
-```
-Extract slide specs (Section B), strategy brief (Section A), talk tracks. Map layout types to visual patterns using the table below.
+Extract slide specs, strategy brief, talk tracks. Map layout types via layout-intelligence.md.
 
 ### Mode 3: From Topic Description
+Plan the deck: outline slides, narrative arc, palette. Then render.
+
+### CTA Enforcement
+
+Strategy YAML must have a cta block:
+```yaml
+closing:
+  cta_primary: "Scope a 2-week POV with your referral data"
+  cta_contact: "Samuel Selvan, SA"
+  cta_timeline: "Workshop available next Thursday"
 ```
-/deck-render "Why Lakebase exists alongside Delta Lake"
-```
-Plan the deck yourself: outline slides, decide narrative arc, pick palette. Then render.
-
-### Layout Type Reference
-
-When strategy or prompt package specifies a layout type, use this as a starting point — not a rigid template. Adapt based on content and context.
-
-| Layout Type | Starting Pattern |
-|-------------|-----------------|
-| `title_slide` | Cover with geometric accents, centered title |
-| `stat_hero` | One big number (48-72pt) with small supporting context |
-| `feature_grid` | 2×3 or 3×1 card grid with accent bars + icons |
-| `two_column_validation` | Two-column comparison cards |
-| `before_after` | Before/After panels with contrasting color treatment |
-| `architecture_diagram` | Flow diagram with boxes + arrows |
-| `proof_points` | Customer story panels or metric cards |
-| `comparison_table` | Styled dark table with colored highlights |
-| `timeline` | Horizontal numbered phases |
-| `discussion` | Numbered next-step cards |
-| `story` | Quote card or narrative layout |
-| `agenda` | Numbered items with accent dots |
-| `objection_handling` | Myth/objection (maroon, italic) → Reality (green, bold evidence) |
+Refuse to render closing without `cta_primary`. Flag generic CTAs ("Schedule a demo", "Let's connect").
 
 ## Workflow: Per-Slide Render-Evaluate Loop
-
-This is the core workflow. Do not batch-render slides.
 
 ### Setup (once per deck)
 
 ```bash
-# Dependency check — fail fast if rendering tools are missing
-for cmd in libreoffice pdftoppm node npm; do
+# Dependency check with graceful degradation
+FULL_EVAL=true
+for cmd in node npm; do
   if ! command -v $cmd &> /dev/null; then
-    echo "ERROR: $cmd not found. Install before proceeding."
-    echo "  brew install libreoffice poppler node  (macOS)"
+    echo "ERROR: $cmd required. Install with: brew install node"
     exit 1
   fi
 done
+for cmd in libreoffice pdftoppm; do
+  if ! command -v $cmd &> /dev/null; then
+    echo "WARNING: $cmd not found. Visual eval degraded to code-only + deck-qa."
+    echo "Install with: brew install libreoffice poppler"
+    FULL_EVAL=false
+  fi
+done
 
-# Install dependencies
+# Font check
+if ! fc-list | grep -qi "DM Sans"; then
+  echo "WARNING: DM Sans not installed. Eval PNGs will use substitute font."
+  echo "Install with: brew install --cask font-dm-sans"
+fi
+
 npm install pptxgenjs react react-dom react-icons sharp 2>/dev/null
-
-# Create working directories
-mkdir -p slides rendered
+mkdir -p slides rendered images
 ```
 
-Write a **scaffold script** that creates the presentation object, defines the palette, fonts, shadow factory, and pre-renders all icons. This script exports a function to add and save slides incrementally.
+Write `scaffold.js` — read scaffold-reference.md for the full template. Bake in ALL constants: palette, fonts, spacing, layout functions, shadow factory, icon pipeline, fitText() utility. scaffold.js is the runtime source of truth.
 
-```javascript
-// scaffold.js — shared setup for all slides
-const PptxGenJS = require("pptxgenjs");
-const pres = new PptxGenJS();
-pres.layout = "LAYOUT_16x9";
-
-// Palette from design-rules.md (official Databricks colors)
-const C = {
-  bg1: "0B2026", bgCard: "1B3139", bgLight: "303F47",
-  lava: "FF3621", green: "00A972", blue: "2272B4", yellow: "FFAB00",
-  maroon: "98102A",
-  t1: "FFFFFF", t2: "DCE0E2", t3: "5A6F77"
-};
-
-const FH = "DM Sans";  // Databricks brand font (fallback: Trebuchet MS)
-const FB = "DM Sans";  // (fallback: Calibri)
-
-// Shadow factory — MUST be a function (pptxgenjs mutates shadow objects)
-const shd = () => ({ type: "outer", blur: 6, offset: 2, angle: 135, color: "000000", opacity: 0.25 });
-
-// Pre-render all icons needed for the deck
-// ... react-icons → sharp → base64 pipeline from pptxgenjs-patterns.md ...
-
-module.exports = { pres, C, FH, FB, shd, icons };
+**Theme config:** scaffold.js supports a theme switch via strategy YAML:
+```yaml
+design_decisions:
+  theme: dark  # or "light"
 ```
+Dark theme: fully implemented. Light theme: palette values defined but layout functions and eval criteria not yet tuned. Use dark unless specifically requested. If light is requested, emit warning: "Light theme available but incomplete — dark recommended."
 
 ### Per-Slide Loop
 
-For EACH slide in the strategy/outline:
+For EACH slide in the strategy:
 
-#### Step 1: Read intent
-Read the strategy for this slide: narrative_role, emotion, audience, relationships, content hierarchy, talk track.
+#### Step 1: Read intent and source visuals
 
-**Long-deck refresh:** If this is slide 10, 15, 20, or any multiple of 5 beyond 10, re-read the `design_decisions` section from the strategy YAML. Context compaction can silently drop decisions from active memory on long decks.
+- Read strategy directives for this slide (register, audience_chunks, loss_frame, image, etc.)
+- Image resolution: strategy manifest specifies images upfront. Use what's given. If no image provided and one would help, build shape-based with speaker note: "Enhancement: replace with [description]." No mid-render blocking questions.
+- Architecture slides: delegate to diagram or arch-diagram skill, save to images/, embed output. Don't build complex architecture from pptxgenjs shapes.
+- Long-deck refresh: every 5th slide, re-read scaffold.js `design_decisions` section.
 
 #### Step 2: Design and render
-Write a single-slide script that requires the scaffold and adds one slide:
 
+Consult layout-intelligence.md for layout selection. Layout functions are vocabulary, not stamps — **never call the same layout function for consecutive slides.**
+
+Write the slide script requiring scaffold:
 ```javascript
-// slide-N.js
-const { pres, C, FH, FB, shd, icons } = require("./scaffold");
+// slide-NN-name.js
+const { pres, C, FH, FB, shd, icons, fitText } = require("./scaffold");
 const s = pres.addSlide();
 s.background = { color: C.bg1 };
 
+// Use fitText() before any text box to verify content fits
 // ... design this slide based on strategy intent ...
-// ... consult design-rules.md for patterns ...
-// ... consult pptxgenjs-patterns.md for API usage ...
-// ... consult layout-intelligence.md for layout selection ...
 
-s.addNotes("Talk Track: " + talkTrackText);
-pres.writeFile({ fileName: "wip.pptx" });
+s.addNotes(talkTrackBullets.join("\n"));
+```
+
+For eval, ALSO write a single-slide scratch file for fast conversion:
+```javascript
+// eval-slide-N.js — single-slide pptx for fast libreoffice conversion
+const PptxGenJS = require("pptxgenjs");
+const { C, FH, FB, shd, icons, fitText } = require("./scaffold");
+const evalPres = new PptxGenJS();
+evalPres.layout = "LAYOUT_16x9";
+// ... copy just this slide's code ...
+evalPres.writeFile({ fileName: "eval-slide-N.pptx" });
 ```
 
 ```bash
-node slide-N.js
+node slide-NN-name.js   # adds to main pres
+node eval-slide-N.js    # writes single-slide pptx for eval
 ```
 
-#### Step 3: Convert to PNG and evaluate
+#### Step 3: Convert to PNG and self-evaluate
 
 ```bash
-libreoffice --headless --convert-to pdf wip.pptx 2>/dev/null
-pdftoppm -png -r 200 -l CURRENT_SLIDE_NUMBER -f CURRENT_SLIDE_NUMBER wip.pdf rendered/slide
+# If FULL_EVAL:
+libreoffice --headless --convert-to pdf eval-slide-N.pptx 2>/dev/null
+pdftoppm -png -r 200 eval-slide-N.pdf rendered/slide-N
+# else: skip to deck-qa with raw pptx
 ```
 
-**Look at the PNG.** Open `references/deck-philosophy.md` and run each check. You MUST emit a structured eval block before proceeding to Step 4.
+Re-read eval-checklist.md. Look at the PNG. Emit EVAL block per checklist format (S1-S11). Fix if VERDICT = FIX REQUIRED.
+
+#### Step 4: deck-qa agent (mandatory gate)
+
+After self-eval VERDICT = CLEAN, dispatch deck-qa:
 
 ```
-EVAL Slide N: [slide title]
-  S1-Hierarchy: PASS|FAIL — [one-line reason, including: is title insight-driven or descriptive?]
-  S2-Density:   PASS|FAIL — [chunk count] chunks, budget = [X] for [audience]. Acronym count: [N] (max 2 exec, 4 technical)
-  S5-Taste:     PASS|FAIL — [icon reuse? accent bar reuse? AI-generated feel?]
-  S6-Proof:     PASS|FAIL — [attribution check or N/A]
-  S7-Boundaries: PASS|FAIL — right-edge max: [X]" ≤ 9.5", bottom-edge max: [Y]" ≤ 5.1"
-  S8-Decisions: PASS|FAIL|N/A — [which design decision this slide must honor, or N/A]
-  S9-Contrast:  PASS|FAIL — [any critical text using t3 or lower on dark bg?]
-  VERDICT:      CLEAN | FIX REQUIRED → [what to fix]
+Task(
+  subagent_type: "deck-qa",
+  prompt: "QA check rendered/slide-N-1.png for layout bugs, contrast, overlaps, alignment, proportions"
+)
 ```
 
-The checks in detail:
-- **Section 1 (Hierarchy):** Can I tell what this slide is about in 3 seconds? Is there one clear hero element? Squint test: blur your vision — can you tell what's important from size/position alone? **Headline check:** Is the title insight-driven or just descriptive?
-- **Section 2 (Density):** Count chunks — within budget for this audience? Max 2 acronyms for exec, 4 for technical.
-- **Section 5 (Taste):** Does this look AI-generated? Check for: accent line reuse, centered body text, icon walls, equal-weight colors. Magazine test: would HBR/McKinsey use this treatment?
-- **Section 6 (Proof):** If there's data, is it attributed? Is the hero number prominent enough?
-- **Section 7 (Boundaries):** Calculate max(x + w) ≤ 9.5", max(y + h) ≤ 5.1". Math, not eyeballing.
-- **Section 9 (Contrast):** Is critical text (hero stat, CTA, key label) using t3 or lower on dark bg? Critical text must use t1 or t2.
+If deck-qa finds issues: fix, re-render, re-evaluate.
 
-#### Step 4: Fix and re-render
-If VERDICT = FIX REQUIRED, fix the slide script, re-render, re-evaluate. Emit a new EVAL block after each fix. Loop until VERDICT = CLEAN.
+**Circuit breaker:**
+- 2 consecutive deck-qa failures on SAME issue — propose different layout to user
+- 3 total deck-qa failures on one slide — present best version with issues list
+- Hard max 5 render attempts per slide
 
 #### Step 5: Transition evaluation
-Pull up the PREVIOUS slide's PNG alongside this one. Run deck-philosophy.md:
 
-- **Section 3 (Rhythm):** Does this slide look different enough from the last 2-3 slides?
-- **Section 4 (Narrative):** Does the visual treatment match the emotional shift? Does the transition feel natural?
+Re-read eval-checklist.md transition checks. Compare this slide's PNG with predecessor. Emit TRANSITION block (S3-Rhythm, S4-Narrative).
 
-**Rhythm hard limit:** If this slide's layout type matches the previous TWO slides (3 consecutive identical layouts), STOP. You must: (a) consolidate into fewer slides, (b) vary the layout, or (c) justify in writing why three identical layouts are narratively necessary.
+#### Step 6: Write eval to disk
 
-Emit:
-```
-TRANSITION Slide N-1 → Slide N:
-  S3-Rhythm:    PASS|FAIL — layout variety vs previous 2 slides: [layout types]
-  S4-Narrative:  PASS|FAIL — emotional shift: [from what → to what]
-  VERDICT:      CLEAN | FIX REQUIRED → [what to fix]
-```
+Append EVAL and TRANSITION blocks to `eval-log.md` (on disk, not kept in conversation context).
 
-Fix if needed. Then move to the next slide.
+### Structure Change Gate
+
+If during rendering you determine a slide needs splitting, a new slide should be added, a slide should be cut, or slides should be reordered — **PROPOSE the change and wait for user approval.** Visual adjustments within a slide are autonomous.
 
 ### After All Slides: Deck-Level Review
 
+NOW read deck-philosophy.md (full file, one time).
+
 ```bash
-# Convert final deck to PNG thumbnails
 libreoffice --headless --convert-to pdf final-deck.pptx 2>/dev/null
 pdftoppm -png -r 150 final-deck.pdf rendered/final
 ```
 
-View ALL thumbnails together. Run deck-philosophy.md Section 7:
+View all thumbnails. Run deck-philosophy.md Section 7 checks:
+- Arc check: narrative phases progress as strategy specified
+- Rhythm check: layout variety visible at thumbnail level
+- Time budget: total talk track time vs. meeting duration. No slide over 120s.
+- Thumbnail distinctiveness: can you tell slides apart from thumbnails alone?
+- Register variation check
+- CTA context check (cta_primary is specific, not generic)
+- Repeated message check
+- Hammock effect (attention placement)
 
-- **Arc check:** Do the narrative phases progress as strategy specified? Any phases missing?
-- **Rhythm check:** Layout variety visible at thumbnail level? Is there a "moment" slide?
-- **Time budget:** Total talk track time vs. meeting duration. No slide over 120s.
-- **Thumbnail distinctiveness:** Can you tell slides apart from thumbnails alone?
+## Talk Tracks to Speaker Notes
 
-Reorder, add section dividers, or cut slides if needed. Re-render affected slides.
+Every slide gets speaker notes with delivery cues mapped from strategy narrative_role. No framework jargon (DROWN/FEEL/REFRAME) visible in notes — just natural cues.
+
+```javascript
+s.addNotes([
+  "TALK TRACK (45s)",
+  "- [PAUSE] \"Referral leakage costs...\" [LET THE NUMBER LAND]",
+  "- $2.4M annually -- that's not a Databricks estimate, that's your claims data",
+  "- [SOFTER] And that's just the referrals you can track",
+  "- Transition: \"So what does this actually look like for a patient?\"",
+  "- If asked: \"How did you calculate that?\" -> \"We ran your FY24 claims...\"",
+].join("\n"));
+```
+
+**Delivery cue mapping** (applied silently from narrative_role — no phase labels in notes):
+- High-stakes data slides: [PAUSE] before hero stat, [LET IT LAND] after
+- Emotional/personal slides: [SOFTER], [SLOWER]
+- Insight/disruption slides: [DIRECT], [PAUSE FOR REACTION]
+- Solution/capability slides: [CONFIDENT PACE]
+- Action/closing slides: [SPECIFIC], [NAME THE NEXT STEP]
+
+**Rules:** 3-7 bullets, one idea per bullet, include Transition and If Asked bullets.
 
 ## Critical Technical Rules
-
-These are non-negotiable. They prevent file corruption and rendering bugs.
 
 | Rule | Details |
 |------|---------|
 | Colors | 6-char hex, NO `#` prefix. `"FF3621"` not `"#FF3621"` |
 | Shadows | NEVER reuse objects (pptxgenjs mutates them). Use factory: `const shd = () => ({...})` |
-| Icons | react-icons → sharp → base64 PNG. Pre-render ALL before building slides |
+| Icons | react-icons to sharp to base64 PNG. Pre-render ALL before building slides |
 | Text align | `margin: 0` when aligning text with shapes/icons |
-| Bullets | `bullet: true`, NEVER unicode "•" |
+| Bullets | `bullet: true`, NEVER unicode bullets |
 | Multi-line | `breakLine: true` between text array items |
-| Bullet spacing | Use `paraSpaceAfter: 12`, NEVER `lineSpacing` with bullets (causes huge gaps) |
-| Layout | `LAYOUT_16x9` = 10" × 5.625" |
+| Bullet spacing | `paraSpaceAfter: 12`, NEVER `lineSpacing` with bullets (causes huge gaps) |
+| Layout | `LAYOUT_16x9` = 10" x 5.625" |
 | Margins | 0.5" minimum from slide edges |
 | Gaps | 0.3" minimum between content blocks |
-| Shadow offset | Must be ≥ 0 (negative corrupts file) |
+| Shadow offset | Must be >= 0 (negative corrupts file) |
 | Shadow opacity | Use `opacity` property, NEVER 8-char hex |
 | Font sizes | Title: 28-36pt. Body: 14-18pt. Caption/source: 9-11pt. Stat hero: 48-72pt. Never below 9pt. |
+| fitText | Call fitText() before any text box to verify content fits. See scaffold-reference.md. |
+| Proportions | Body text >= 14pt. Every text box content fills >= 60% of box area. |
+| Overlap | Adjacent elements need 0.15" safety margin. Title must not share y-range with content. |
 
 ## Script Architecture
 
-**CRITICAL: No reusable slide-generation functions.** Never write a helper like `createPersonaSlide()` or `createPainSlide()` and call it multiple times with different data. This guarantees rhythm failure — identical layouts repeated mechanically. Each slide gets its own code block, designed individually after viewing the previous slide's PNG. Shared utilities for colors, fonts, shadows, and icons (in scaffold.js) are fine. Shared functions that produce entire slides are prohibited.
-
-For decks longer than 5 slides, use a modular approach:
-
+Modular structure for decks > 5 slides:
 ```
-scaffold.js          — pres object, palette, fonts, shadow factory, pre-rendered icons
-slide-01-cover.js    — title slide
-slide-02-problem.js  — opening problem statement
-slide-03-data.js     — data evidence
+scaffold.js          -- pres object, palette, fonts, shadow, icons, fitText, layout functions
+slide-01-cover.js    -- title slide
+slide-02-problem.js  -- opening
 ...
-assemble.js          — requires scaffold, runs all slides in order, writes final file
+assemble.js          -- requires scaffold, runs all slides, writes final
+eval-log.md          -- accumulated eval results (on disk, not in context)
 ```
 
-For shorter decks (≤ 5 slides), a single file with block scoping is fine:
+Scripts persist after delivery for revision.
 
-```javascript
-// Each slide in its own block scope
-{ const s = pres.addSlide(); /* slide 1 */ }
-{ const s = pres.addSlide(); /* slide 2 */ }
-```
+### Revision Workflow
 
-## Talk Tracks → Speaker Notes
+Scripts are the "source code" of the deck. They persist after delivery.
 
-Every slide gets speaker notes from the strategy talk track. **Notes must be bullet points, not paragraphs.** An AE reading paragraph notes verbatim sounds robotic. Bullets let them glance and speak naturally.
+- `--revise slide-5` — Modify slide-05.js, re-render that slide only, re-run eval + deck-qa, re-run transition check against slides 4 and 6, re-assemble.
+- `--reorder 5,4,6,7` — Update assemble.js import order, re-run deck-level review.
+- `--add-after 5` — Create slide-05b.js, insert into assemble.js, run full eval. (Explicit user intent, no approval needed.)
 
-```javascript
-s.addNotes([
-  "TALK TRACK (" + durationSeconds + "s):",
-  "• " + bulletPoint1,
-  "• " + bulletPoint2,
-  "• " + bulletPoint3,
-  "• Key transition: " + transitionToNext,
-  "• If asked: " + anticipatedQuestion,
-].join("\n"));
-```
+## Graceful Degradation
 
-**Rules:**
-- 3-7 bullets per slide, never a wall of text
-- Each bullet is one idea, one sentence max
-- Include a "Transition:" bullet that bridges to the next slide
-- Include an "If asked:" bullet for the most likely audience question
-- Duration estimate in the header helps the presenter pace themselves
+If libreoffice or pdftoppm are not installed:
+- Skip PNG conversion
+- Self-eval uses code-only analysis (boundary math, spacing calculations from code)
+- deck-qa agent receives the raw .pptx file instead of PNG
+- Quality guarantee is reduced — emit warning at start and in output
 
 ## Output
 
-After all slides pass evaluation, save the final deck and report:
-
 ```
-✅ DECK COMPLETE
-==================
+DECK COMPLETE
+=================
 File: path/to/final-deck.pptx
 Slides: N
-Quality: N/N slides CLEAN
+Quality: N/N slides CLEAN (self-eval + deck-qa)
 
 Per-Slide Summary:
-  Slide 1 (title_slide): CLEAN
+  Slide 1 (title): CLEAN
   Slide 2 (stat_hero): CLEAN, 1 fix applied (contrast)
   ...
 
-Generation time: Xs
-Average: Y seconds per slide
+Scripts: slides/ directory preserved for revision
+Eval log: eval-log.md
 ```

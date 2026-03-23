@@ -50,12 +50,12 @@ PALETTE = {
     "bgLight": "303F47",
     "lava": "FF3621",
     "green": "00A972",
-    "blue": "2272B4",
+    "blue": "3B8FD4",
     "yellow": "FFAB00",
-    "maroon": "98102A",
+    "maroon": "C4243E",
     "t1": "FFFFFF",
     "t2": "DCE0E2",
-    "t3": "5A6F77",
+    "t3": "9EADB5",
 }
 
 PALETTE_LIGHT = {
