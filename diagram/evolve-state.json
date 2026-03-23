@@ -1,38 +1,18 @@
 {
   "skill": "diagram",
   "branch": "evolve/diagram/2026-03-22",
-  "phase": "ROUND_3_READY",
+  "phase": "ROUND_4_READY",
   "baseline_median": 14,
   "baseline_max": 14,
-  "rounds_completed": 2,
+  "rounds_completed": 3,
   "rounds_total": 5,
-  "round1": {
-    "hypothesis": "Add format-specific governance positioning examples for Mermaid (subgraph) and PlantUML C4 (System_Boundary + LAYOUT_LEFT_RIGHT)",
-    "result": "WIN",
-    "baseline_median": 13,
-    "challenger_median": 14,
-    "commit": "9d43103",
-    "note": "E3: 58%→100%. E4: 75%→100%. Major improvement on governance structural positioning."
-  },
-  "round2": {
-    "hypothesis": "Add STEP 3.5 mandatory arrow label verification with format-specific syntax examples",
-    "result": "TIE",
-    "baseline_median": 14,
-    "challenger_median": 14,
-    "note": "E2 improved 50%→75% but median unchanged at 14. Mermaid still drops arrow labels. Reverted.",
-    "lesson": "Verification step helps PlantUML/D2/Excalidraw but Mermaid's bare --> is deeply ingrained. May need a Mermaid-specific example showing |label| syntax on every arrow, or this may be a format limitation that's hard to fix with instructions alone."
-  },
-  "per_eval_rates_after_round1": {
-    "E1": "100%", "E2": "50%", "E3": "100%", "E4": "100%",
-    "E5": "100%", "E6": "100%", "E7": "100%", "E8": "100%",
-    "E9": "100%", "E10": "92%", "E11": "92%", "E12": "100%",
-    "E13": "100%", "E14": "100%"
-  },
+  "round1": {"result": "WIN", "hypothesis": "Format-specific governance positioning", "commit": "9d43103"},
+  "round2": {"result": "TIE", "hypothesis": "STEP 3.5 arrow label verification"},
+  "round3": {"result": "TIE", "hypothesis": "WRONG/RIGHT arrow label examples in Style Guide"},
   "weakest_evals": {
-    "E2": {"rate": "50%", "issue": "Mermaid bare --> connectors. STEP 3.5 helped other formats but Mermaid persists."}
+    "E2": {"rate": "75%", "issue": "Mermaid bare --> — 3 consecutive rounds failed to fix. Accept as format ceiling."},
+    "E10": {"rate": "92%", "issue": "One Excalidraw run substituted 'Shared Memory' for semantic/pgvector"},
+    "E11": {"rate": "92%", "issue": "One Excalidraw run placed Vector Search inside Lakebase"}
   },
-  "scoring_method": "Agent subagents (12 parallel scorers)",
-  "runs_per_variant": 3,
-  "inputs": 4,
-  "total_executions_per_round": 12
+  "consecutive_losses": 2
 }

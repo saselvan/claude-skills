@@ -717,6 +717,25 @@ Rel(auditor, platform, "Validate governance", "Role-based access, column masking
 
 ---
 
+### Scenario 6: Lakebase AI Agent Memory Architecture
+
+**Audience:** Enterprise architects evaluating agentic AI workloads
+**Intent:** Show how Lakebase provides structured memory for AI agents
+**Recommended Format:** Excalidraw (positioned layout — has spanning bars)
+
+**Critical architectural distinction — DO NOT confuse these two:**
+- **Mosaic AI Vector Search** = an agent TOOL for enterprise knowledge retrieval (RAG over docs, policies, guidelines). Lives in the Agent Runtime zone alongside Function Calling. It searches the organization's knowledge base.
+- **Lakebase semantic memory (pgvector)** = the agent's OWN past interaction embeddings stored in Lakebase. Episodic recall of what the agent has done before. Lives in the Lakebase Memory zone.
+
+Vector Search and semantic memory serve different purposes. Vector Search retrieves external knowledge. Semantic memory recalls the agent's own history. Never place Vector Search inside the memory layer — it is a retrieval tool, not a memory store.
+
+**Three Lakebase memory types** (always show all three with descriptions):
+1. **Short-term** — conversation checkpoints, session state, tool call history. Scoped by `thread_id`.
+2. **Long-term** — user profiles, preferences, cross-session insights. JSONB lookups.
+3. **Semantic (pgvector)** — agent's own past interaction embeddings. Episodic recall, resolution patterns.
+
+---
+
 ## Architecture Patterns Library
 
 Reference patterns for common solutions architect work. Use these as starting templates — adapt to the user's specific context.
