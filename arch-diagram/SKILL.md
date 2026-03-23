@@ -1,47 +1,52 @@
 ---
 name: architecture-diagram
-version: "1.0"
+version: "2.0"
 description: "Customer-grade architecture diagrams as draw.io XML. Positioned layout with Databricks icons, branded zones, and cloud vendor icon libraries. Output opens in draw.io, Lucidchart, or any tool that imports .drawio files. USE WHEN reference architecture, customer presentation diagram, Databricks architecture, professional architecture diagram, draw.io, positioned layout, architecture with icons."
+changelog: |
+  v2.0: Grill-me redesign — direct .drawio file output, MCP server preferred, T-shirt canvas sizes, companion guide with numbered steps, programmatic XML validation, icon strategy, cross-skill routing.
+  v1.0: Initial skill with draw.io XML, visual standards, 8 evals.
 ---
 
 # Architecture Diagram
 
-Generate customer-grade architecture diagrams as draw.io XML with absolute positioning, branded zones, vendor icons, and labeled arrows. Output is a `.drawio` file that opens in draw.io, Lucidchart, or any compatible editor for manual polish.
+Generate customer-grade architecture diagrams as draw.io XML with absolute positioning, branded zones, vendor icons, and labeled arrows. Writes a `.drawio` file directly (not XML-in-markdown) plus a companion `{name}-guide.md` with numbered step walkthrough.
 
-**When to use this skill vs the `diagram` skill:**
-- This skill: Customer presentations, reference architectures, diagrams that need to look like official Databricks/AWS/Azure marketing materials. Positioned layout. Icons.
-- `diagram` skill: Quick internal sketches, GitHub READMEs, email explanations, sequence diagrams, ERDs, C4 models. Auto-layout is fine.
+**When to use which skill:**
+- **This skill (`arch-diagram`):** Standalone customer-facing reference architectures. Produces `.drawio` files editable in draw.io/Lucidchart. Positioned layout with icons.
+- **`diagram` skill:** Quick internal sketches, GitHub READMEs, sequence diagrams, ERDs, C4 models. Auto-layout formats (Mermaid, D2, PlantUML).
+- **`deck-render` skill:** Diagrams embedded inside PowerPoint slides as part of a deck.
+- **`diagram` → Excalidraw:** Live whiteboarding sessions where you're building on screen with the customer.
 
 ## MCP Tools
 
-**Primary: next-ai-drawio MCP server**
+**Highly preferred: next-ai-drawio MCP server**
 ```
 claude mcp add drawio -- npx @next-ai-drawio/mcp-server@latest
 ```
 
-If the MCP server is unavailable, generate the draw.io XML directly as a `.drawio` file. The XML is the same format — the MCP server just provides live preview.
+Check if the MCP server is available. If yes, generate the full XML first, then open it in the MCP server for visual review. If unavailable, write the `.drawio` file directly — the output is identical, you just don't get live preview.
 
-## Icon Libraries
+## Icons
 
-**Databricks icons:** github.com/nihil0/databricks-drawio-icons — import into draw.io via File > Open Library.
+**Strategy:** Use built-in draw.io shapes for cloud services (AWS/Azure/GCP icons are built-in). Use labeled rectangles with Databricks brand colors for Databricks products. Document which rectangles to swap for official icons during polish.
 
-**Cloud vendor icons (built into draw.io):**
+**Built-in cloud icons:**
 - AWS: `shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.{service}`
-- Azure: `shape=mxgraph.azure.{service}` or use the Azure icon libraries
+- Azure: `shape=mxgraph.azure.{service}`
 - GCP: `shape=mxgraph.gcp2.{service}`
 
-When generating XML, use the `shape` style attribute to reference icons. If the exact icon shape ID is unknown, use a labeled rectangle with the correct brand color — the user can swap in the icon during manual polish.
+**Databricks products:** Use colored rectangles (Databricks blue #137CBD for functional blocks, rose #9B2D5E for ML/AI). Include a "Polish notes" section in the companion guide listing which rectangles to swap for official Databricks icons from the `databricks-drawio-icons` library.
 
 ---
 
 ## Workflow
 
 ```
-STEP 0: Confirm Audience & Intent
+STEP 0: Confirm Audience, Intent & Output Path
   Q: Who sees this? (customer exec, enterprise architect, compliance, internal team?)
   Q: What's the story? (platform overview, specific solution, migration path?)
   Q: Cloud context? (AWS, Azure, GCP, multi-cloud?)
-  Q: Will this be polished in Lucid/draw.io after? (always yes for this skill)
+  Q: Where should I save the .drawio file? (ALWAYS ask before writing)
 
 STEP 1: Define Zones
   Map the architecture into the Databricks layout spine:
@@ -52,27 +57,45 @@ STEP 1: Define Zones
     Right: Consumers / Applications
     Bottom: Governance bar (full width) + Foundation bar
 
-STEP 2: Plan Coordinates
-  Use a 1400x900 canvas (standard widescreen).
-  Assign x,y coordinates to each zone:
+STEP 2: Select Canvas Size
+  Pick based on zone count and node density:
+    Size S (1200x700):  Simple flows, ≤4 zones, ≤15 nodes (e.g., compliance audit, migration before/after)
+    Size M (1500x900):  Standard reference architectures, 5-6 zones, 15-25 nodes (e.g., medallion lakehouse, IoT analytics)
+    Size L (1800x1100): Complex multi-zone with feedback loops, 6+ zones, 25+ nodes (e.g., agent memory, multi-consumer platforms)
+
+STEP 3: Plan Coordinates (Size M defaults shown — scale proportionally for S/L)
     Sources:      x=0,    y=100,  w=180
     Ingestion:    x=220,  y=100,  w=180
     Platform:     x=440,  y=60,   w=560, h=600
     Serving:      x=1040, y=100,  w=180
     Consumers:    x=1260, y=100,  w=180
-    Governance:   x=0,    y=700,  w=1500, h=50 (full DIAGRAM width, not just platform)
-    Foundation:   x=440,  y=760,  w=560, h=40  (full platform width)
-  
-  These are starting coordinates — adjust based on content density.
+    Governance:   x=0,    y=700,  w=FULL_CANVAS_WIDTH, h=50
+    Foundation:   x=440,  y=760,  w=560, h=40
 
-STEP 3: Generate draw.io XML
-  Use the XML structure in references/drawio-template.md
+STEP 4: Generate draw.io XML
+  Build the full XML. Add numbered teal step indicators (①②③...) at key flow transitions.
   Every node needs: id, value (label), style, x, y, width, height
-  Every arrow needs: source id, target id, value (label)
+  Every arrow needs: source id, target id, value (label describing what flows)
 
-STEP 4: Save and Present
-  Save as {name}.drawio
-  Tell user: "Open in draw.io or Lucid to polish. All elements are positioned and labeled — adjust spacing, swap in vendor icons, add branding as needed."
+STEP 5: Validate XML
+  Before saving, run programmatic checks:
+    ✓ Every vertex="1" cell has mxGeometry with x and y
+    ✓ Every edge="1" cell has a non-empty value attribute
+    ✓ Governance bar width >= full canvas width
+    ✓ At least 4 Databricks product names in node labels
+  Fix any failures before proceeding.
+
+STEP 6: Write Files
+  1. Write {name}.drawio — the diagram file (ask user for path first)
+  2. Write {name}-guide.md — companion guide with:
+     - Numbered steps matching the diagram's teal circles (① → paragraph explaining what happens)
+     - Talking points for the stated audience
+     - Polish notes: list of rectangles to swap for official Databricks icons
+  3. If MCP server is available, open the .drawio file for visual review
+
+STEP 7: Present
+  Show the user a brief summary of what was generated.
+  Do NOT paste XML into the chat — it's in the file.
 ```
 
 ---
@@ -232,16 +255,34 @@ value="Bronze&#xa;Raw HL7 messages, DICOM images"
 
 ---
 
+## GTM Scenario Library
+
+Industry-specific reference architecture examples with complete draw.io XML. Each scenario is a self-contained file that can be used as a template.
+
+| # | Scenario | Audience | Canvas | File |
+|---|----------|----------|--------|------|
+| 1 | Healthcare Oncology Data Unification | C-suite + medical informatics | S | `scenarios/01-healthcare-oncology.md` |
+| 2 | Genomics Data Pipeline | Data eng + research biology | M | `scenarios/02-genomics-pipeline.md` |
+| 3 | Unity Catalog Migration | Enterprise architects | S | `scenarios/03-unity-catalog-migration.md` |
+| 4 | Manufacturing Quality Control (IoT) | Operations + quality teams | M | `scenarios/04-manufacturing-iot.md` |
+| 5 | Compliance Audit Trail | Compliance officers | S | `scenarios/05-compliance-audit.md` |
+| 6 | Lakebase AI Agent Memory | Enterprise architects | L | `scenarios/06-lakebase-agent-memory.md` |
+
+When generating a new diagram, read the closest matching scenario for structural reference. Adapt the zone layout, node count, and content to the user's specific request.
+
 ## Constraints
 
-- **Always label every arrow.** An unlabeled arrow is ambiguous. Use the `value` attribute on edge cells.
-- **Always position elements with explicit x,y coordinates.** Never rely on auto-layout. The whole point of this skill is positioned layout.
-- **Governance is always a full-width bar.** The governance bar must span the ENTIRE diagram width — from the leftmost source to the rightmost consumer — not just the platform container. Set x=0 and width equal to the full canvas width. It governs everything, not just the platform. Never a peer node.
+- **Always write a `.drawio` file directly.** Do NOT paste XML into chat. Write the file, tell the user where it is.
+- **Always ask for the output path before writing.** Never assume a directory.
+- **Always write a companion `{name}-guide.md`.** Numbered steps matching diagram circles, audience-specific talking points, polish notes.
+- **Always label every arrow.** Use the `value` attribute on edge cells. An unlabeled arrow is ambiguous.
+- **Always position elements with explicit x,y coordinates.** Never rely on auto-layout.
+- **Always validate XML before saving.** Check: every vertex has x/y, every edge has a label, governance bar spans full width.
+- **Governance is always a full-width bar.** x=0, width=full canvas. It governs everything. Never a peer node.
 - **Use Databricks product names.** See the naming table.
 - **Medallion layers need descriptive labels.** "Bronze — {what's specifically in this layer}" not just "Bronze (Raw)".
-- **Keep node count manageable.** If >20 top-level nodes, decompose into multiple diagrams or use C4 drill-down.
-- **Save as .drawio file.** This opens in draw.io desktop, draw.io web, and Lucidchart import.
-- **Tell the user to polish.** This skill produces the architecture and layout. The user adds final visual polish (icon swaps, font tuning, spacing) in their editor of choice.
+- **Keep node count manageable.** If >20 top-level nodes, decompose or use C4 drill-down.
+- **Use built-in cloud icons, branded rectangles for Databricks.** Document icon swaps in the companion guide.
 
 ---
 
