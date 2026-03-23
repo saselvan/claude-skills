@@ -218,6 +218,28 @@ platform {
 }
 ```
 
+**Mermaid:** Mermaid cannot render true spanning bars. Use a full-width subgraph OUTSIDE the platform subgraph, styled with the governance classDef:
+```mermaid
+subgraph governance["Governance — Unity Catalog (Access Control · Lineage · PII Masking · Audit)"]
+end
+
+classDef gov fill:#1B3A4B,color:#fff,stroke:#1B3A4B
+class governance gov
+```
+Place the governance subgraph AFTER all other subgraphs so it renders at the bottom. Do NOT put Unity Catalog as a node inside the platform subgraph.
+
+**PlantUML C4:** Do NOT place Unity Catalog as a `Container()` inside the main `System_Boundary`. Instead, use a separate `Enterprise_Boundary` or `System_Boundary` wrapper, or place it as a `System()` outside the platform boundary with `LAYOUT_LEFT_RIGHT()`:
+```plantuml
+' CORRECT: Governance as a separate boundary below the platform
+System_Boundary(governance, "Governance — Unity Catalog") {
+    Container(uc, "Unity Catalog", "Databricks", "Access control, lineage, column masking, audit logs")
+}
+
+' Also add LAYOUT_LEFT_RIGHT() at the top for horizontal flow
+LAYOUT_LEFT_RIGHT()
+```
+The key rule: governance must be visually OUTSIDE and BELOW (or above) the main platform content, never a peer `Container()` alongside Bronze/Silver/Gold.
+
 ### Numbered Flow Steps
 
 Databricks reference architectures use circled numbers to create a guided reading path. This is critical for customer presentations — it tells the viewer where to start and what order to follow.
