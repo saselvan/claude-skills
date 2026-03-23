@@ -17,6 +17,5 @@ FROM main.fin_live_gold.paid_usage_metering
 WHERE sfdc_account_id = :account_id
   AND date >= DATEADD(DAY, -:weeks * 7, CURRENT_DATE())
   AND paying_status = 'PAYING_STATUS_PAYING'
-  AND record_type = 'RECORD_TYPE_ORIGINAL'
 GROUP BY DATE_TRUNC('week', date)
 ORDER BY week_start

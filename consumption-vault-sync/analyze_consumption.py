@@ -34,8 +34,41 @@ except ImportError:
     MATPLOTLIB_AVAILABLE = False
 
 
+def coerce_query_results(rows: List[Dict], string_fields: set = None) -> List[Dict]:
+    """
+    Coerce Logfood JSON_ARRAY results from all-strings to proper types.
+
+    Logfood's SQL Statement API with format=JSON_ARRAY returns every value as a string.
+    This function converts numeric strings to float/int and trims ISO timestamps to dates.
+    """
+    if string_fields is None:
+        string_fields = {'week_start', 'sku', 'product_type', 'sfdc_workspace_id',
+                         'sfdc_workspace_name', 'platform'}
+
+    for row in rows:
+        for k, v in row.items():
+            if v is None:
+                continue
+            # Trim ISO timestamps to date-only (e.g. "2026-03-09T00:00:00.000Z" -> "2026-03-09")
+            if k == 'week_start' and isinstance(v, str) and 'T' in v:
+                row[k] = v[:10]
+                continue
+            if k in string_fields:
+                continue
+            # Coerce numeric strings
+            try:
+                s = str(v)
+                if '.' in s:
+                    row[k] = float(s)
+                else:
+                    row[k] = int(s)
+            except (ValueError, TypeError):
+                pass
+    return rows
+
+
 def load_query_results(weekly_path: str, sku_path: str, workspace_path: str) -> Tuple[List[Dict], List[Dict], List[Dict]]:
-    """Load pre-computed query results from JSON files."""
+    """Load pre-computed query results from JSON files and coerce types."""
     try:
         with open(weekly_path, 'r') as f:
             weekly_data = json.load(f)
@@ -59,6 +92,11 @@ def load_query_results(weekly_path: str, sku_path: str, workspace_path: str) -> 
         print(f"ERROR: Workspace data file not found: {workspace_path}", file=sys.stderr)
         print("The SKILL.md workflow may have failed to execute queries.", file=sys.stderr)
         sys.exit(1)
+
+    # Coerce all-string Logfood results to proper types
+    weekly_data = coerce_query_results(weekly_data)
+    sku_data = coerce_query_results(sku_data)
+    workspace_data = coerce_query_results(workspace_data)
 
     return weekly_data, sku_data, workspace_data
 
@@ -519,11 +557,11 @@ def query_contract_commitment(account_id: str, start_date: datetime, end_date: d
         # Parse contract data
         row = data_array[0]
         
-        workload_commitment = row[1]
-        accumulated_dbu_dollars = row[2]
-        order_start_date = datetime.strptime(row[4], '%Y-%m-%d')
-        order_end_date = datetime.strptime(row[5], '%Y-%m-%d')
-        days_until_expiry = row[6]
+        workload_commitment = float(row[1]) if row[1] else 0
+        accumulated_dbu_dollars = float(row[2]) if row[2] else 0
+        order_start_date = datetime.strptime(str(row[4])[:10], '%Y-%m-%d')
+        order_end_date = datetime.strptime(str(row[5])[:10], '%Y-%m-%d')
+        days_until_expiry = int(float(row[6])) if row[6] else 0
         
         # Edge cases
         if days_until_expiry <= 0:
@@ -717,16 +755,19 @@ def generate_chart(weekly_data: List[Dict], sku_data: List[Dict], analysis: Dict
     # Formatting
     ax.set_xlabel('Week', fontsize=12)
     ax.set_ylabel('Weekly Spend ($)', fontsize=12)
-    ax.set_title('Weekly Consumption Trend', fontsize=14, fontweight='bold')
+    account_name = analysis.get('account_name', 'Weekly Consumption Trend')
+    ax.set_title(f"{account_name} — Weekly Consumption", fontsize=14, fontweight='bold')
     ax.legend(loc='upper left')
     ax.grid(True, alpha=0.3)
     
     # Format y-axis as currency
     ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x:,.0f}'))
     
-    # Format x-axis
-    ax.xaxis.set_major_formatter(DateFormatter('%b %d'))
-    fig.autofmt_xdate()
+    # Format x-axis — show "Mar '25" style month labels
+    from matplotlib.dates import MonthLocator
+    ax.xaxis.set_major_locator(MonthLocator(interval=2))
+    ax.xaxis.set_major_formatter(DateFormatter("%b '%y"))
+    fig.autofmt_xdate(rotation=45)
     
     plt.tight_layout()
     plt.savefig(output_path, dpi=150, bbox_inches='tight')
@@ -882,7 +923,9 @@ def main():
         "workspace_analysis": workspace_analysis,
         "inflection_points": inflection_points,
         "forecast": forecast,
-        "contract": contract
+        "contract": contract,
+        # Include weekly data for store_to_delta.py consumption
+        "weekly_data": weekly_data,
     }
 
     # Format Slack alert if churn risk > 0.5 or contract underburning

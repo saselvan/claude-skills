@@ -989,7 +989,7 @@ Generate clean HTML that renders properly when pasted into Gmail compose:
     }
     .section-label {
       font-weight: 600;
-      color: #5f6368;
+      color: #444746;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -1006,7 +1006,7 @@ Generate clean HTML that renders properly when pasted into Gmail compose:
       font-weight: 600;
     }
     .date {
-      color: #1a73e8;
+      color: #0b57a4;
       font-weight: 500;
     }
     .collateral {
@@ -1016,7 +1016,7 @@ Generate clean HTML that renders properly when pasted into Gmail compose:
       margin-top: 16px;
     }
     .metadata {
-      color: #5f6368;
+      color: #444746;
       font-size: 12px;
       border-top: 1px solid #e8eaed;
       margin-top: 24px;
@@ -1030,9 +1030,9 @@ Generate clean HTML that renders properly when pasted into Gmail compose:
       font-weight: 700;
       font-size: 13px;
     }
-    .deal-health.green { background: #e6f4ea; color: #137333; }
-    .deal-health.yellow { background: #fef7e0; color: #b06000; }
-    .deal-health.red { background: #fce8e6; color: #c5221f; }
+    .deal-health.green { background: #e6f4ea; color: #0d5626; }
+    .deal-health.yellow { background: #fef7e0; color: #7a4100; }
+    .deal-health.red { background: #fce8e6; color: #9c1b18; }
     .medpicc-grid {
       display: grid;
       grid-template-columns: 40px 1fr;
@@ -1041,7 +1041,7 @@ Generate clean HTML that renders properly when pasted into Gmail compose:
     }
     .medpicc-label {
       font-weight: 700;
-      color: #5f6368;
+      color: #444746;
     }
   </style>
 </head>

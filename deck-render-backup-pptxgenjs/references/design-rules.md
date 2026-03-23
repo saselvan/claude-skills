@@ -24,9 +24,9 @@ Source: https://brandguides.brandfolder.com/databricks-extended-brand-guidelines
 | **bgLight** | Gray - Navigation | 303F47 | Lighter card variant, interactive elements |
 | **primary** | Lava 600 | FF3621 | Databricks red (use sparingly) |
 | **green** | Green 600 | 00A972 | Success, complete, positive |
-| **blue** | Blue 600 | 2272B4 | Info, neutral emphasis |
+| **blue** | Blue 600 | 3B8FD4 | Info, neutral emphasis |
 | **yellow** | Yellow 600 | FFAB00 | Warning, highlight, next |
-| **maroon** | Maroon 600 | 98102A | Deep emphasis |
+| **maroon** | Maroon 600 | C4243E | Deep emphasis (18pt+ only, never body text) |
 
 **Secondary palette:**
 
@@ -36,7 +36,7 @@ Source: https://brandguides.brandfolder.com/databricks-extended-brand-guidelines
 | **Oat Medium** | Oat | EEEDE9 | Light backgrounds (light theme only) |
 | **Oat Light** | Oat light | F9F7F4 | Lightest background (light theme only) |
 | **Gray - Lines** | Lines | DCE0E2 | Borders, dividers, body text on dark bg |
-| **Gray - Text** | Text | 5A6F77 | Muted text, captions, footnotes on dark bg |
+| **Gray - Text** | Text | 9EADB5 | Muted text, captions, footnotes on dark bg |
 | **Gray - Navigation** | Nav | 303F47 | Navigation elements, card fills on dark bg |
 
 **Text hierarchy (dark theme):**
@@ -45,12 +45,12 @@ Source: https://brandguides.brandfolder.com/databricks-extended-brand-guidelines
 |------|------|-----|-------|
 | **t1** | White | FFFFFF | Titles, hero text |
 | **t2** | Gray - Lines | DCE0E2 | Body text, bullet points |
-| **t3** | Gray - Text | 5A6F77 | Secondary labels, section headers |
-| **t4** | Gray - Text | 5A6F77 | Captions, footnotes (same as t3 — palette has 3 usable dark-theme text levels) |
+| **t3** | Gray - Text | 9EADB5 | Secondary labels, captions, footnotes (~7:1 on bg, ~5:1 on bgCard) |
+| **t4** | Gray - Text | 9EADB5 | Same as t3 (palette has 3 usable dark-theme text levels) |
 
 **Note:** The brand palette supports 3 text contrast levels on Navy 900 backgrounds, not 4. Gray-Navigation (#303F47) is too low-contrast for readable text on Navy 900 — use it only for backgrounds and borders, never for text.
 
-**Projector contrast warning:** Conference room projectors wash out low-contrast pairings. Critical data (hero stats, key labels, CTA text) must use `t1` (FFFFFF) or `t2` (DCE0E2) on dark backgrounds — never `t3` for anything the audience needs to read from 10+ feet away. Reserve `t3` for secondary labels and footnotes that are only relevant in leave-behind mode. When in doubt, bump up one contrast level.
+**Display accessibility mandate:** Slides will be shown on cheap LCD TVs in bright conference rooms, old Windows laptops with TN panels, and projectors. Design for worst-case: assume 30-50% contrast loss. All readable text on bg must achieve 7:1+. Card body text: always t2, never t3. Maroon (C4243E): 18pt+ only. When in doubt, bump UP one contrast level.
 
 **Light variants for callout backgrounds** (darken to ~15% visible):
 - greenLight: 0D2920
@@ -64,11 +64,11 @@ const C = {
   bg1: "0B2026", bgCard: "1B3139", bgLight: "303F47",  // Navy 900, Navy 800, Gray-Navigation
   lava: "FF3621", lavaLight: "2D1510",      // Lava 600 - use sparingly
   green: "00A972", greenLight: "0D2920",    // Green 600
-  blue: "2272B4", blueLight: "0D1F2D",      // Blue 600
+  blue: "3B8FD4", blueLight: "0D1F2D",      // Blue 600 (lightened for dark-bg accessibility)
   yellow: "FFAB00", yellowLight: "2D2510",  // Yellow 600
-  maroon: "98102A", maroonLight: "1D0D10",  // Maroon 600
+  maroon: "C4243E", maroonLight: "1D0D10",  // Maroon 600 (lightened, 18pt+ only)
   navy: "1B5162",                           // Mid-tone for variety
-  t1: "FFFFFF", t2: "DCE0E2", t3: "5A6F77", t4: "5A6F77",  // White, Gray-Lines, Gray-Text, Gray-Text
+  t1: "FFFFFF", t2: "DCE0E2", t3: "9EADB5", t4: "9EADB5",  // White, Gray-Lines, Gray-Text, Gray-Text
   border: "303F47"                                            // Gray-Navigation
 };
 ```

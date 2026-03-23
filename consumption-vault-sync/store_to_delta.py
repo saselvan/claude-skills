@@ -36,15 +36,14 @@ def prepare_records(analysis: Dict, account_id: str, account_name: str) -> List[
     analysis_date = datetime.now().isoformat()
     records = []
 
-    # Extract analysis-level metrics
-    summary = analysis.get('analysis', {})
-    churn_risk = summary.get('churn_risk', 0)
-    expansion_signal = summary.get('expansion_signal', 0)
-    health = summary.get('health_status', 'Unknown')
-    velocity = summary.get('velocity', 'Unknown')
+    # Extract analysis-level metrics (flat keys from analyze_consumption.py output)
+    churn_risk = analysis.get('churn_risk', 0)
+    expansion_signal = analysis.get('expansion_signal', 0)
+    health = analysis.get('health', 'Unknown')
+    velocity = analysis.get('velocity', 'Unknown')
 
-    # Process each week
-    for week_data in analysis.get('data', []):
+    # Process each week (key is 'weekly_data', not 'data')
+    for week_data in analysis.get('weekly_data', []):
         record = {
             'account_id': account_id,
             'account_name': account_name,
@@ -243,6 +242,10 @@ def main():
 
     print("Creating table if not exists...", file=sys.stderr)
     if not execute_sql(create_table_sql(), args.profile, args.warehouse_id):
+        sys.exit(1)
+
+    if not records:
+        print("No records to insert — analysis may not contain weekly_data.", file=sys.stderr)
         sys.exit(1)
 
     print("Inserting records...", file=sys.stderr)

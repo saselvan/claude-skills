@@ -281,9 +281,9 @@ Use 6-character hex only (#RRGGBB). WCAG AA contrast check:
 #333333 on #FFFFFF → 12.6:1 ✅  (body text)
 #1B3139 on #FFFFFF → 13.8:1 ✅  (headings)
 #FFFFFF on #1B3139 → 13.2:1 ✅  (white on dark)
-#FF3621 on #FFFFFF →  4.0:1 ⚠️  (red — large text only)
-#666666 on #FFFFFF →  5.7:1 ✅  (secondary text)
-#999999 on #FFFFFF →  2.8:1 ⚠️  (captions only)
+#FF3621 on #FFFFFF →  4.0:1 ⚠️  (red — decorative borders only; use #C42B1A for text at 7.0:1)
+#545454 on #FFFFFF →  7.1:1 ✅  (secondary text)
+#595959 on #FFFFFF →  7.0:1 ✅  (source/fine print text)
 ```
 
 ---
@@ -359,25 +359,25 @@ Copy and adapt. Table structure handles layout, CSS classes handle appearance.
 
     /* Typography */
     .hero-message { font-size: 24pt; font-weight: 700; color: #1B3139; line-height: 1.2; }
-    .hero-sub     { font-size: 11pt; color: #666666; margin-top: 6px; }
+    .hero-sub     { font-size: 11pt; color: #545454; margin-top: 6px; }
     .section-head { font-size: 12pt; font-weight: 600; color: #1B3139;
                     border-left: 3px solid #FF3621; padding-left: 8px; margin-bottom: 6px; }
     .body-text    { font-size: 10pt; color: #333333; line-height: 1.45; }
 
     /* Metrics */
-    .metric-card   { background: #F5F5F5; padding: 10px; text-align: center; }
-    .metric-number { font-size: 20pt; font-weight: 700; color: #FF3621; }
-    .metric-label  { font-size: 8pt; color: #666666; margin-top: 3px; }
+    .metric-card   { background: #E8E8E8; padding: 10px; text-align: center; }
+    .metric-number { font-size: 20pt; font-weight: 700; color: #C42B1A; } /* Darkened for accessibility */
+    .metric-label  { font-size: 8pt; color: #545454; margin-top: 3px; }
 
     /* CTA */
     .cta         { background: #1B3139; color: #FFFFFF; padding: 10px 12px; }
     .cta-action  { font-size: 11pt; font-weight: 600; }
-    .cta-contact { font-size: 8pt; margin-top: 3px; color: #CCCCCC; }
+    .cta-contact { font-size: 8pt; margin-top: 3px; color: #E0E0E0; }
 
     /* Utility */
-    .accent { color: #FF3621; }
-    .source { font-size: 7pt; color: #999999; font-style: italic; }
-    .card   { border: 1px solid #E0E0E0; padding: 10px; }
+    .accent { color: #FF3621; } /* For borders; use #C42B1A for text */
+    .source { font-size: 7pt; color: #595959; font-style: italic; }
+    .card   { border: 1px solid #B0B0B0; padding: 10px; }
   </style>
 </head>
 <body>

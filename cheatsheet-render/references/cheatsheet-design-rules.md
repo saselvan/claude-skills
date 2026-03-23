@@ -75,12 +75,12 @@ Colors are semantic, not decorative. Each color has exactly one meaning.
 |------|-------|-----|-------|
 | **Primary accent** | Brand-defined (see shared design-rules.md) | `#FF3621` (Databricks Lava) | Card title text, active borders, hero stat emphasis |
 | **Alert / Critical** | Red | `#FF3621` (doubles as brand accent) | Danger states, critical warnings, "stop" signals |
-| **Caution / Attention** | Amber/Yellow | `#F4A261` | Warnings, conditional items, "check first" signals |
-| **Safe / Positive** | Green | `#00A972` (Databricks Green) | Confirmed states, "go" signals, success indicators |
+| **Caution / Attention** | Amber/Yellow | `#F7B070` | Warnings, conditional items, "check first" signals |
+| **Safe / Positive** | Green | `#2DC98E` (Databricks Green) | Confirmed states, "go" signals, success indicators |
 | **Neutral background** | Dark slate | `#1A1A2E` | Sheet background (dark mode default) |
 | **Card background** | Slightly lighter | `#1D1D31` | Card containers |
 | **Body text** | Light gray | `#E8E8E8` | All body content |
-| **Muted text** | Medium gray | `#888888` | Metadata, secondary labels |
+| **Muted text** | Medium gray | `#A8A8A8` | Metadata, secondary labels |
 
 **Dark mode is the default** for cheat sheets (Gery's research + color cognition studies show white-on-dark yields superior performance under high cognitive load).
 
@@ -90,13 +90,13 @@ Colors are semantic, not decorative. Each color has exactly one meaning.
 | Background | `#FFFFFF` |
 | Card background | `#F8F9FA` |
 | Body text | `#1A1A2E` |
-| Muted text | `#6C757D` |
+| Muted text | `#555E66` |
 
 ### Color Rules
 1. Never use more than 4 semantic colors (excluding neutrals)
 2. Every color must be explainable in one sentence ("Red means stop/danger")
 3. Never use color as the ONLY differentiator (accessibility — always pair with shape, icon, or label)
-4. Card borders: 1px solid `#2F2F45` (subtle, not prominent)
+4. Card borders: 1px solid `#4A4A68` (subtle, not prominent)
 5. Accent color used for: card titles, table headers, hero numbers. Never for body text.
 
 ---
@@ -150,7 +150,7 @@ Colors are semantic, not decorative. Each color has exactly one meaning.
 /* Standard card */
 .card {
   background: #1D1D31;
-  border: 1px solid #2F2F45;
+  border: 1px solid #4A4A68;
   border-radius: 8px;
   padding: 1rem;
 }
@@ -162,7 +162,7 @@ Colors are semantic, not decorative. Each color has exactly one meaning.
   font-weight: 700;
   margin-bottom: 0.5rem;
   padding-bottom: 0.4rem;
-  border-bottom: 1px solid #2F2F45;
+  border-bottom: 1px solid #4A4A68;
 }
 
 /* Table inside card */
@@ -201,13 +201,13 @@ For compliance, liability, or "stop before you start" constraints that must be v
   text-align: center;
   margin: 0.3rem 0;
 }
-.alert-banner .safe { color: #F4A261; font-weight: 400; font-style: italic; }
+.alert-banner .safe { color: #F7B070; font-weight: 400; font-style: italic; }
 ```
 
 **Rules:**
 1. Maximum 1 banner per sheet (if you need more, you have a compliance problem, not a cheat sheet problem)
 2. Must contain all three elements: constraint + consequence + safe alternative
-3. Uses brand red (#FF3621) for constraint, amber (#F4A261) for safe path
+3. Uses brand red (#FF3621) for constraint, amber (#F7B070) for safe path
 4. Triggers a Liability Audit check during self-evaluation (Step 5 in SKILL.md)
 
 ---
@@ -224,13 +224,13 @@ h1 span {
   display: block;
   margin-top: 0.1rem;
 }
-h1 span em { color: #F4A261; font-style: normal; font-weight: 600; }
+h1 span em { color: #F7B070; font-style: normal; font-weight: 600; }
 ```
 
 **Rules:**
 1. Maximum 1 subtitle per sheet
 2. Under 15 words
-3. Anchoring metaphor or mental model in amber accent (`#F4A261`)
+3. Anchoring metaphor or mental model in amber accent (`#F7B070`)
 4. Format: `[Metaphor] for [Domain] — [Product positioning]`
 5. Example: `The Nurse's Station for Your Data Lake — Postgres, built into Databricks`
 

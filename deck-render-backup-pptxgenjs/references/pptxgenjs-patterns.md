@@ -264,11 +264,11 @@ const C = {
   bg1: "0B2026", bgCard: "1B3139", bgLight: "303F47",
   lava: "FF3621", lavaLight: "2D1510",
   green: "00A972", greenLight: "0D2920",
-  blue: "2272B4", blueLight: "0D1F2D",
+  blue: "3B8FD4", blueLight: "0D1F2D",
   yellow: "FFAB00", yellowLight: "2D2510",
-  maroon: "98102A", maroonLight: "1D0D10",
+  maroon: "C4243E", maroonLight: "1D0D10",
   navy: "1B5162",
-  t1: "FFFFFF", t2: "DCE0E2", t3: "5A6F77", t4: "5A6F77",
+  t1: "FFFFFF", t2: "DCE0E2", t3: "9EADB5", t4: "9EADB5",
   border: "303F47"
 };
 

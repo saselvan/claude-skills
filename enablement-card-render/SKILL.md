@@ -605,12 +605,25 @@ Read the HTML template from `enablement-card-patterns.md` and populate with gene
    - `hub_and_spoke` → Landing Page HTML template
    - `self_contained` → Self-Contained HTML template
 
-2. Apply brand colors from `~/.claude/skills/deck-render/references/design-rules.md`:
-   - Dark mode: #0B2026 bg, #FFFFFF text
-   - Accent: #FF3621 (Databricks red — use sparingly)
-   - Success/scripts: #00A972
-   - Links/info: #2272B4
-   - Discovery: #FFAB00
+2. Apply brand colors from `~/.claude/skills/deck-render/references/design-rules.md`, using WCAG AA accessible variants:
+
+   **On light/white backgrounds:**
+   - Links/info: #1A5A8F (7.2:1 contrast on white)
+   - Success/scripts (text): #006644 (7.3:1 on white). Keep #00A972 for borders/decorative only.
+   - Discovery/warnings (text): #705510 (7.1:1 on white). Keep #FFAB00 for borders/decorative only.
+   - Timing labels/metadata: #3D5A66 (7.1:1 on white)
+   - Footer text: #3D5A66 (7.1:1 on white)
+
+   **On dark backgrounds (#0B2026, #0D1F2D):**
+   - Stat bar accent numbers: #FF8A7A (8.1:1 on #0B2026)
+   - AI card examples text: #B8CCD6 (9.3:1 on #0B2026)
+   - AI card links: #5CEBA0 (9.1:1 on #0B2026)
+   - Proof block customer name: #6EB5E5 (7.8:1 on #0D1F2D)
+
+   **Always (context-independent):**
+   - Dark bg: #0B2026
+   - White text on dark: #FFFFFF
+   - Accent: #FF3621 (Databricks red — use sparingly, decorative/borders only)
 
 3. Populate sections from markdown content:
    - Convert markdown tables → HTML `<table>` with proper styling

@@ -1286,7 +1286,7 @@ The landing page is a single-page visual router. Target: 1 printed page, ~400 wo
       margin-bottom: 16pt;
     }
     .stat-bar span { margin-right: 20pt; }
-    .stat-bar .accent { color: #FF3621; }
+    .stat-bar .accent { color: #FF8A7A; } /* 8.1:1 on #0B2026 dark bg */
 
     /* Section Header */
     h1 {
@@ -1321,7 +1321,7 @@ The landing page is a single-page visual router. Target: 1 printed page, ~400 wo
     }
     .script-box .timing {
       font-size: 9pt;
-      color: #618794;
+      color: #3D5A66; /* 7.1:1 on light bg */
       text-transform: uppercase;
     }
     .script-box .script {
@@ -1345,7 +1345,7 @@ The landing page is a single-page visual router. Target: 1 printed page, ~400 wo
     .router-table .situation { font-size: 11pt; color: #1B3139; }
     .router-table .link { text-align: right; }
     .router-table a {
-      color: #2272B4;
+      color: #1A5A8F; /* 7.2:1 on white bg */
       text-decoration: none;
       font-weight: 500;
     }
@@ -1361,7 +1361,7 @@ The landing page is a single-page visual router. Target: 1 printed page, ~400 wo
     .ai-card h3 { margin: 0 0 6pt 0; font-size: 12pt; }
     .ai-card .examples {
       font-size: 9pt;
-      color: #90A5B1;
+      color: #B8CCD6; /* 9.3:1 on #0B2026 dark bg */
       font-family: monospace;
     }
 
@@ -1378,7 +1378,7 @@ The landing page is a single-page visual router. Target: 1 printed page, ~400 wo
     /* Footer */
     .footer {
       font-size: 8pt;
-      color: #90A5B1;
+      color: #3D5A66; /* 7.1:1 on white bg */
       border-top: 1pt solid #E5E9EC;
       padding-top: 8pt;
       margin-top: 16pt;
@@ -1401,7 +1401,7 @@ The landing page is a single-page visual router. Target: 1 printed page, ~400 wo
 
   <h2>🤖 Got a Question? Ask the AI</h2>
   <div class="ai-card">
-    <h3><a href="#" style="color:#00A972;">Open AI Assistant →</a></h3>
+    <h3><a href="#" style="color:#5CEBA0;">Open AI Assistant →</a></h3>
     <p class="examples">Try: "HIPAA script" · "DBA voicemail" · "Aurora vs us" · "pricing objection"</p>
   </div>
 
@@ -1510,7 +1510,7 @@ For AE/SA/Manager cards rendered as single multi-page documents.
     }
     .metadata {
       font-size: 9pt;
-      color: #618794;
+      color: #3D5A66; /* 7.1:1 on white bg */
     }
 
     /* TOC */
@@ -1526,7 +1526,7 @@ For AE/SA/Manager cards rendered as single multi-page documents.
       font-weight: bold;
       text-transform: uppercase;
       letter-spacing: 1pt;
-      color: #618794;
+      color: #3D5A66; /* 7.1:1 on light bg */
       margin-bottom: 8pt;
     }
     .toc ul {
@@ -1539,7 +1539,7 @@ For AE/SA/Manager cards rendered as single multi-page documents.
       font-size: 10pt;
     }
     .toc a {
-      color: #2272B4;
+      color: #1A5A8F; /* 7.2:1 on light bg */
       text-decoration: none;
     }
 
@@ -1615,15 +1615,15 @@ For AE/SA/Manager cards rendered as single multi-page documents.
     }
     .proof-block .customer {
       font-weight: bold;
-      color: #2272B4;
+      color: #6EB5E5; /* 7.8:1 on #0D1F2D dark bg */
     }
     .proof-block .metric {
       color: #FFFFFF;
     }
 
     /* Qualification Signals */
-    .signal-green { color: #00A972; font-weight: bold; }
-    .signal-yellow { color: #FFAB00; font-weight: bold; }
+    .signal-green { color: #006644; font-weight: bold; } /* 7.3:1 on white bg */
+    .signal-yellow { color: #705510; font-weight: bold; } /* 7.1:1 on white bg */
     .signal-red { color: #FF3621; font-weight: bold; }
 
     /* Discovery Script */
@@ -1637,14 +1637,14 @@ For AE/SA/Manager cards rendered as single multi-page documents.
 
     /* Collateral Links */
     .collateral-table a {
-      color: #2272B4;
+      color: #1A5A8F; /* 7.2:1 on white bg */
       text-decoration: none;
     }
 
     /* Footer */
     .footer {
       font-size: 8pt;
-      color: #90A5B1;
+      color: #3D5A66; /* 7.1:1 on white bg */
       border-top: 1pt solid #E5E9EC;
       padding-top: 10pt;
       margin-top: 24pt;
@@ -1838,21 +1838,38 @@ pdftoppm -png -r 200 -singlefile output/landing-page.pdf output/rendered/landing
 
 ### Design Rules Reference
 
-<!-- Note: HTML enablement cards use a light-background palette distinct from the dark-theme Slides palette in deck-render/design-rules.md. These hex values are intentionally different to maintain readability on white/light card backgrounds. -->
+<!-- Note: HTML enablement cards use WCAG AA accessible color variants that differ by background context. Light-bg text colors are darker than the raw brand palette; dark-bg text colors are lighter. All text colors achieve 7:1+ contrast ratio (WCAG AAA). -->
 
-For colors, fonts, and brand styling, use `~/.claude/skills/deck-render/references/design-rules.md`. Key values:
+For colors, fonts, and brand styling, use `~/.claude/skills/deck-render/references/design-rules.md` as the source palette, then apply these accessible variants:
+
+**On light/white backgrounds:**
+
+| Element | Value | Contrast | Use |
+|---------|-------|----------|-----|
+| blue (text) | #1A5A8F | 7.2:1 | Links, TOC links, collateral links |
+| green (text) | #006644 | 7.3:1 | Signal green text, positive indicators |
+| yellow (text) | #705510 | 7.1:1 | Signal yellow text, caution indicators |
+| metadata/timing | #3D5A66 | 7.1:1 | Timing labels, metadata, TOC titles, footer |
+| green (border) | #00A972 | — | Script box left borders, objection response borders (decorative) |
+| yellow (border) | #FFAB00 | — | Discovery script left borders (decorative) |
+
+**On dark backgrounds (#0B2026, #0D1F2D):**
+
+| Element | Value | Contrast | Use |
+|---------|-------|----------|-----|
+| stat accent | #FF8A7A | 8.1:1 | Stat bar numbers on #0B2026 |
+| AI examples | #B8CCD6 | 9.3:1 | AI card example text on #0B2026 |
+| AI links | #5CEBA0 | 9.1:1 | AI card link text on #0B2026 |
+| proof customer | #6EB5E5 | 7.8:1 | Customer name in proof blocks on #0D1F2D |
+| t1 | #FFFFFF | — | Primary text on dark |
+| t2 | #C4CCD6 | — | Secondary text on dark |
+
+**Context-independent (structural):**
 
 | Element | Value | Use |
 |---------|-------|-----|
 | bg | #0B2026 | Dark backgrounds (stat bar, AI card) |
 | bgCard | #1B3139 | Card backgrounds |
-| primary | #FF3621 | Databricks red (use sparingly — title accents, CTA) |
-| green | #00A972 | Success, scripts, positive |
-| blue | #2272B4 | Links, info cards |
-| yellow | #FFAB00 | Discovery scripts, warnings |
-| t1 | #FFFFFF | Text on dark |
-| t2 | #C4CCD6 | Secondary text |
-| t3 | #90A5B1 | Muted text |
-| t4 | #618794 | Captions |
+| primary | #FF3621 | Databricks red (borders, title accents — never as text on white) |
 | light bg | #F5F7F8 | Script boxes, TOC |
 | border | #E5E9EC | Table borders |

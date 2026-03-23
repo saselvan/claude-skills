@@ -481,6 +481,11 @@ def main():
         default="DEFAULT",
         help="Databricks profile for E2 workspace (default: DEFAULT)"
     )
+    parser.add_argument(
+        "--output-json",
+        default=None,
+        help="Path to dump analysis JSON (for generate_prep.py consumption input)"
+    )
 
     args = parser.parse_args()
 
@@ -500,12 +505,54 @@ def main():
     analysis = compute_analysis(consumption)
     consumption['analysis'] = analysis
 
-    # 3. Generate signals
+    # 3. Dump analysis JSON for generate_prep.py (before vault write, independent)
+    if args.output_json:
+        latest = consumption['latest_week']
+        wow = float(latest['wow_growth']) if latest.get('wow_growth') else None
+        driver = "consumption trend"
+        if analysis.get('sku_shifts') and analysis['sku_shifts'].get('shifts'):
+            driver = analysis['sku_shifts']['shifts'][0].get('message', driver)
+        elif analysis.get('anomalies'):
+            driver = analysis['anomalies'][0].get('message', driver)
+        elif analysis.get('baseline', {}).get('status') != 'insufficient_data':
+            dev = analysis['baseline'].get('deviation_pct', 0)
+            if abs(dev) > 15:
+                driver = f"baseline deviation {dev:+.1f}%"
+
+        # Compute WoW and 4wk avg from raw data when pre-computed columns are null
+        trend_data = consumption.get('trend_4wk', [])
+        spends = [float(w['total_spend']) for w in trend_data if w.get('total_spend')]
+
+        if wow is None and len(spends) >= 2:
+            wow = round((spends[0] - spends[1]) / spends[1] * 100, 1) if spends[1] else None
+
+        four_wk_avg = float(latest['rolling_4wk_avg']) if latest.get('rolling_4wk_avg') else None
+        if four_wk_avg is None and len(spends) >= 2:
+            four_wk_avg = round(sum(spends[:4]) / len(spends[:4]), 2)
+
+        prep_data = {
+            "current_weekly_spend": float(latest['total_spend']) if latest.get('total_spend') else None,
+            "wow_change_pct": wow,
+            "four_week_avg_spend": four_wk_avg,
+            "trend_pct": wow,
+            "primary_driver": driver,
+            "health": latest.get('health'),
+            "velocity": latest.get('velocity'),
+            "week_start": latest.get('week_start'),
+            "weekly_data": [{"week_start": w.get('week_start'), "total_spend": float(w['total_spend']) if w.get('total_spend') else 0} for w in trend_data],
+        }
+        import os
+        os.makedirs(os.path.dirname(args.output_json) or '/tmp', exist_ok=True)
+        with open(args.output_json, 'w') as f:
+            json.dump(prep_data, f, indent=2)
+        print(f"  Analysis JSON written to {args.output_json}", file=sys.stderr)
+
+    # 4. Generate signals
     print("Generating signals...", file=sys.stderr)
     signals = create_consumption_signals(consumption)
     print(f"  Generated {len(signals)} signals", file=sys.stderr)
 
-    # 4. Write to vault
+    # 5. Write to vault (best-effort — analysis JSON is the critical output)
     print("Writing to vault...", file=sys.stderr)
     success = write_signals_to_vault(signals)
 
@@ -514,8 +561,11 @@ def main():
         print(f"✅ Consumption sync complete for {args.account_name}", file=sys.stderr)
         print(f"   View signals: Open vault frontend → Signals → Filter by '{args.account_name}'", file=sys.stderr)
     else:
-        print("❌ Vault sync failed", file=sys.stderr)
-        sys.exit(1)
+        if args.output_json:
+            print("⚠️  Vault Lakebase write failed (analysis JSON already written — continuing)", file=sys.stderr)
+        else:
+            print("❌ Vault sync failed", file=sys.stderr)
+            sys.exit(1)
 
 
 if __name__ == "__main__":
