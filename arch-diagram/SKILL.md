@@ -60,7 +60,7 @@ STEP 2: Plan Coordinates
     Platform:     x=440,  y=60,   w=560, h=600
     Serving:      x=1040, y=100,  w=180
     Consumers:    x=1260, y=100,  w=180
-    Governance:   x=440,  y=700,  w=560, h=50  (full platform width)
+    Governance:   x=0,    y=700,  w=1500, h=50 (full DIAGRAM width, not just platform)
     Foundation:   x=440,  y=760,  w=560, h=40  (full platform width)
   
   These are starting coordinates — adjust based on content density.
@@ -174,7 +174,8 @@ Gold:               fill=#FFD700, fontColor=#000000
 <mxCell id="gov-bar" value="Governance — Unity Catalog&#xa;Access control · PII masking · Lineage · Audit trail" 
   style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1B3A4B;fontColor=#FFFFFF;strokeColor=#1B3A4B;fontSize=11;fontStyle=1;verticalAlign=middle;" 
   vertex="1" parent="1">
-  <mxGeometry x="440" y="700" width="560" height="50" as="geometry"/>
+  <mxGeometry x="0" y="700" width="1500" height="50" as="geometry"/>
+  <!-- NOTE: width must span the FULL diagram (all zones), not just the platform container -->
 </mxCell>
 ```
 
@@ -235,7 +236,7 @@ value="Bronze&#xa;Raw HL7 messages, DICOM images"
 
 - **Always label every arrow.** An unlabeled arrow is ambiguous. Use the `value` attribute on edge cells.
 - **Always position elements with explicit x,y coordinates.** Never rely on auto-layout. The whole point of this skill is positioned layout.
-- **Governance is always a full-width bar.** Match the platform container width. Never a peer node.
+- **Governance is always a full-width bar.** The governance bar must span the ENTIRE diagram width — from the leftmost source to the rightmost consumer — not just the platform container. Set x=0 and width equal to the full canvas width. It governs everything, not just the platform. Never a peer node.
 - **Use Databricks product names.** See the naming table.
 - **Medallion layers need descriptive labels.** "Bronze — {what's specifically in this layer}" not just "Bronze (Raw)".
 - **Keep node count manageable.** If >20 top-level nodes, decompose into multiple diagrams or use C4 drill-down.
