@@ -92,9 +92,17 @@ Write `scaffold.js` — read scaffold-reference.md for the full template. Bake i
 **Theme config:** scaffold.js supports a theme switch via strategy YAML:
 ```yaml
 design_decisions:
-  theme: dark  # or "light"
+  theme: light  # default if omitted — brand-aligned warm palette
+  # theme: dark  # opt-in for dark navy backgrounds
 ```
-Dark theme: fully implemented. Light theme: palette values defined but layout functions and eval criteria not yet tuned. Use dark unless specifically requested. If light is requested, emit warning: "Light theme available but incomplete — dark recommended."
+Light theme is the default — uses official Databricks brand background (#F9F7F4 warm oat). Dark theme is opt-in via explicit `theme: dark`. Both themes are fully implemented. See `.wall/grill-me-agreements.md` for the 11-decision rationale.
+
+**Light theme slide categories:**
+- **Content slides** (default): warm F9F7F4 bg, dark text, white card callouts with colored accent bars
+- **Structural slides** (title, section dividers, closing): dark 1B3139 teal bg, white text
+- **Architecture slides**: dark 0B2026 navy bg, full-bleed D2 diagrams
+
+**Light theme red rule:** Use `C.lava` (FF3621) for shapes/fills/borders ONLY. Use `C.lavaText` (C42B1A) for any red text — FF3621 fails WCAG AA for text on F9F7F4.
 
 ### Per-Slide Loop
 

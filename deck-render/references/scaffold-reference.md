@@ -68,33 +68,63 @@ const DARK_PALETTE = {
 };
 ```
 
-### Light Theme (Scaffolded — Dark Recommended)
+### Light Theme (Default — Brand-Aligned Warm Palette)
 
-Light theme is scaffolded but incomplete. Use dark theme for production decks.
+Light theme uses the official Databricks brand background (#F9F7F4 warm oat). This is the default theme. See `.wall/grill-me-agreements.md` for the full 11-decision rationale.
 
-**Light theme text colors (on white/oat backgrounds):**
+**Light theme text colors (on F9F7F4 warm backgrounds):**
 
-| Role | Hex | Contrast | Usage |
-|------|-----|----------|-------|
-| **Body text** | `333333` | 12.6:1 | Primary body copy |
-| **Subtitle/secondary** | `545454` | 7.1:1 | Secondary descriptive text |
-| **Source/fine print** | `595959` | 7.0:1 | Citations, footnotes, legal text |
-| **Accent text (large)** | `C42B1A` | 7.0:1 | Hero metrics, emphasized numbers (use `FF3621` for borders only) |
+| Role | Hex | Contrast on F9F7F4 | Usage |
+|------|-----|---------------------|-------|
+| **Body text (t1)** | `333333` | 12.6:1 | Titles, hero text |
+| **Subtitle/secondary (t2)** | `545454` | 7.1:1 | Body text, bullet points |
+| **Source/fine print (t3)** | `595959` | 7.0:1 | Captions, footnotes, legal text |
+| **Red text** | `C42B1A` | 7.0:1 | Hero metrics, emphasized numbers — NEVER use `FF3621` as text |
+| **Red shapes/fills** | `FF3621` | 4.5:1 | Accent bars, borders, icon fills — visual elements only |
 | **Card borders** | `B0B0B0` | 3.2:1 | Visual separation |
-| **Metric card bg** | `E8E8E8` | - | Subtle background differentiation |
-| **CTA contact (on #1B3139)** | `E0E0E0` | 9.0:1 | Contact info in dark CTA sections |
+
+**Slide background categories:**
+
+| Category | Background | Text | Examples |
+|----------|-----------|------|----------|
+| **Content slides** | `F9F7F4` (warm oat) | Dark (t1/t2/t3) | Cards, bullets, comparisons, tables, stat heroes |
+| **Structural slides** | `1B3139` (dark teal) | White | Title, section dividers, closing/CTA |
+| **Architecture slides** | `0B2026` (navy 900) | White | D2 diagrams — full-bleed dark |
+
+**Callout/highlight box pattern (light theme):**
+
+White boxes with colored left-edge accent bars on warm F9F7F4 background:
+```javascript
+// White callout box
+s.addShape("rect", { x, y, w, h, fill: { color: "FFFFFF" }, shadow: shd() });
+// Colored accent bar (left edge)
+s.addShape("rect", { x, y, w: 0.06, h, fill: { color: C.green } });
+```
+Accent bar colors: green (success), blue (info), yellow (warning), lava (brand), maroon (emphasis 18pt+).
 
 ```javascript
 const LIGHT_PALETTE = {
-  bg: "FFFFFF", bgCard: "F9F7F4", bgLight: "EEEDE9",
-  lava: "FF3621", lavaLight: "FFF0ED",
-  green: "00A972", greenLight: "E6F7F0",
-  blue: "3B8FD4", blueLight: "E8F2FC",
-  yellow: "FFAB00", yellowLight: "FFF8E6",
-  maroon: "C4243E", maroonLight: "FCEDEF",
-  navy: "1B5162",
-  t1: "333333", t2: "545454", t3: "595959",
-  border: "B0B0B0"
+  // Backgrounds
+  bg: "F9F7F4",      // Warm oat slide background (brand primary)
+  bgCard: "FFFFFF",   // White card/callout backgrounds
+  bgLight: "EEEDE9",  // Oat medium — subtle differentiation
+  // Brand accent
+  lava: "FF3621",     // Shapes, fills, borders, icons ONLY — never text
+  lavaText: "C42B1A", // Text-safe red (7.0:1 on F9F7F4)
+  // Semantic accents
+  green: "00A972",    // Success, complete
+  blue: "2272B4",     // Info, neutral emphasis (brand blue)
+  yellow: "FFAB00",   // Warning, highlight
+  maroon: "C4243E",   // Deep emphasis (18pt+ only)
+  // Structural
+  navy: "1B3139",     // Structural slide backgrounds (teal)
+  navyDark: "0B2026", // Architecture slide backgrounds
+  // Text hierarchy
+  t1: "333333",       // Titles, hero text (12.6:1 on F9F7F4)
+  t2: "545454",       // Body text, bullets (7.1:1 on F9F7F4)
+  t3: "595959",       // Captions, footnotes (7.0:1 on F9F7F4)
+  // Borders
+  border: "B0B0B0"    // Card borders, dividers
 };
 ```
 
@@ -102,8 +132,26 @@ const LIGHT_PALETTE = {
 
 ```javascript
 // Config: set theme at top of scaffold.js
-const THEME = "dark"; // "dark" | "light"
+// Default: "light" (brand-aligned). Override with strategy.design_decisions.theme
+const THEME = "light"; // "dark" | "light"
 const C = THEME === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
+```
+
+**Structural slide override pattern (light theme only):**
+```javascript
+// Title, section divider, and closing slides use dark teal background
+if (isStructuralSlide) {
+  s.background = { fill: C.navy };  // 1B3139
+  // Use white text on structural slides
+  titleColor = "FFFFFF";
+  bodyColor = "FFFFFF";
+}
+// Architecture slides use navy 900
+if (isArchitectureSlide) {
+  s.background = { fill: C.navyDark };  // 0B2026
+}
+// All other slides get warm background
+s.background = { fill: C.bg };  // F9F7F4
 ```
 
 ### Color Usage Guidelines
@@ -133,7 +181,7 @@ Slides will be shown on cheap LCD TVs in bright conference rooms, old Windows la
 **Rules:**
 - Card body text: always `t2`, never `t3` — t3 on card backgrounds is reserved for 12pt+ footnotes only
 - Maroon (`C4243E`): decorative elements and 18pt+ text only — never body text
-- Blue (`3B8FD4`): text-safe on both bg and bgCard
+- Blue (`2272B4` light / `3B8FD4` dark): text-safe on both bg and bgCard
 - `t3` (`9EADB5`): ~7:1 on bg (`0B2026`), ~5:1 on bgCard — safe for secondary labels
 - When in doubt, bump UP one contrast level — nobody ever complained a slide was too readable
 
@@ -722,18 +770,18 @@ const DARK_PALETTE = {
 };
 
 const LIGHT_PALETTE = {
-  bg: "FFFFFF", bgCard: "F9F7F4", bgLight: "EEEDE9",
-  lava: "FF3621", lavaLight: "FFF0ED",
-  green: "00A972", greenLight: "E6F7F0",
-  blue: "3B8FD4", blueLight: "E8F2FC",
-  yellow: "FFAB00", yellowLight: "FFF8E6",
-  maroon: "C4243E", maroonLight: "FCEDEF",
-  navy: "1B5162",
+  bg: "F9F7F4", bgCard: "FFFFFF", bgLight: "EEEDE9",
+  lava: "FF3621", lavaText: "C42B1A",
+  green: "00A972",
+  blue: "2272B4",
+  yellow: "FFAB00",
+  maroon: "C4243E",
+  navy: "1B3139", navyDark: "0B2026",
   t1: "333333", t2: "545454", t3: "595959",
   border: "B0B0B0"
 };
 
-const THEME = "dark"; // "dark" | "light"
+const THEME = "light"; // "dark" | "light" — default: light (brand-aligned)
 const C = THEME === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
 
 // ── Fonts ───────────────────────────────────────────────────────
