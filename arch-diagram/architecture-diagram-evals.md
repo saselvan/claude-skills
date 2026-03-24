@@ -49,14 +49,14 @@ Example YES: `<mxGeometry x="500" y="200" width="160" height="60" as="geometry"/
 Example NO: mxGeometry without x or y attributes, or nodes without mxGeometry at all
 
 ### E3: Governance is a full-width bar
-Is the governance element a wide rectangle (width >= the platform container width) positioned at the bottom, with dark teal fill (#1B3A4B)? Scores NO if governance is a regular-sized node, or positioned inside the platform as a peer of other nodes.
-Example YES: mxCell with width matching platform width, y-position below platform content, fillColor=#1B3A4B
+Is the governance element a wide rectangle (width >= the platform container width) positioned at the bottom? Scores NO if governance is a regular-sized node, or positioned inside the platform as a peer of other nodes. Color should use Unity Catalog purple (#5C4EE5) or dark teal (#1B3A4B) — not a random fill.
+Example YES: mxCell with width matching platform width, y-position below platform content, labeled "Unity Catalog" or "Governance"
 Example NO: A 160x60 box labeled "Unity Catalog" among other boxes, or governance missing
 
-### E4: All arrows have labels
-Does every mxCell with edge="1" have a non-empty value attribute describing what flows through the connection? A single unlabeled arrow scores NO.
-Example YES: `value="CDC events"`, `value="Save checkpoint"`, `value="JDBC/ODBC"`
-Example NO: `value=""` or edge cells with no value attribute
+### E4: Cross-zone arrows have labels
+Do arrows that cross zone boundaries have a non-empty value attribute describing what flows? Intra-zone or sequential-tier arrows (e.g., Bronze → Silver) may be unlabeled — spatial proximity makes them self-evident. Scores NO if any cross-zone arrow lacks a label.
+Example YES: Arrow from Sources to Platform has `value="CDC events"`; Bronze→Silver arrow has no label (ok — sequential)
+Example NO: Arrow crossing from Agent Framework to Lakebase Memory with `value=""` or no value attribute
 
 ### E5: Left-to-right zone positioning
 Are data sources positioned at lower x-coordinates (left) and consumers at higher x-coordinates (right)? The platform should be in the center. Check the mxGeometry x values across zones.
@@ -96,6 +96,11 @@ Example YES: `value="Mosaic AI"`, `value="Delta Live Tables"`, `value="Lakebase&
 Example NO: `value="agent_knowledge:&#xa;entity_type · entity_id · fact_key&#xa;fact_value JSONB · pgvector · confidence&#xa;access_count · EMA scoring"` (schema dump inside a box)
 
 ### E12: Clean arrow routing without spaghetti [visual]
-When rendered, do arrows follow clean orthogonal paths without creating a tangled "spaghetti" effect? Score NO if arrows cross through unrelated zones, if more than 2 arrows cross at the same point, if arrow paths create visual noise that makes the data flow hard to follow, or if there are more than 15 arrows total (Databricks reference architectures use spatial proximity over explicit connections — fewer arrows is better).
-Example YES: Arrows follow clear L-shaped or straight paths; arrows connect adjacent components without crossing distant zones; total arrow count is proportional to node count (roughly 1:2 arrows-to-nodes ratio or less)
-Example NO: An arrow from the top-left crosses through the center to reach the bottom-right; 5 arrows converge at one point; arrows labeled "Tool dispatch" and "Build prompt" create a knot in the middle of the framework zone
+When rendered, do arrows follow clean orthogonal paths without creating a tangled "spaghetti" effect? Score NO if any arrow crosses more than one unrelated zone boundary, if more than 2 arrows cross at the same point, or if arrow paths create visual noise that makes the data flow hard to follow. Databricks reference architectures use spatial proximity over explicit connections — fewer arrows is better, but complex architectures (e.g., IoT with many sources) may legitimately need more connections.
+Example YES: Arrows follow clear L-shaped or straight paths; arrows connect adjacent or nearby components; no arrow skips over an unrelated zone to reach a distant target
+Example NO: An arrow from the top-left crosses through the center platform to reach the bottom-right; 5 arrows converge at one point; arrows create a knot in the middle of the framework zone
+
+### E13: Databricks color palette compliance [visual]
+Are the colors used in the diagram consistent with the official Databricks brand palette? The diagram should NOT use neon greens, bright magentas, or ad-hoc color schemes. Check for: platform border coral (#FF3621), functional blocks using neutral fills (#FFFFFF with #E0E0E0 borders or Databricks blue #137CBD), governance bar dark teal (#1B3A4B) or UC purple (#5C4EE5), foundation bar coral (#FF3621), accent green (#00A972) used sparingly. Score NO if the diagram uses more than 2 colors outside the Databricks palette or if the overall visual impression is "colorful" rather than "professional and restrained."
+Example YES: White/light gray nodes with subtle borders, coral platform boundary, teal governance bar, medallion colors (bronze/silver/gold) for data layers only
+Example NO: Neon green memory boxes, bright magenta agent framework zone, saturated yellow lakehouse zone, 5+ vivid colors competing for attention
