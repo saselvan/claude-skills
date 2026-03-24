@@ -136,6 +136,10 @@ phase_dependencies:
     needs: ["brainstorm", "research"]
     reads_from: [".pipeline/demo-factory/board/brainstorm-output.yaml", ".pipeline/demo-factory/board/research-output.yaml"]
     writes_to: ".pipeline/demo-factory/board/spec-output.yaml"
+  narrative:
+    needs: ["spec"]
+    reads_from: [".pipeline/demo-factory/board/spec-output.yaml", ".pipeline/demo-factory/board/brainstorm-output.yaml", ".pipeline/demo-factory/board/research-output.yaml"]
+    writes_to: ".pipeline/demo-factory/board/narrative-output.yaml"
 
 accumulated_context:
   gap_analysis_key_findings: []
@@ -257,7 +261,7 @@ Parse $ARGUMENTS to determine entry point:
 
 - If $ARGUMENTS starts with "--build":
   → Skip to Phase 4 (Build)
-  → Read `.pipeline/demo-factory/context.yaml` → verify `phase_completed` is "spec"
+  → Read `.pipeline/demo-factory/context.yaml` → verify `phase_completed` is "spec" or "narrative"
   → If phase_completed is null or earlier than "spec", tell user: "Spec not complete. Run `/demo [concept]` first."
   → Otherwise, proceed to Phase 4 preamble
 
@@ -274,6 +278,7 @@ Parse $ARGUMENTS to determine entry point:
 ├── context.yaml              ← concept, industry, personas, scope
 ├── board/                    ← phase outputs land here
 ├── artifacts/                ← gap-analysis.md, research.md, DEMO_SPEC.md, .mdc
+│   └── narrative/            ← acts.json, demo-script.md, YAML scaffold (Phase 3.5)
 └── failures.yaml             ← error log (create empty)
 ```
 
@@ -287,7 +292,7 @@ _meta:
   coordinator: "demo-factory"
   run_id: "{ISO timestamp}"
 
-phase_completed: null          # null → brainstorm → research → spec → build-infra → build-app → verification → complete
+phase_completed: null          # null → brainstorm → research → spec → narrative → build-infra → build-app → verification → complete
 spec_prp_status: null
 workspace_provisioned: false
 lakebase_provisioned: false
@@ -522,8 +527,8 @@ recommendations_for_downstream:
 5. **MANDATORY STOP.** Print:
 
 ```
-Demo Factory — Phases 0-3 Complete
-===================================
+Demo Factory — Phase 3 (Spec) Complete
+=======================================
 Board: .pipeline/demo-factory/
 Concept: {concept}
 Industry: {industry}
@@ -536,28 +541,141 @@ Completed:
   ✓ PRP Gate: {PASS|FAIL}
   {if .mdc generated: ✓ Cursor Rules → {path}}
 
+Next: Phase 3.5 (Demo Narrative)
+  Run: /demo-narrative {concept}
+  This generates the structured narrative (acts.json, demo-script.md,
+  YAML scaffold) from the spec. The spec's Talk Track section is
+  superseded by narrative output when present.
+
+Options:
+  a) Generate narrative → run /demo-narrative {concept} (recommended)
+  b) Skip narrative, build with Claude Code → /demo --build
+  c) Build with Cursor → copy .mdc file, open in Cursor
+  d) Stop here → spec is complete, build later
+```
+
+Do NOT proceed to Phase 3.5 or Phase 4 in this session. Phases 1-3
+involve extensive reasoning (Socratic discovery, parallel research,
+spec generation, PRP iteration). That context is irrelevant to
+narrative generation and infrastructure provisioning, and actively
+degrades quality if retained.
+
+### Phase 3.5: Demo Narrative
+
+**Session entry:** This phase runs in a NEW session after Phase 3 completed and stopped.
+
+**Purpose:** Generate structured demo narrative artifacts — act sequence, presenter script, and YAML scaffold for demo-machine — from the completed spec. When narrative output exists, it supersedes the spec's thin Talk Track section.
+
+1. Read `.pipeline/demo-factory/context.yaml` → verify `phase_completed == "spec"`
+2. Invoke the `demo-narrative` skill with board context:
+
+```
+Skill(skill: "demo-narrative", args: "{concept}")
+```
+
+The demo-narrative skill consumes:
+- `DEMO_SPEC.md` — wow moments, persona-to-view mappings, UI route table
+- `{name}-research.md` — domain context, competitive landscape, audience insights
+- `board/brainstorm-output.yaml` — outcome map position, plugin stack, target buyer
+
+3. After completion, capture output and write board entry to `board/narrative-output.yaml`:
+
+```yaml
+skill_name: "demo-narrative"
+phase: "3.5"
+invoked_at: "{ISO timestamp}"
+invoked_by: "demo-factory"
+
+artifact_paths:
+  acts_json: ".pipeline/demo-factory/artifacts/narrative/acts.json"
+  demo_script: ".pipeline/demo-factory/artifacts/narrative/demo-script.md"
+  yaml_scaffold: ".pipeline/demo-factory/artifacts/narrative/{name}.draft.demo.yaml"
+artifact_type: "demo-narrative"
+
+# Narrative details
+methodology: "{cohan|demo2win|challenger}"
+methodology_rationale: ""
+act_count: N
+total_duration_target_sec: N
+wow_moments_total: N
+wow_moments_spec_derived: N
+wow_moments_methodology_derived: N
+
+# Challenger-specific (null if not challenger)
+reframe_validation:
+  supplied_buyer_frame: ""
+  reframe_insight: ""
+  frame_used_in_opening: "{yes|no|partial}"
+
+# Quality
+discovery_prompts_placed: N
+discovery_prompts_distribution: "{e.g., 'Act 1: 1, Act 2: 1, Act 3: 1'}"
+persona_narration_alignment: true/false  # HLS gate #39
+invariant_overrides: []  # e.g., gate #31 intentional deviation
+
+quality_pass: true/false
+quality_notes: ""
+
+strategy_contract_amendments: []
+discovered_entities: []
+coverage_gaps: []
+recommendations_for_downstream:
+  - target_skill: "build"
+    recommendation: "{e.g., 'YAML scaffold expects morning_briefing chapter — ensure agent trigger route exists'}"
+    priority: "high"
+```
+
+4. Verify narrative artifacts were written to `.pipeline/demo-factory/artifacts/narrative/`:
+   - `acts.json` — structured act sequence with timing, narration, screen states
+   - `demo-script.md` — human-readable presenter script with act structure, scripts, discovery prompts, objection flags
+   - `{name}.draft.demo.yaml` — chapter scaffold for demo-machine with CHAPTER INTENT and AUTOMATION REQUIRED blocks
+
+5. Update `context.yaml`:
+   ```yaml
+   phase_completed: "narrative"
+   narrative_methodology: "{cohan|demo2win|challenger}"
+   ```
+
+6. **MANDATORY STOP.** Print:
+
+```
+Demo Factory — Phase 3.5 (Narrative) Complete
+==============================================
+Board: .pipeline/demo-factory/
+Concept: {concept}
+Methodology: {methodology} — {one-line rationale}
+
+Completed:
+  ✓ Brainstorm → gap-analysis.md
+  ✓ Research → {name}-research.md
+  ✓ Spec → DEMO_SPEC.md (PRP: {PASS|FAIL})
+  ✓ Narrative → {act_count} acts, {total_duration}s target
+    acts.json        → .pipeline/demo-factory/artifacts/narrative/acts.json
+    demo-script.md   → .pipeline/demo-factory/artifacts/narrative/demo-script.md
+    YAML scaffold    → .pipeline/demo-factory/artifacts/narrative/{name}.draft.demo.yaml
+
 Options:
   a) Build with Claude Code → start new session, run: /demo --build
   b) Build with Cursor → copy .mdc file, open in Cursor
-  c) Stop here → spec is complete, build later
+  c) Stop here → narrative + spec complete, build later
 
 If building with Claude Code, the new session will read the board
 and provision workspace → database → app → resources → frontend.
 ```
 
-Do NOT proceed to Phase 4 in this session. Phases 1-3 involve extensive
-reasoning (Socratic discovery, parallel research, spec generation, PRP
-iteration). That context is irrelevant to infrastructure provisioning
-and actively degrades build quality if retained.
+Do NOT proceed to Phase 4 in this session. Narrative generation
+involves methodology selection, act structuring, and script writing.
+That context is irrelevant to infrastructure provisioning.
 
 ### Phase 4: Build (V2 — Adapter-Heavy)
 
 **Session entry:** This phase runs in a NEW session after Phases 0-3 completed and stopped.
 
-1. Read `.pipeline/demo-factory/context.yaml` → verify `phase_completed == "spec"`
+1. Read `.pipeline/demo-factory/context.yaml` → verify `phase_completed` is `"spec"` or `"narrative"`
 2. Read `.pipeline/demo-factory/artifacts/DEMO_SPEC.md` — this is your build blueprint
 3. Read `.pipeline/demo-factory/board/spec-output.yaml` → get plugin mappings and quality status
-4. Do NOT read gap-analysis.md or research.md. The spec is your distilled input.
+4. If `phase_completed == "narrative"`, also read `board/narrative-output.yaml` for methodology context and YAML scaffold location
+5. Do NOT read gap-analysis.md or research.md. The spec (and narrative, if present) is your distilled input.
 
 **This phase invokes Databricks infrastructure skills via adapters.** It is optional — the user may choose to build manually in Cursor using the .mdc file instead.
 
@@ -907,7 +1025,7 @@ quality_pass: true/false
 
 **Prevents:** Dead features that exist in spec but not in runtime (F1, F4, F5, F19 from sentiment sensor failures)
 
-1. Read `DEMO_SPEC.md` → extract `## Wow Moments` section
+1. If `board/narrative-output.yaml` exists, read `artifacts/narrative/acts.json` for wow moments (acts with `wowMoment: true`). Methodology-derived wow moments (`wowSource: "methodology"`) are spoken moments, not UI interactions — exclude them from code path verification. Otherwise, read `DEMO_SPEC.md` → extract `## Wow Moments` section
 2. Parse each wow moment into verification criteria:
    - What user action triggers it?
    - What data should be visible?
@@ -1194,6 +1312,8 @@ Artifacts:
   - Research Synthesis: {path} ({N} sources)
   - DEMO_SPEC.md: {path} ({N} tables, {N} features)
   - Cursor Rules: {path to .mdc} (if generated)
+  - Narrative: {path to artifacts/narrative/} ({N} acts, {methodology}) (if generated)
+    - acts.json, demo-script.md, {name}.draft.demo.yaml
 
 Build Status: {NOT_STARTED | COMPLETE | PARTIAL}
   {if built: list deployed resources with URLs}
@@ -1215,6 +1335,7 @@ For staleness detection (skills that don't produce board output within expected 
 | demo brainstorm | Valid gap-analysis.md | 1 retry with constraints | Accept partial, flag gaps | Ask user for direction |
 | demo research | >=3 sources per dimension | 2 retries on thin dimensions | Accept with coverage gaps noted | Log coverage gaps |
 | demo spec | PRP gate pass | 2 iterations against PRP feedback | **BLOCK** — do not build from failing spec | Escalate with PRP failures |
+| demo-narrative | acts.json + demo-script.md + YAML scaffold produced | 1 retry with adjusted methodology | Skip narrative, proceed to build with spec's Talk Track | Log methodology selection rationale |
 | workspace (adapter) | Workspace accessible | 2 retries | **BLOCK** — no workspace = no demo | Escalate with error |
 | lakebase (adapter) | Instance created, tables exist | 2 retries | **BLOCK** — no database = no demo | Escalate with error |
 | apps (adapter) | App deploys, endpoints respond | 2 retries | Deploy API-only (no frontend) | Escalate with deploy logs |
@@ -1231,6 +1352,8 @@ For staleness detection (skills that don't produce board output within expected 
 |---------------|---------------------|---------------------|
 | Post-research: coverage OK? | Always proceed to spec | Loop back if dimension coverage = "low" |
 | Post-spec: PRP pass? | Iterate (max 2), then block | Same |
+| Post-spec: narrative? | N/A (no narrative phase) | Mandatory stop, then Phase 3.5 via `/demo-narrative` |
+| Post-narrative: proceed to build? | N/A | Mandatory stop, then Phase 4 in new session |
 | Build: workspace type? | Always FE-VM | Route based on cloud/IAM reqs |
 | Build: step failure? | Retry 2x, then block | Retry with error-informed fix |
 
