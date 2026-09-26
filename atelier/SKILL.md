@@ -28,7 +28,7 @@ Map to a tier and **announce what that tier skips, out loud**, so skipping is a 
 | **2 Working artifact** | + short contract, STATE.md, self-critique passes, TDD on logic | Blind panels; full studio (seat only The User + Content Designer) |
 | **3 Production / customer-facing** | Everything in the playbook | Nothing |
 
-Three overrides: a build that is **already being promoted** (a demo that now has a video, a change request, or an outside reviewer) re-tiers *now*. Rerun Step 1 and the Q3 claims inventory before more work, not after. Second, an expert in the audience makes the artifact **Tier 3 for exactly what they will check** (the named-skeptic rule); and any answer of "maybe promoted" gets the warning that promotion re-tiers and re-runs gates. If the user resists the tier ("just make it nice"), state the two tells — over-processing: the gate costs more than redoing it; under-processing: it outlives the session or meets a falsifier ungated — and let them pick with eyes open.
+Four overrides. First, a build that is **already being promoted** (a demo that now has a video, a change request, or an outside reviewer) re-tiers *now*. Rerun Step 1 and the Q3 claims inventory before more work, not after. Second, the **named-skeptic rule**, applied mechanically: if Q1 is "shown repeatedly" and Q2 is "someone who can falsify it", the artifact is **Tier 3 for exactly the claims that audience will check**. There is no agent judgment about whether the audience is "expert enough". Underestimating the audience is the failure this rule removes. Third, any answer to Q3 other than "never" must name its **promotion triggers**: the concrete events that force a re-plan (for example "it becomes a video", "it goes to an outside reviewer", "it is shown a third time"). Write them into `SESSION_PLAN.md`, which the agent re-reads before every item, not only into the catechism, which it reads once. An agent can't check a trigger it isn't rereading. If the user resists the tier ("just make it nice"), state the two tells — over-processing: the gate costs more than redoing it; under-processing: it outlives the session or meets a falsifier ungated — and let them pick with eyes open.
 
 ## Step 2 — Catechize, at tier depth
 
@@ -51,7 +51,11 @@ Hand `docs/CATECHISM.md` to the design-brief skill as its first input. A brief w
 
 ## Step 3 — Route by build type
 
-Identify the build type and assign the studio seats and gates from the playbook's matrix (§3d). The router's table:
+Identify the build type and assign the studio seats and gates from the playbook's matrix (§3d).
+
+**Routing must quote the answers it routes on.** For every tier, override, and route decision, quote the Step 1 and catechism answers behind it. For example: *Q2: "NWM can find mistakes in it" + Q1: "shown repeatedly" → named-skeptic rule → Tier 3 for the platform claims.* If a decision contradicts a quoted answer, the contradiction is now visible: fix the decision, or change the answer on the record. Never route silently against your own answers.
+
+The router's table:
 
 | Build type | Process route | Studio musts | The exam usually looks like |
 |---|---|---|---|

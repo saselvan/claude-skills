@@ -3,6 +3,7 @@
 **Goal (ONE):** {the single thing this session proves or produces}
 **Tier:** {1/2/3} · **Attended or unattended:** {which, and why}
 **Stop condition:** {executable — what green looks like}
+**Promotion triggers:** {events that force a re-plan before the next item, e.g. "it becomes a video · it goes to an outside reviewer · it is shown a third time" — or "none: Q3 answered never"}. Check these before each item.
 
 ## Items
 Each item: a checkbox, a one-line acceptance criterion, and (for checks) its red proof.
