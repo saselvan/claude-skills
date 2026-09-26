@@ -28,7 +28,7 @@ Map to a tier and **announce what that tier skips, out loud**, so skipping is a 
 | **2 Working artifact** | + short contract, STATE.md, self-critique passes, TDD on logic | Blind panels; full studio (seat only The User + Content Designer) |
 | **3 Production / customer-facing** | Everything in the playbook | Nothing |
 
-Two overrides: an expert in the audience makes the artifact **Tier 3 for exactly what they will check** (the named-skeptic rule); and any answer of "maybe promoted" gets the warning that promotion re-tiers and re-runs gates. If the user resists the tier ("just make it nice"), state the two tells — over-processing: the gate costs more than redoing it; under-processing: it outlives the session or meets a falsifier ungated — and let them pick with eyes open.
+Three overrides: a build that is **already being promoted** (a demo that now has a video, a change request, or an outside reviewer) re-tiers *now*. Rerun Step 1 and the Q3 claims inventory before more work, not after. Second, an expert in the audience makes the artifact **Tier 3 for exactly what they will check** (the named-skeptic rule); and any answer of "maybe promoted" gets the warning that promotion re-tiers and re-runs gates. If the user resists the tier ("just make it nice"), state the two tells — over-processing: the gate costs more than redoing it; under-processing: it outlives the session or meets a falsifier ungated — and let them pick with eyes open.
 
 ## Step 2 — Catechize, at tier depth
 
@@ -41,17 +41,27 @@ Tier 2–3: run the full Heilmeier interview (all 8, one at a time, `references/
 
 Write the result to `docs/CATECHISM.md` (Tier 2–3) or paste it in chat (Tier 1).
 
+**The catechism is the brief's input.** The chain is mechanical, not advisory:
+- Q3 non-negotiables and the **claims inventory** → the brief's non-negotiables, word for word, with their dates.
+- Q4 → the brief's "who it's for" (both audiences for a demo) and the named-skeptic override.
+- Q5 risks → named gates in the session plan.
+- Q8 exams → the stop condition.
+
+Hand `docs/CATECHISM.md` to the design-brief skill as its first input. A brief written without it has lost the chain; say so.
+
 ## Step 3 — Route by build type
 
 Identify the build type and assign the studio seats and gates from the playbook's matrix (§3d). The router's table:
 
 | Build type | Process route | Studio musts | The exam usually looks like |
 |---|---|---|---|
-| **Sales demo** | design-brief skill → build; no gauntlet | Buyer, Content, Integrity, Narrative (Duarte) | the named skeptic believes the one slide/screen they'll check |
+| **Sales demo** | catechism (with claims inventory) → design-brief skill → build; no gauntlet *unless a named skeptic exists* (then one round on the screens they'll check) | Buyer, Content, Integrity, Narrative (Duarte) | the named skeptic believes the one slide/screen they'll check |
 | **Deck / PowerPoint** | design-brief skill **with §4b pacing block** (register, shape, archetypes, meter check) | Narrative (owns it), Content, Typography & Grid, Buyer, Skimmer; projector gate | title-only read carries the argument; sorter-view rhythm visible; seam invisible if extending |
 | **Prototype** | catechism → design-brief → plumbing-lite (real data if any exists) → build with self-critique | Human Factors, User, Product, Content, Accessibility(AA) | the real user completes the core task unaided |
 | **Production app** | full playbook: five artifacts → design phase → **data-reality gate** → plumbing before pixels → checkpoint → gauntlet loop (coordinator spec) → promotion ladder | all seats, tiered panels on high-stakes screens | contract tests green vs live backend + audit zero + panel unanimity |
 | **Code (library/pipeline/API)** | catechism → contract-as-tests → TDD, mutation-proven → fresh-agent narration gate | Architect, Maintainer-at-2AM (the User), Content (names/comments/README), Integrity | a fresh agent narrates the diff correctly; checks red-proofed |
+
+Re-run the Q3 claims inventory against every artifact that reuses the claims (app ↔ video ↔ deck), so they all say the same thing.
 
 Never seat Duarte outside demos and decks. Integrity and Content are musts in every row. When extending an existing artifact of any type, add the **seam-invisibility** gate: the extension inherits the incumbent's system, and the test is a reviewer unable to tell old from new.
 
@@ -68,7 +78,9 @@ For Tier 1, the kit collapses to item 5 alone with the catechism paragraph at th
 
 ## Step 5 — The retro (project end; also triggered by "retro")
 
-Thirty minutes, exactly two questions, output as **diffs, not notes**:
+Thirty minutes, exactly two questions, output as **diffs, not notes**. Read `DECISIONS_PENDING.md`, `DESIGN_DIVERGENCE.md`, `REGISTER.md`, and the commits first. Chats evaporate; those files are the record. If they are empty or missing, that is the first finding.
+
+The diffs land as **commits in the skills repo**, never only in an installed copy.
 1. *Which principle did the user explain by hand this project?* → propose the rule, worded for the right home (`HUMAN_FACTORS.md`, DOM audit, decision policy, a skill's SKILL.md, the playbook), and offer to apply it.
 2. *Which gate fired never, or always?* → never-fired: propose deletion (dead gates teach agents to skim); always-fired: investigate whether the builders never learned the rule or the rule is wrong.
 

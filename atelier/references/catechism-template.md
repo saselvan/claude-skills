@@ -11,11 +11,15 @@ The incumbent practice and its specific pain. This becomes the agent's *why* and
 ## Q3. What's new in your approach, and why will it succeed?
 Extract the **non-negotiables** here: the 5–8 rules that distinguish this from the default the tools would produce. Each testable, each naming the failure it prevents. Any comparative/competitive claim gets verified before it becomes a rule, with the verification date in the rule.
 
+**Claims inventory.** List every claim the artifact will make about how the system works: architecture, data, privacy, and comparisons. Include the ones that will only live in UI copy, diagram labels, or captions. For each one, write the claim, the source that proves it, the date it was verified, and the exact true wording. Mark tempting overclaims next to their true form ("one copy" → "a managed mirror"; "same permissions" → "same catalog, same lineage"). This table goes into the design brief's non-negotiables word for word. An unverified claim may not appear in any artifact.
+
 ## Q4. Who cares? What difference does it make?
 The user as a **person**: age, eyesight, lighting, device, minutes available, what they've been burned by. If the audience contains an expert, name them and name the artifact they will falsify.
 
+A demo has **two audiences**: the persona inside the story (the patient finding a doctor) and the room watching it (the architect judging the platform). Name both. The room's expert is the named skeptic, and the claims inventory (Q3) is what they will check.
+
 ## Q5. What are the risks?
-Always include the agent-work four: (a) the agent claims done when it isn't; (b) the data model can't support the design; (c) the demo data misleads; (d) the security model is decorative. **Each risk maps to a named gate in the plan** — a risk without a gate is a wish.
+Always include the agent-work four: (a) the agent claims done when it isn't; (b) the data model can't support the design; (c) the demo data misleads; (d) the security model is decorative. For (c), check both directions: synthetic values that look measured (identical counts, one fixed date behind a "last 24 months" label), and **real identities next to synthetic facts** (real names beside made-up volumes). **Each risk maps to a named gate in the plan** — a risk without a gate is a wish.
 
 ## Q6. How much will it cost?
 Sessions and money. Budget expensive runs (ultracode, large panels) explicitly.

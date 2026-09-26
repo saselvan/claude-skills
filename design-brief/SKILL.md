@@ -18,11 +18,13 @@ Work through these in order. Each stage produces a section of the output; don't 
 - **Content contract → slide/section contract.** Per slide or section type (claim, evidence, diagram, appendix) and per read mode (presented live vs. read cold as a leave-behind): what appears, in what order, and the negative list (unsourced numbers, uncited customer names, roadmap phrasing that reads as commitment). Read mode replaces object state.
 - **Auth model → disclosure model.** What is confidential, attributable, or forward-looking, and what leaks it: logo walls, screenshots with tenant names, ticket IDs in diagrams.
 - **Mock-data rules → number rules.** Totals reconcile across slides; one unit and date convention; every chart carries a source line. Blind export still applies.
+- **Sequence is a claim.** The order of slides, screens, or scenes implies cause. Check that no sequence suggests an action causes something that happened earlier. A batch build shown right after a search click reads as "the click built it." Mark flashbacks on screen.
 - **Drops entirely:** the four list-page tests, the two-layer token extraction in round 4 (extract a master/template instead), and the blind panel unless the deck faces an external audience.
 
 ### 1. Read everything before writing anything
 
 Look for, in the repo or attachments the user provides:
+- `docs/CATECHISM.md`, if it exists (from the atelier skill). Its Q3 non-negotiables and **claims inventory** become this brief's non-negotiables word for word, with their dates. Its Q4 gives "who it's for"; for a demo, that means both the persona and the room.
 - Requirements, PRDs, ADRs, decision logs: what has been decided and why. Decisions are constraints; the brief must not re-open them.
 - The data model (schema, migrations, types): what fields exist. **Anything the design shows must map to a field.** A screen that displays "what counts / what does not count" when the schema has one free-text definition is inventing content.
 - Existing frontends or design systems: is this a sibling of something, or deliberately different? Ask if unclear; the answer changes the brief.
@@ -59,7 +61,7 @@ Put them at the **top** of the brief. Buried under inspiration they get treated 
 
 **Vocabulary.** The words you use for components are design instructions. "Card" produces boxes; "entry" produces a ruled page; "badge" produces a pill; "band" produces a full-width annotation. Choose the vocabulary for the layout you want before the designer draws, and use it consistently in the contract.
 
-Also write the **mock-data rules** now, because plausible-but-inconsistent mock data eats more rounds than any design defect: counts reconcile; a filter shown active is honoured in the results beneath it; anything hidden by the auth model is hidden in the mock too (a restricted item appears only for queries its public label matches); every date has a label; every promise in the copy is a feature that exists. Ask for a **blind export** (no captions, no pattern inventory) as a separate file from round one, so external review is actually blind.
+Also write the **mock-data rules** now, because plausible-but-inconsistent mock data eats more rounds than any design defect: counts reconcile; a filter shown active is honoured in the results beneath it; anything hidden by the auth model is hidden in the mock too (a restricted item appears only for queries its public label matches); every date has a label; every promise in the copy is a feature that exists. Check fake-looks-real **in both directions**: synthetic values that pass for measured (identical counts, one fixed date behind a "last 24 months" label), and real identities next to synthetic facts (real names beside made-up volumes). Label or remove either one before anything is shared. Ask for a **blind export** (no captions, no pattern inventory) as a separate file from round one, so external review is actually blind.
 
 ### 4. Write the brief
 
