@@ -10,11 +10,11 @@ One row per claim the app will make on screen:
 | claim | the exact on-screen wording |
 | status | GA / Beta / Preview (with date) |
 | source | docs URL or a live measurement id |
-| evidence grade | 1 = live measurement · 2 = app artifact · 3 = docs |
+| evidence grade | one schema for app, film and deck — see `film/ledger-template.md` (1 check run · 2 code read · 3 official docs) |
 | backing | the real telemetry field / query that proves it, OR "aspirational — not shown" |
 | business pain | the buyer pain this claim answers (why it's on screen) |
 
-Rules: no claim ships without status + source + backing. Unmeasured, Preview-gated or unsourced claims are excluded, not softened. Preview features are labeled "Preview". Competitor comparisons need a citation or say "not documented natively". A feature the app can't back with real telemetry today is **aspirational**: label it or cut it.
+Rules: no claim ships without status + source + backing. Unmeasured or unsourced claims are excluded, not softened. A Preview or Beta feature appears only with a visible "Preview"/"Beta" tag and real backing; whether a given app screen or film includes it is the owner's call per artifact (owner, 2026-09-29: "It depends"). Competitor comparisons need a citation or say "not documented natively". A feature the app can't back with real telemetry today is **aspirational**: label it or cut it.
 
 ## Forbidden phrases (copy_lint fails the build)
 `instant` · `zero-copy` · `sub-second` · `millisecond restore` · `no downtime` · `unlimited` · `cost nothing` · `in one second` · `nearby`. Also fail any on-screen claim not present in the ledger.

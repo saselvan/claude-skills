@@ -8,7 +8,7 @@ Each rule was an owner decision or a gauntlet finding on the Lakebase teaser fil
 3. **Values the app really produces.** A screen shows only numbers the running app renders from the seed and the code; every number on an app screen comes from a capture. The film says the planted flaw was planted (ledger honesty note), and it never implies the flaw was found by chance or written by an agent.
 
 ## Claims
-4. **GA-only product claims.** Preview and Beta features (change data feed, Lakehouse sync, direct writes) stay out, so the film needs no status tags (D7). Opting one in is a user decision and a re-plan.
+4. **GA product claims by default.** A Preview or Beta feature (change data feed, Lakehouse sync, direct writes) enters a film only when the owner opts it in for that film, and then always with a visible "Preview"/"Beta" tag and a grade-3 source. The Lakebase teasers of 2026-09-29 stayed GA-only (D7).
 5. **Product facts only on type cards.** Three caption classes: **DEMO** (a numbered ledger row, over app screens or code), **PRODUCT** (a `P*` row, only on plain type cards), **FRAME** (makes no factual claim). A PRODUCT claim over an app screen reads as "the demo proved this". It was the biggest class of round-1 HIGH findings.
 6. **Demo-only proof; no customer numbers.** Customer stories (Ensemble, Prada) stay in the seller's email and talk track, not the film (D12). If a customer number is approved later, it needs attribution and the approved story link.
 7. **Ledger or absent.** A caption with no grade 1–3 row is cut, not softened. Diagram cards show only what the demo really runs.
