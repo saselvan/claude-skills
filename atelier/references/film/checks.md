@@ -6,13 +6,12 @@ Write each check before the first render. Each one reads the **same data file th
 A red proof plants the bad value **in the real input** (a copy of `acts.json` or `shot-crops.json`), runs the check, sees exit 1, and restores the file. A proof that tests a string inside the script itself proves the regex, not the check. All five reference scripts print "✓ Check correctly identified…" from a hardcoded string, so they stay green even when the check can't fail. Record each proof as `mutation | check | exit code | output line`.
 
 ## 1. Copy lint (captions)
-- Forbidden stems: `instant · zero-copy · sub-second · millisecond restore · no downtime · unlimited · cost nothing · in one second · nearby · live · representative · <engine name> · lakehouse · real data · dossier · captur · contract · fingerprint · checkpoint · governed data · no etl · zero cost`, plus the app's banned vocabulary file.
+- Forbidden stems (the film list's one home): the app's `copy_lint` phrases (`../lakebase-demo.md`), plus `live · representative · <engine name> · lakehouse · real data · dossier · captur · contract · fingerprint · checkpoint · governed data · no etl · zero cost`, plus the app's banned vocabulary file.
 - **Stem matching means a leading word boundary only.** The first coordinator lint missed "instantly". The reference `check-copy-lint.js` builds `\b(stem)\b` with a trailing `\b`, so "instantly" and "captured" still pass (checked with node, 2026-09-29). Use `\b(stem)` and add the planted words `instantly`, `captured` and `Live` to the red proof.
 - Ledger coverage: every caption id in `acts.json` has `claims` that exist in the ledger, or the class `FRAME`. Zero orphans.
 
 ## 2. Reading time
-- Per line: `max(1.2, words / 3 + 0.5)` s, plus 0.3 s for the reveal.
-- **Multi-line cards fit the sum of their lines.** A type card whose lines build one by one (B15: four lines in 13.5 s, each ≥ 2.5 s) fails if the sum exceeds the slot. The reference script computes `totalReadingTime` and never compares it, so it only checks each line against the whole slot.
+- The formula is standing rule 12. **Multi-line cards fit the sum of their lines:** a type card whose lines build one by one (B15: four lines in 13.5 s, each ≥ 2.5 s) fails if the sum exceeds the slot. The reference script computes `totalReadingTime` and never compares it, so it only checks each line against the whole slot.
 - Red proof: plant a 12-word caption in a 2 s shot.
 
 ## 3. Chrome grep (film source)
@@ -32,4 +31,4 @@ A red proof plants the bad value **in the real input** (a copy of `acts.json` or
 Width × height (1920×1080 / 1080×1080), duration within the target range, H.264, 30 fps, and file size. With music, integrated loudness −16 LUFS ±1 (`ffmpeg -af ebur128`) and a licence file next to the render. Open the frames yourself: a render that exits 0 is not a reviewed film.
 
 ## 7. Claimed artifacts exist
-Before accepting any agent's "captured", "rendered" or "passed", open the file it names: the capture PNG contains the number, the still shows the frame, the check output shows exit 0. The s1 capture agent claimed probe panes that no capture contained (D16).
+An agent's report is a **lead**, not evidence. Before accepting any "captured", "rendered" or "passed", open the file it names: the capture PNG contains the number, the still shows the frame, the check output shows exit 0. The s1 capture agent claimed probe panes that no capture contained (D16).

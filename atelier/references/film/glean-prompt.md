@@ -24,4 +24,4 @@ For each: is it still current, changed (give the new wording and source date), o
 ## After the answer
 - Log each usable line as an `M` row (`ledger-template.md`) with its source and date. Withdraw retired wording in place (strike it through, add the date and the replacement) and never delete it.
 - A status change (for example Preview → GA) reopens that `P` row: re-read the official docs and re-grade it before any caption uses it.
-- Re-run the claim-honesty, vocabulary-tone and product-marketer seats (a light round) on the changed captions only.
+- Run a light round (`critic-panel.md` step 6) on the changed captions only.

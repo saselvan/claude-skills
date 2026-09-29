@@ -15,10 +15,10 @@ Ask one follow-up only if the answer changes the route: **"Is any of it for cust
 
 ## Screen source (decide at the attended script gate, not before)
 - **Default:** capture every app screen **from one real rehearsal run**, read-only (GET-only script, free port, `<title>` checked). All shots come from that single run.
-- The replay mode was the first choice last time and failed. It never rendered the probe panes, so the key frame didn't exist (D16). Don't plan a film around a replay until a capture proves the key frame renders.
+- The replay mode was the first choice last time and failed: no replay capture contained `1,204`, the film's STAR frame (D16). Plan a film around a replay only after a capture proves the key frame renders.
 
 ## Promotion triggers (copy verbatim into `SESSION_PLAN.md`; any one → stop and re-plan)
-- **Any customer use.** It needs the Remotion Company License (cleared through procurement) **or** a HyperFrames (Apache 2.0) re-render. The Remotion Free License covers individuals, companies of up to 3 employees, non-profits and evaluation, so Databricks is not covered (D3, D9).
+- **Any customer use.** It needs the Remotion Company License (cleared through procurement) **or** a HyperFrames (Apache 2.0) re-render. The Remotion Free License covers individuals, companies of up to 3 employees, non-profits and evaluation, so Databricks is not covered (D3, D9). This is the licence's one home; `remotion-starter.md` points here.
 - It goes to marketing or any public channel.
 - A clinician or a customer reviews it.
 - A new cut: another length, ratio or language.

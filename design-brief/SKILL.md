@@ -1,6 +1,6 @@
 ---
 name: design-brief
-description: Turn a product's requirements, ADRs, data model, code, and domain into a brief for Claude Design that sets the bar, the lineage, and testable non-negotiables while leaving every visual decision to the designer. Use it whenever the user is about to start a UI or design system in Claude Design, or wants a brief for a deck or document that has to survive review. Produces a paste-ready brief plus its supporting files.
+description: Design brief for Claude Design — turns a product's requirements, ADRs, data model, code and domain into the bar, the lineage and testable non-negotiables, leaving every visual decision to the designer. Use when the user is about to start a UI or design system in Claude Design, or wants a brief for a deck, document or demo film that has to survive review.
 ---
 
 # Design brief for Claude Design
@@ -31,7 +31,9 @@ Look for, in the repo or attachments the user provides:
 - Authorization and privacy model: what is hidden from whom, and what leaks it (names, slugs in URLs, counts, rank position, breadcrumbs, search matching on hidden text).
 - Anything the product refuses to do (no numbers, no ads, no ranking by popularity). Refusals are the product's identity and the designer must know them.
 
-If there is no repo, interview for the same things. Don't accept "just make it look good"; ask who the user is, what they do with it in the first thirty seconds, and what would embarrass the team if a reviewer saw it.
+If there is no repo, interview for the same things. Answer "just make it look good" with three questions: who the user is, what they do with it in the first thirty seconds, and what would embarrass the team if a reviewer saw it.
+
+**Stage 1 is done when** every source above is read or recorded as absent, and each decision the brief must protect is listed with its source.
 
 ### 2. Domain research
 
@@ -61,6 +63,8 @@ Put them at the **top** of the brief. Buried under inspiration they get treated 
 
 **Vocabulary.** The words you use for components are design instructions. "Card" produces boxes; "entry" produces a ruled page; "badge" produces a pill; "band" produces a full-width annotation. Choose the vocabulary for the layout you want before the designer draws, and use it consistently in the contract.
 
+**Stage 3 is done when** five to eight non-negotiables each name the failure they prevent, every object type and state has a negative list, and the mock-data rules below are written.
+
 Also write the **mock-data rules** now, because plausible-but-inconsistent mock data eats more rounds than any design defect: counts reconcile; a filter shown active is honoured in the results beneath it; anything hidden by the auth model is hidden in the mock too (a restricted item appears only for queries its public label matches); every date has a label; every promise in the copy is a feature that exists. Check fake-looks-real **in both directions**: synthetic values that pass for measured (identical counts, one fixed date behind a "last 24 months" label), and real identities next to synthetic facts (real names beside made-up volumes). Label or remove either one before anything is shared. Ask for a **blind export** (no captions, no pattern inventory) as a separate file from round one, so external review is actually blind.
 
 ### 4. Write the brief
@@ -74,9 +78,13 @@ Rules for writing it:
 - **Let inspiration be an invitation, not a palette.** "Well-set reference book" is a good metaphor for hierarchy and a bad one if the designer reads it as parchment; say which you mean.
 - **Name the decided things as decided.** The designer will otherwise redesign them, well, and waste a round.
 
+**Stage 4 is done when** the brief follows the template order and every prescribed element traces to a non-negotiable (search the draft for "use a").
+
 ### 5. Session plan and review kit
 
 Attach `references/session-plan.md` adapted to the product. Four rounds is the target: (1) brief → designer's own prompt and questions; (2) three whole-page directions on structure, judged with the four tests, one structural pick with its reason, then colour **once**, judged by a contrast table; (3) every state, then self-critique in three voices plus one real user; (4) system extraction (two-layer tokens, rules that state the failure they prevent) and hand-off.
+
+**Stage 5 is done when** the output files below exist and the user has the four tests.
 
 Give the user the **four list-page tests** and the **things a designer won't flag** list from `references/review-checklist.md`. Render the output yourself when a headless browser is available; the canvas view shows artboards on a tinted ground and misleads.
 
@@ -109,9 +117,8 @@ Then tell the user, in a few sentences, which non-negotiables came from domain r
 - **Honest labels come from observation.** A "LIVE" badge, a timing, or a "memory written" line renders only after the event is observed. Before that, the state says "Not yet run".
 - **Verify each critic finding against the law before editing.** Critics flagged the correct Lava action fill, and IDs shown in mono by design, as violations. The coordinator checks every finding. False positives are logged, not "fixed".
 
-For **film briefs** (a teaser cut from a demo app; the full kit is atelier's `references/film/`):
-- **One film per persona pair, and one question per film.** Lakebase Film A asked "can we change the database without gambling?" for the platform lead. Film B asked "can we build fast without adding another system to govern?" for the app developer and the enterprise architect together. A beat after the answer that opens a new topic turns the film back into a feature list.
+For **film briefs** (a teaser cut from a demo app), the rules live in atelier's kit — cite them as the brief's non-negotiables: `~/.claude/skills/atelier/references/film/standing-rules.md` (one question per film: rule 9; DEMO vs PRODUCT caption classes: rule 5) and `~/.claude/skills/atelier/references/film/director-lenses.md` (frame and pacing checks, STAR hold). What the brief adds:
+- **One film per persona pair.** Lakebase Film A asked "can we change the database without gambling?" for the platform lead. Film B asked "can we build fast without adding another system to govern?" for the app developer and the enterprise architect together.
 - **Bookend it.** The opening states the old way (three burdens, or "a stale copy, or production"), and the closing card answers the same items. Duarte's what-is / what-could-be, closed in the frame.
-- **Hold the STAR moment.** The frame that proves the point (37 · 37 · 37 · **1,204**) gets stillness, no caption, and the film's longest hold (≥ 2 s; 2.5 s shipped), and the caption follows it.
-- **Two claim classes, visibly different.** DEMO claims (what the app did) sit over app screens and code. PRODUCT claims (official docs, GA only) sit only on plain type cards. A product fact over a demo screen reads as "the demo proved it", and it was the largest class of round-1 HIGH findings.
-- **Brief the frame with director lenses, never director quirks.** Take the checkable frame and pacing rules (centred and flat-on, motivated moves, one point of attention, clean crop edges) from `director-lenses.md`. The product's colour law wins over every lens.
+- **Name the STAR frame.** The frame that proves the point (37 · 37 · 37 · **1,204**) gets the lenses' STAR hold; 2.5 s shipped, and the caption follows it.
+- **Brief the frame with the lenses' checkable rules**, not the directors' quirks or genre.

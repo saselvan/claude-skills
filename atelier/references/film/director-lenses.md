@@ -32,7 +32,7 @@ Use as a critic charter for demo and product films. Borrow the **frame and pacin
 2. Each frame has one point of attention. Two competing = MED; three = HIGH.
 3. The STAR moment has stillness and no caption for ≥ 2 s.
 4. Crops end on clean edges; no cut-off words.
-5. Accent colour appears only where it means something (the product's colour law wins over any lens).
+5. Accent colour appears only where it means something.
 6. Pacing: hold time ≥ reading time + 0.3 s; the key reveal gets the longest hold of the film.
 
-Product law and the claims ledger always win over a lens.
+**Veto:** an unmotivated move, or a frame with competing points of attention. The product's colour and type law and the claims ledger always win over a lens.

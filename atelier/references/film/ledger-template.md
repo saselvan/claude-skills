@@ -13,6 +13,8 @@ Grades: **1** = a check run (command, output file, date) · **2** = code or sche
 
 Numbered ids, with letter suffixes for sub-claims. Add a **HONESTY NOTE** row for anything planted, so the film can't imply otherwise.
 
+**Name the role per claim, verified in SQL.** The probe runs `SET ROLE ward_clinician` and counts `app.medications` (37 on RLS branches, 1,204 on `latency-only`); Gate 2 connects as `care_coordinator_reader`. The DBA seat conflated the two and only reading `0002-app-state-probe.sql` settled it. Screens that show several roles' views say whose view each is (DI-6).
+
 ## 2. P rows: product facts (grade 3, official docs)
 
 | ID | Claim (video-safe wording) | Status | Source |
@@ -20,7 +22,7 @@ Numbered ids, with letter suffixes for sub-claims. Add a **HONESTY NOTE** row fo
 | P7 | Branch creation time does not depend on database size | Branches — GA | docs URL (quote the sentence) |
 | P12 | Postgres changes stored as Delta with full history | Change data feed — **Public Preview** (date) | docs URL |
 
-Put status and date on every row. Under GA-only (standing rule 5), a Preview row stays in the ledger and out of every caption. Close the section with **"Not supported by the docs (do not say)"** and **"Tempting overclaims from official marketing"**. Marketing said "instant branching", and the film didn't, because the word is forbidden and no fork time was measured.
+Put status and date on every row. Under GA-only (standing rule 4), a Preview row stays in the ledger and out of every caption. Close the section with **"Not supported by the docs (do not say)"** and **"Tempting overclaims from official marketing"**. Marketing said "instant branching", and the film didn't, because the word is forbidden and no fork time was measured.
 
 ## 3. M rows: approved messaging (wording only; facts still need a P or demo row)
 
@@ -31,6 +33,8 @@ Put status and date on every row. Under GA-only (standing rule 5), a Preview row
 
 Record the long form and the film form. "Internal only" lines never enter the M section.
 
+Baseline M rows (owner's Glean run, 2026-09-29): `M1` above · `M2` "branches are created in seconds" (still needs `P7` behind it) · `M3` above · `M4` copy-on-write "shares underlying storage until changes are made" (replaces "zero-copy") · `M5` "idle compute scales to zero" (replaces "zero cost").
+
 ## Retirement (never delete a row)
 Strike the claim through, then add **RETIRED**, the date, the reason and the replacement id, in place:
 
@@ -40,5 +44,5 @@ Before the next render, grep every script, `acts.json` and the app for the retir
 
 ## Also in the file
 - **UNPROVEN — cut from every artifact:** each claim, its only lead, and why it fails.
-- **Wording corrections:** tempting overclaim → true form (for example "double the daily dose" → "each dose doubles and the release form changes; both total 1000 mg a day").
+- **Wording corrections:** tempting overclaim → true form. Work every clinical number by hand in the ledger pass: "double the daily dose" was wrong in the runbook and a code comment, and only the coordinator's arithmetic caught it (metformin IR 500 mg twice daily vs ER 1000 mg once daily: "each dose doubles and the release form changes; both total 1000 mg a day").
 - **Open questions for the owner** (at most 5).
