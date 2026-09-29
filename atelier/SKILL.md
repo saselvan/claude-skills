@@ -1,6 +1,6 @@
 ---
 name: atelier
-description: The front door to building anything with agents — a router that turns "I want X" into a tiered, gated project kickoff. Use when the user wants to start building something new (an app, a deck, a demo, a prototype, a library, a pipeline), asks to "atelier" or "kick off" a project, asks which process or how much rigor a piece of work needs, or asks for a session kit / first prompt for a build. It sizes the rigor (throwaway / working / production), runs a Heilmeier catechism at tier-appropriate depth, routes by build type to the right studio seats and gates, and emits the session kit — STATE.md, SESSION_PLAN.md, decision policy, studio roster, and the paste-ready first prompt. Also use at project end when the user asks for a retro, to patch the skills with what was learned.
+description: The front door to building anything with agents — a router that turns "I want X" into a tiered, gated project kickoff. Use when the user wants to start building something new (an app, a deck, a demo, a demo film, a prototype, a library, a pipeline), asks to "atelier" or "kick off" a project, asks which process or how much rigor a piece of work needs, or asks for a session kit / first prompt for a build. It sizes the rigor (throwaway / working / production), runs a Heilmeier catechism at tier-appropriate depth, routes by build type to the right studio seats and gates, and emits the session kit — STATE.md, SESSION_PLAN.md, decision policy, studio roster, and the paste-ready first prompt. Also use at project end when the user asks for a retro, to patch the skills with what was learned.
 ---
 
 # Atelier — the build router
@@ -63,11 +63,36 @@ The router's table:
 | **Deck / PowerPoint** | design-brief skill **with §4b pacing block** (register, shape, archetypes, meter check) | Narrative (owns it), Content, Typography & Grid, Buyer, Skimmer; projector gate | title-only read carries the argument; sorter-view rhythm visible; seam invisible if extending |
 | **Prototype** | catechism → design-brief → plumbing-lite (real data if any exists) → build with self-critique | Human Factors, User, Product, Content, Accessibility(AA) | the real user completes the core task unaided |
 | **Production app** | full playbook: five artifacts → design phase → **data-reality gate** → plumbing before pixels → checkpoint → gauntlet loop (coordinator spec) → promotion ladder | all seats, tiered panels on high-stakes screens | contract tests green vs live backend + audit zero + panel unanimity |
+| **Demo film** (a teaser cut from a demo app) | the **demo film fast path** below: six questions → reuse the ledger + messaging baseline → script (`demo-narrative`, Cohan) → 10-seat script panel → **attended script gate** → build at low effort → visual gauntlet → attended draft review | Director/DP, Claim-honesty (Integrity), Vocabulary-tone (Content), Buyer, Comms-legends + Master-storytellers (Narrative), one domain-truth seat | last round 0 HIGH; every caption maps to a ledger row; copy-lint, reading-time, chrome, pills and crop-text checks at 0 with planted red proofs; `ffprobe` size and duration on every cut; a fresh named-skeptic critic traces every frame to a row |
 | **Code (library/pipeline/API)** | catechism → contract-as-tests → TDD, mutation-proven → fresh-agent narration gate | Architect, Maintainer-at-2AM (the User), Content (names/comments/README), Integrity | a fresh agent narrates the diff correctly; checks red-proofed |
 
 Re-run the Q3 claims inventory against every artifact that reuses the claims (app ↔ video ↔ deck), so they all say the same thing.
 
-Never seat Duarte outside demos and decks. Integrity and Content are musts in every row. When extending an existing artifact of any type, add the **seam-invisibility** gate: the extension inherits the incumbent's system, and the test is a reviewer unable to tell old from new.
+Never seat Duarte outside demos, decks and demo films. Integrity and Content are musts in every row. When extending an existing artifact of any type, add the **seam-invisibility** gate: the extension inherits the incumbent's system, and the test is a reviewer unable to tell old from new.
+
+### Lakebase-demo detection (auto-adds the drawer + operator modules)
+
+When the build is a **Databricks Lakebase demo** — the pitch sells Lakebase, or the app runs on Lakebase and a **technical/economic buyer** is in Q4 — the kit MUST add two app modules, each tied to the **business story** from the claims inventory (buyer-pain first, feature second — never a feature tour):
+
+- **Lakebase drawer** — a per-action panel that surfaces the *real engine move* behind the current screen (memory hit from `ltm.*`, hybrid vector+BM25 search, branch-per-experiment, freshness, CDF/PITR) with **live telemetry** and one **safe claim**. Nothing is shown unless the app can back it with real measured data.
+- **Operator modules** — live-measured Lakebase operations the presenter runs *in-app* (branch-per-experiment, PITR rollback, scale-to-zero, CDF history), each printing **measured numbers**, not marketing copy.
+
+Discipline (all three are gates, not suggestions):
+1. Every drawer/operator claim is drawn from a **claims ledger** (`docs/lakebase-claims.md`): each entry carries **status (GA / Beta / Preview)**, a **source**, and the **exact safe wording**. Unmeasured, Preview-gated, or unsourced claims are excluded, not softened.
+2. A **copy-lint gate** (`copy_lint`) fails the build on forbidden phrases (instant · zero-copy · sub-second · millisecond restore · unlimited · cost nothing · no downtime) and on any on-screen claim absent from the ledger.
+3. If the app cannot back a feature with real telemetry today, it is **aspirational** — label it or cut it; never fake it. The named skeptic (a tech buyer) is assumed to fact-check every number.
+
+Match the modules to the story: a screen exists only if it maps a buyer pain the pitch names. See `references/lakebase-demo.md`.
+
+### Demo film fast path (a teaser film cut from a demo app)
+
+The first film (clinical-va-appkit, 2026-09-29) took a full day of catechism, ledger, three panel rounds and setup bugs. The owner asked for the next one to be "quick to go rather than repeat the whole thing". Everything reusable lives in `references/film/`. Reuse it; don't rebuild it.
+
+1. **Ask the six questions in one message** (`references/film/questions.md`): reach, audience, length, sound, format, screens. Offer the last project's answers as defaults. The user changes only what differs. The defaults route to Tier 3 through the named-skeptic rule, and the file lists the promotion triggers to copy into `SESSION_PLAN.md`.
+2. **Start from the baseline; don't rebuild it.** Copy the ledger (`references/film/ledger-template.md`) and re-verify only the rows the new film uses. Re-read the release notes for status changes. Give the owner `references/film/glean-prompt.md` with its "diff since last run" instruction. Apply `references/film/standing-rules.md` as pre-answered decisions. Never re-ask those.
+3. **Script, then the 10-seat panel plus Director/DP** (`references/film/critic-panel.md`). Every seat is a fresh read-only agent, and every round ends in a coordinator synthesis. For round 2, resume the same agents with the synthesis; don't spawn new ones. Stop when a round has 0 HIGH.
+4. **ATTENDED STOP at the script gate.** Show the user the scripts and the style direction. Settle the licence (Remotion vs HyperFrames), the music and the screen source here. This is creative work, so it's agreed before anything is built.
+5. **Build at low effort.** Ask the user to type `/effort low`. Start from the Remotion starter (`references/film/remotion-starter.md`, four known setup bugs). Write the checks as code before the first render (`references/film/checks.md`). The coordinator runs renders and live-app reads itself (see `references/lakebase-demo.md` field lessons). The visual gauntlet and the user's draft review are attended.
 
 ## Step 4 — Emit the session kit
 

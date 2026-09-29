@@ -108,3 +108,10 @@ Then tell the user, in a few sentences, which non-negotiables came from domain r
 - **Judge the populated live state, not only the offline empty state.** The local synthetic shell rendered empty states, so the real populated screens were only judged once the app was live.
 - **Honest labels come from observation.** A "LIVE" badge, a timing, or a "memory written" line renders only after the event is observed. Before that, the state says "Not yet run".
 - **Verify each critic finding against the law before editing.** Critics flagged the correct Lava action fill, and IDs shown in mono by design, as violations. The coordinator checks every finding. False positives are logged, not "fixed".
+
+For **film briefs** (a teaser cut from a demo app; the full kit is atelier's `references/film/`):
+- **One film per persona pair, and one question per film.** Lakebase Film A asked "can we change the database without gambling?" for the platform lead. Film B asked "can we build fast without adding another system to govern?" for the app developer and the enterprise architect together. A beat after the answer that opens a new topic turns the film back into a feature list.
+- **Bookend it.** The opening states the old way (three burdens, or "a stale copy, or production"), and the closing card answers the same items. Duarte's what-is / what-could-be, closed in the frame.
+- **Hold the STAR moment.** The frame that proves the point (37 · 37 · 37 · **1,204**) gets stillness, no caption, and the film's longest hold (≥ 2 s; 2.5 s shipped), and the caption follows it.
+- **Two claim classes, visibly different.** DEMO claims (what the app did) sit over app screens and code. PRODUCT claims (official docs, GA only) sit only on plain type cards. A product fact over a demo screen reads as "the demo proved it", and it was the largest class of round-1 HIGH findings.
+- **Brief the frame with director lenses, never director quirks.** Take the checkable frame and pacing rules (centred and flat-on, motivated moves, one point of attention, clean crop edges) from `director-lenses.md`. The product's colour law wins over every lens.

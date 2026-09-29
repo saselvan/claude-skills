@@ -22,6 +22,9 @@ A persona without a defined veto just adds prose. Each seat is a fresh-context s
 - **Narrative Designer (Duarte)** — demos and decks ONLY; owns the arc and the ask. Banned from anything real.
 - **Data-Viz Critic** (Tufte/Few) — only when charts exist.
 - **Maintainer-at-2AM** — the code studio's User: reads the diff cold six months later.
+- **Director/DP** — demo and product films only. Charter: `references/film/director-lenses.md` (Anderson, Fincher, Deakins and Kubrick frame and pacing rules, six checks). Veto: an unmotivated camera move, or a frame with competing points of attention. The product's colour law and the claims ledger beat any lens.
+
+**The legend-as-charter rule held on films too** (Lakebase teasers, 2026-09-29). The comms-legends (Duarte, Heath, Raskin), master-storytellers (Pixar, Ira Glass, McKee, Apple craft) and Director/DP seats each apply the **published rules** and cite them in `rule_or_peer`. They never imitate a voice. The film panel's charters are in `references/film/critic-panel.md`.
 
 ## Operating rules
 1. Order: Accessibility + Human Factors first → Content + Product → domain seats → The User → Visual/taste last, on surviving artifacts only. The human reads last of all.
