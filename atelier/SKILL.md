@@ -82,7 +82,7 @@ Seat Duarte only on demos, decks and demo films. Integrity and Content are musts
 
 ### Lakebase demo (adds the drawer + operator modules)
 
-When the pitch sells **Databricks Lakebase**, or the app runs on Lakebase and a **technical/economic buyer** is in Q4, the kit MUST add the **Lakebase drawer** and the **operator modules**, each tied to a buyer pain from the claims inventory, with their three gates (claims ledger, `copy_lint`, aspirational = label or cut). Load `references/lakebase-demo.md` — the modules, the gates and the field lessons live there.
+When the pitch sells **Databricks Lakebase**, or the app runs on Lakebase and a **technical/economic buyer** is in Q4, the kit MUST add the **Lakebase drawer** and the **operator modules**, each tied to a buyer pain from the claims inventory, with their three gates (claims ledger, `copy_lint`, aspirational = label or cut). Load `references/lakebase-demo.md` — the modules, the gates, the **live-or-absent** rule, **disposable-branch testing** and the field lessons live there. Any build whose tests touch Lakebase loads its disposable-branch section, demo or not.
 
 ### Demo film fast path (a teaser film cut from a demo app)
 
@@ -101,7 +101,11 @@ Produce, as files (not chat):
 2. **`SESSION_PLAN.md`** from `references/session-plan-template.md` — ONE goal, checkboxes, per-item acceptance criteria; instruct the agent to re-read it before each item and commit per item.
 3. **The decision policy** from `references/decision-policy-template.md` — pre-answered categories, proceed-and-record for reversible calls, hard stops only for irreversible / security / money. This is what makes unattended hours worth anything.
 4. **The studio roster** for this tier and type: each seat with its charter line and veto class (from the playbook §3c); note which are gates rather than voices.
-5. **The first prompt of the first session**, paste-ready, containing: the goal, the tier and what it skips, the relevant artifact paths, the decision policy inline, the stop condition, and the re-read-the-plan instruction. This prompt is the deliverable the user actually came for.
+5. **The first prompt of the first session**, paste-ready, containing: the goal, the tier and what it skips, the relevant artifact paths, the decision policy inline, the stop condition, the re-read-the-plan instruction, and the acceptance rule below. This prompt is the deliverable the user actually came for.
+
+**The acceptance rule** (Tier 2–3; every item and every delegated stream). An item is done when two things have happened:
+- **The coordinator verified it.** An agent's report is a lead. The coordinator re-runs the evidence, replays one mutation of its own, and rejects vacuous tests: blackboard Step 4 is the procedure, for fan-outs and single delegations alike.
+- **Its live path ran once**, where one exists: the real database, the deployed app, the rendered file. Unit tests pass on what the code believes. On clinical-va-appkit 14 green tests ran against the wrong Postgres credential, and a printed branch name was not the real branch; one live run caught each.
 
 For Tier 1, the kit collapses to item 5 alone with the catechism paragraph at the top.
 

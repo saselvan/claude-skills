@@ -1,6 +1,6 @@
 # Lakebase-demo module pack (drawer + operator modules)
 
-Loaded when atelier Step 3 detects a Lakebase demo. Everything here is **claims-gated**: buyer-pain first, feature second — a screen exists only if it maps a buyer pain the pitch names; never a feature tour. The named skeptic (a tech buyer) is assumed to fact-check every number.
+Loaded when atelier Step 3 detects a Lakebase demo, or when a build's tests touch Lakebase (Testing on disposable branches). Everything else here is **claims-gated**: buyer-pain first, feature second — a screen exists only if it maps a buyer pain the pitch names; never a feature tour. The named skeptic (a tech buyer) is assumed to fact-check every number.
 
 ## The claims ledger (`docs/lakebase-claims.md`) — write this first
 One row per claim the app will make on screen:
@@ -39,6 +39,26 @@ A slide-out panel that, for the current screen's action, shows the real engine m
 - **CDF history** — show recent Postgres changes materialized as Delta (label Preview).
 Each module writes its measured numbers to an artifact the drawer/claims-ledger reads; none use marketing copy.
 
+## Live or absent
+Every screen shows live state from the running system, or it shows nothing (owner, 2026-09-29: "everything should be live, so there is no need for anything to be representative").
+- The app has two states per screen: live, and a plain error with **Retry**. No replay, representative or authored screen stands in for a failed call, and no provenance label marks one. The synthetic-data banner is the only on-screen marker.
+- **Retry re-reads.** After a failed write, Retry reads the current state first, because the write may have landed; re-issuing it is the presenter's explicit next action.
+- Films and stills are captured from one live rehearsal run, read-only.
+- A screen the app can't yet back live is cut from the demo path until it can, the same rule as aspirational claims.
+
+## Testing on disposable branches
+Database tests run on Lakebase, one throwaway branch per run (the clinical-va-appkit harness: `tests/helpers/lakebase-branch.ts`, `lakebase-database.ts`, `lakebase-global-setup.ts`).
+- **Fork, attest, delete.** Each run forks one `ci-{sha}-{timestamp}` branch from the baseline branch with a TTL (1 h) and `is_protected: false`, waits for its endpoint to be ACTIVE, then **attests** it before any test runs: the branch id matches `ci-*`, the parent is exactly the baseline, the TTL is set, it is unprotected, the connection host is that branch's live endpoint, and the database set is exactly the expected one (a leftover database fails the start). Teardown (also on SIGINT/SIGTERM) deletes exactly that branch, then polls the listing until it is gone. A crashed run falls to the TTL.
+- **Explicit profile.** The Databricks profile comes from one env var (`LAKEBASE_TEST_PROFILE`), with no fallback; `DEFAULT` is refused.
+- **Lakebase branch names are flat.** The parent is in `status.source_branch`, not in the name; read it there when attesting.
+- **No superuser.** Design every test around it:
+  - Roles are cluster-wide and inherited from the baseline, so "role absent after rollback" asserts on a role name unique to the test, created and rolled back inside it.
+  - `CREATE FOREIGN DATA WRAPPER` is impossible; such a test is an explicit skip naming the reason.
+  - Password login is disabled, and fixture roles aren't Databricks identities. A test acts as a role through `-c role=<role>` / `SET ROLE` from the OAuth admin (granted `SET TRUE, INHERIT FALSE`). SET ROLE checks privileges against the session user, so a proof that "the app cannot do X" logs in as a real identity: a dedicated test service principal, created once by the owner, whose Postgres role exists only on the `ci-*` branch.
+  - A second concurrent database handle gets its own `ci-*` child branch under the same guards.
+  - Every skip names its reason and decision in the register.
+- **Network drops.** `EHOSTUNREACH`, an OAuth refresh failure or `ERR_INTERNET_DISCONNECTED` across many tests at once is the network: rerun the suite before diagnosing anything.
+
 ## The 80% stat (only if it serves the story)
 Verbatim: "over 80 percent of the databases provisioned on Neon were created automatically by AI agents rather than by humans." Source: Databricks, May 14, 2025 (Neon acquisition press release, PR Newswire) — cite the date + link. Do NOT use the "97% of branches" figure (secondary source).
 
@@ -53,11 +73,10 @@ Verbatim: "over 80 percent of the databases provisioned on Neon were created aut
 - **One promote per clean slot.** Never race or promote just to test or film. Pre-promote, release-target reads return 409 by design, so the runbook must name that UI state and its recovery link.
 - **Agent permission limits are real.** The auto-mode classifier blocks agent-run production deploys and live-app Playwright (reads included) until the owner allows them. Hand the user an exact `! <command>`, and never work around the block. Governed deploys need a clean git tree: `git stash push -u` → `bash scripts/deploy.sh --execute ...` → `git stash pop`. The script is not executable, so it needs `bash`.
 - **Live Playwright:** pass the bearer token via `extraHTTPHeaders`. Run from the repo root, because specs read `design/*.json` relative to the working folder. Curate a read-only spec list, because clicks without mocks write to the live demo.
-- **Read failures by class and time before believing a run.** A network drop turned 35+ tests into `ERR_INTERNET_DISCONNECTED`. For the rest, re-run the same spec on the pre-change commit. "Fails there too" means old debt, not a regression.
+- **Read failures by class and time before believing a run.** Rule out a network drop first (Testing on disposable branches). For the rest, re-run the same spec on the pre-change commit. "Fails there too" means old debt, not a regression.
 - **Local Playwright port trap:** foreign apps on 8000/8010/8020 plus `reuseExistingServer` silently test the wrong app. Use a free port and assert the `<title>`.
 - **Verify role claims in SQL.** When a demo uses more than one role, the ledger names the role per claim (the `ward_clinician` pattern: `film/ledger-template.md`).
 - **Critic hygiene:** light prompts (no more than 4 images each; prefer computed-style JSON dumps), because heavy image critics stall. Include one domain-truth critic. The coordinator verifies every finding against the colour/type law before editing, since some findings are false positives.
-- **Agent worktree isolation bases on `main`**, not the working branch. For branch work, create worktrees by hand (`git worktree add --detach .claude/worktrees/<n> HEAD`, then symlink `node_modules`).
 
 ## Field lessons — Lakebase films, 2026-09-29
 Each film lesson lives beside the step it governs in `references/film/` (atelier "Demo film fast path").

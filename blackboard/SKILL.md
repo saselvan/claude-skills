@@ -1,858 +1,177 @@
 ---
 name: blackboard
-description: "Recursive parallel work coordinator — spawns agents with board-based coordination, worktree isolation, and caller-defined synthesis. USE WHEN 2+ independent work streams, parallel issue build, multi-phase handoffs, structured synthesis needed."
-version: "2.0"
-changelog: |
-  v2.0: Grill-me redesign — LLM decomposition replaces regex parser, stream criticality, per-stream agent type selection, worktree isolation via Claude Code native support, caller-defined synthesis schema, --resume mode, execution history for cost/benefit, dual-channel coordination (YAML state + optional message nudge), .pipeline/ board convention, default max depth 2.
-  v1.0: Initial skill with regex stream parsing, hardcoded synthesis formats, scratch/ board directory, hard depth-3 limit.
+description: "Parallel work coordinator. Decomposes a task into independent streams, spawns one subagent per stream in dependency-ordered waves, records each result as a durable YAML board signal on disk, merges worktree branches, and synthesizes results in a caller-defined shape. Use whenever a task has 2+ independent work streams (parallel issue builds, multi-artifact renders, research fan-out, validator + red-team pairs), when a multi-phase workflow needs context preserved across handoffs or session restarts, or when a parent coordinator needs fan-out/fan-in. Also use when the user says 'in parallel', 'fan out', 'spawn agents for each', or '--resume' a board."
+metadata:
+  version: "2.2"
 ---
 
-# Blackboard v2.0 — Recursive Parallel Coordination
+# Blackboard — Parallel Coordination
 
-Coordinate multiple agents on a shared task using file-based board signals. Supports recursive invocation (coordinators calling blackboard, blackboard calling blackboard).
+Coordinate subagents on a shared task. **Files are truth**: every result is written as YAML to a board directory on disk, so the run survives context compaction, session kills, and agent crashes, and can be resumed. Agent messages are never the source of state.
 
-**Core architecture:** Files are truth. Board signals are durable YAML on disk — they survive session kills, context compaction, and agent crashes. Messages are optional nudges for latency, never the source of truth.
+## Fast path (the 80% case)
 
-## Trigger
+1. Decompose the task into streams (schema below). If only one stream and no handoff complexity, stop — do the work directly.
+2. Create `.pipeline/blackboard-{slug}/` with `context.yaml`.
+3. Topologically sort streams into waves. Touch the wave's start marker, then spawn every agent in the wave in a single message.
+4. As each agent returns, verify it (Step 4), then write its result YAML to `board/{agent}-complete.yaml`. Inject verified deliverables into the next wave's prompts.
+5. Merge worktree branches (write streams only), run tests, write `artifacts/SYNTHESIS.{md|yaml}`.
+6. Report to caller. Archive the board.
 
-Invoke when:
-- Task has 2+ truly independent work streams (parallel work)
-- Sequential pipeline with complex handoffs requiring context preservation
-- Multi-phase workflow where board signals prevent context loss
-- `/design build` detects parallel-eligible issues in the dependency graph
-- A coordinator (content-factory, demo-factory, enablement-kit) needs fan-out/fan-in
+Details for each step follow. Read `references/` files only when the pointer says to.
 
-**The board serves two purposes:**
-1. **Parallelization** — coordinate independent work streams
-2. **External memory** — preserve context across complex handoffs and session restarts
+## When not to use
 
-Do NOT invoke when:
-- Simple linear task with no handoff complexity
-- Trivial work (cost/benefit analysis will reject it)
-- Already at max nesting depth
+- Single linear task with no handoffs — the coordination overhead costs more than it saves.
+- Streams that all touch the same files — they will conflict at merge; do them sequentially.
+- Already at max nesting depth (default 2, hard ceiling 3).
 
-## Entry Point
+## Prerequisites
 
-Parse args to detect mode:
+- The `Agent` tool with `isolation: "worktree"` support (for write streams).
+- Optional: agent-teams tools (`TeamCreate`, `SendMessage`, `TeamDelete`). If absent, skip the team steps — everything else works without them.
+- Add `.pipeline/` to `.gitignore` if it isn't already.
 
-- `--resume {board_dir}` → resume from existing board state
-- `--nested` → extract parent board dir, increment depth
-- Otherwise → standalone mode, depth = 1
+## Step 1: Decompose
 
-## Phase 0: Board Setup
-
-### 0a. Detect Mode
-
-```
-if args contain --resume {path}:
-  MODE = "resume"
-  BOARD_DIR = {path}
-  Read context.yaml → restore state
-  Skip to Phase 4 (monitor) with partial agent re-spawn
-
-elif args contain --nested:
-  PARENT_BOARD = extract from args
-  PARENT_DEPTH = extract from args (default 0)
-  NESTING_DEPTH = PARENT_DEPTH + 1
-  MODE = "nested"
-
-else:
-  PARENT_BOARD = null
-  NESTING_DEPTH = 1
-  MODE = "standalone"
-```
-
-### 0b. Depth Check
-
-Default max depth: 2. Configurable up to hard ceiling of 3.
-
-```
-max_depth = context.yaml.max_nesting_depth or 2
-if NESTING_DEPTH > max_depth:
-  ERROR: "Max nesting depth ({max_depth}) exceeded. Flatten your task decomposition."
-  exit
-if NESTING_DEPTH > 3:
-  ERROR: "Hard ceiling of 3 exceeded regardless of config."
-  exit
-```
-
-### 0c. Create Board Directory
-
-All boards use `.pipeline/` convention for unified archival:
-
-```
-TASK_SLUG = slugify(TASK_DESCRIPTION, max=40)
-TIMESTAMP = unix_epoch
-
-if MODE == "nested":
-  BOARD_DIR = "{PARENT_BOARD}/board/blackboard-{TIMESTAMP}"
-else:
-  BOARD_DIR = ".pipeline/blackboard-{TASK_SLUG}/"
-
-mkdir -p "{BOARD_DIR}/board"
-mkdir -p "{BOARD_DIR}/artifacts"
-```
-
-### 0d. Write context.yaml
+You are the coordinator and you are an LLM — reason about the task directly rather than pattern-matching phrases. Produce this YAML and save it into `context.yaml`:
 
 ```yaml
-_meta:
-  board_dir: "{BOARD_DIR}"
-  coordinator: "blackboard"
-  parent_coordinator: "{parent if nested, else null}"
-  run_id: "{ISO timestamp}"
-  nesting_depth: N
-  mode: "{standalone|nested|resume}"
-  max_nesting_depth: 2  # configurable up to 3
-
-task_description: "{user's task}"
-phase_completed: null  # null → analysis → spawn → monitor → synthesis → cleanup → complete
-streams: null
-agents_spawned: []
-
-# Caller-defined synthesis
-synthesis_format: "markdown-report"  # named preset (backward compat)
-synthesis_schema: null               # or inline schema from caller
-
-# Cost/benefit tracking
-estimated_parallel_time_min: null
-estimated_sequential_time_min: null
-parallelization_decision: null
-parallelization_reason: ""
-
-# Monitoring
-agent_timeout_min: 10
-max_retries_per_agent: 1
-
-# Failures
-failures: []
-```
-
-### 0e. Write failures.yaml
-
-```yaml
-failures: []
-warnings: []
-```
-
-## Phase 1: Analyze Complexity
-
-### 1a. LLM Decomposition (replaces regex parsing)
-
-The coordinator IS an LLM. Let it reason about task decomposition natively instead of pattern-matching English phrases.
-
-**Prompt the LLM to output a structured YAML block:**
-
-```
-Analyze this task and decompose it into parallel work streams.
-Output ONLY a YAML block with this exact schema:
-
 streams:
-  - name: "{short descriptive name}"
-    description: "{what this stream must accomplish}"
-    critical: true|false    # must complete for synthesis to proceed?
-    depends_on: []          # list of stream names this depends on
-    agent_type: "general-purpose|Explore|Bash|Plan"  # right-sized agent
-
-Rules:
-- Streams with no mutual dependencies can run in parallel
-- Mark streams "critical: true" if their failure makes the whole task useless
-- Use "Explore" for read-only research, "Bash" for command execution only,
-  "Plan" for architecture/design, "general-purpose" for anything needing file writes
-- Default to "general-purpose" if unsure
-- If task is sequential ("X then Y"), set depends_on accordingly
-- If task is a single unit with no parallelism, output one stream
+  - name: "issue-2-api-endpoints"         # short slug; the coordinator's label for this stream (board filename, merge msg) — NOT the agent's assigned name, which the Agent tool returns
+    description: "Implement REST endpoints for X per issue #2. TDD."
+    critical: true                          # if this fails, is the whole task useless?
+    depends_on: []                          # stream names that must finish first
+    agent_type: "general-purpose"           # general-purpose | Explore | Plan | custom
+    writes_files: true                      # true → worktree isolation + merge
+    timeout_min: 30                         # per-stream; research 10, builds 30+
+    scope: ["src/api/**", "tests/api/**"]   # files this stream may touch
 ```
 
-**Output:** structured `streams` list with names, dependencies, criticality, and agent types.
+Rules of thumb:
+- `Explore` for read-only research (it has no Write tool, so it can never produce files); `Plan` for design alternatives; `general-purpose` for anything that edits files. There is no `Bash` agent type.
+- Set `scope` so streams are disjoint: every path belongs to at most one stream. Overlap causes merge conflicts in worktrees and silent overwrites in a shared tree.
+- If two streams would each take under ~5 tool calls, they aren't worth parallelizing — fold them into one.
 
-**Single stream assessment:** If `len(streams) == 1`, assess whether blackboard adds value:
-- **Use blackboard if:** Multi-phase with complex handoffs, structured output needed for parent coordinator, or context preservation critical
-- **Skip blackboard if:** Simple single-phase task — just do it directly
+**Parallelize when**: 2+ streams with no mutual dependency, each needing meaningful work (multiple files, or 5+ tool calls). Otherwise do the task inline and say why.
 
-Update `context.yaml` with the streams list.
+**Cycle check**: topologically sort `depends_on`. If a cycle exists, stop and report it (`A → B → A`) — don't guess a linearization.
 
-### 1b. Cost/Benefit Analysis
-
-Estimate parallel vs sequential execution using historical data when available.
-
-**Step 1: Check execution history**
+## Step 2: Board setup
 
 ```
-STATS_FILE = ~/.claude/blackboard-stats.yaml
-if STATS_FILE exists:
-  Load historical medians per stream keyword category
-else:
-  Use cold-start defaults
+MODE      = resume | nested | standalone   (from args: --resume {dir}, --nested {parent_dir} {depth})
+DEPTH     = parent_depth + 1 (nested) | 1
+BOARD_DIR = standalone: .pipeline/blackboard-{slug}/
+            nested:     {parent_board}/board/blackboard-{epoch}/
+mkdir -p {BOARD_DIR}/board {BOARD_DIR}/artifacts
 ```
 
-**Cold-start defaults:**
+Refuse if `DEPTH > max_nesting_depth` (default 2) or `DEPTH > 3` regardless of config. Deep nesting multiplies overhead and makes failures hard to trace; flatten instead.
 
-| Category | Default (min) |
-|----------|--------------|
-| research | 15 |
-| test | 10 |
-| frontend / backend | 20 |
-| default | 10 |
-
-**Step 2: Calculate**
-
-```
-stream_times = {s.name: historical_median_or_default(s) for s in streams}
-
-# Parallel: max(independent streams) + overhead
-parallelization_overhead = 2 + (len(streams) * 1)  # 2 min base + 1 min per agent
-parallel_time = max(stream_times.values()) + parallelization_overhead
-
-# Sequential: sum(stream_times)
-sequential_time = sum(stream_times.values())
-
-# Decision: parallelize if parallel < 0.7 * sequential
-threshold = 0.7 * sequential_time
-should_parallelize = parallel_time < threshold
-```
-
-**Decision:**
-- `should_parallelize == False` → ERROR: "Parallelization overhead ({parallel_time} min) exceeds benefit (threshold: {threshold} min). Do this sequentially."
-- `should_parallelize == True` → proceed
-
-Update `context.yaml` with estimates and decision.
-
-Log to user:
-```
-✓ Complexity Analysis Complete
-
-Streams detected: {N}
-Parallel estimate: {N} min ({max_time} + {overhead} overhead)
-Sequential estimate: {N} min
-Decision: PARALLELIZE (saves {sequential - parallel} min)
-```
-
-### 1c. Dependency Cycle Check
-
-Before spawning agents, validate the dependency graph:
-
-```
-Build directed graph from streams[].depends_on
-Run topological sort
-If cycle detected:
-  ERROR: "Dependency cycle: {A} → {B} → {A}. Flatten or linearize."
-  BLOCK
-```
-
-## Phase 2: Create Team
-
-```
-TEAM_NAME = "{TASK_SLUG}-team"
-
-TeamCreate(
-  team_name: TEAM_NAME,
-  description: task_description
-)
-```
-
-Export board context for nested invocations:
-```
-export _BLACKBOARD_PARENT_BOARD = BOARD_DIR
-export _BLACKBOARD_DEPTH = NESTING_DEPTH
-```
-
-## Phase 3: Spawn Agents
-
-### 3a. Agent Naming
-
-```
-For each stream, generate: {slugify(stream.name)}-{index}
-Truncate to 20 chars.
-```
-
-### 3b. Board Signal Schema
-
-**CRITICAL: Board signals MUST be file-based YAML.** This is the architectural core — files survive session kills, context compaction, and agent crashes. Messages don't.
-
-Each agent writes this schema when complete:
+`context.yaml`:
 
 ```yaml
-task_id: N
-agent_name: "{name}"
-stream_description: "{original stream desc}"
-status: complete
-timestamp: "{ISO8601}"
-branch_name: "worktree-{agent-name}"  # from worktree isolation
-commit_sha: "{sha}"                    # last commit in worktree
-deliverables:
-  - file_path: "{path}"
-    description: "{what}"
-  - description: "{what}"  # if not file-based
-depends_on_completed: [list of task IDs]
-ready_for: [list of agent names that were waiting]
-errors: []
-duration_seconds: N  # actual execution time for stats tracking
+_meta: {board_dir, coordinator: blackboard, parent_board, run_id, nesting_depth, mode, max_nesting_depth: 2}
+task_description: "..."
+target_branch: "{current branch}"        # where worktree branches merge
+phase: decompose                          # decompose → spawn → collect → merge → synthesize → complete
+streams: [...]
+waves: [[...], [...]]                     # names, in execution order
+agents: []                                # {name, wave, spawned_at, returned_at, status}
+synthesis_format: markdown-report         # preset name, or:
+synthesis_schema: null                    # caller-defined (see references/synthesis.md)
+failures: []
 ```
 
-### 3c. Worktree Isolation
+For `--resume`, read `context.yaml` and `board/*-complete.yaml`, compute `missing = streams − completed`, and continue from Step 3 spawning only the missing streams. Existing signals count toward completion. Nothing else is needed because all state is already on disk.
 
-Claude Code natively supports subagent worktree isolation. Each agent gets its own worktree at `.claude/worktrees/{agent-name}/` with an isolated branch. Auto-cleanup on completion.
+## Step 3: Spawn in waves
 
-**Blackboard does NOT manage worktree lifecycle.** Claude Code handles creation, branch naming, and cleanup. Blackboard only reads the `branch_name` and `commit_sha` from board signals for the merge step.
+Group streams by dependency level. Before each wave, `touch {BOARD_DIR}/board/wave-{n}.start`; Step 4's scope check lists changed files against this marker. Spawn all agents in a wave **in one message** so they run concurrently. Do not spawn wave N+1 until wave N has returned — this replaces polling and cross-agent messaging entirely; agents never wait on each other.
 
-To enable: use a custom agent definition with `isolation: worktree` in frontmatter, or spawn agents that create their own worktrees via the `--worktree` pattern.
+Every agent prompt must be self-contained. Subagents do not see this SKILL.md, CLAUDE.md context you have loaded, or the other agents' work. Use `references/agent-prompt.md` as the template; the essentials:
 
-### 3d. Spawn Each Agent
+- What to build, the acceptance criteria, and the `scope` boundary.
+- Deliverables from upstream streams (paths + one-line summaries), pasted in from their board signals.
+- Repo conventions and code-quality rules the agent must follow (see `references/code-quality.md` — paste, don't reference).
+- The exact result YAML to return as its **final message**. The coordinator writes it to the board; agents don't write board files themselves (Explore agents can't, and others forget).
 
-```
-for each stream in dependency-sorted order:
-  agent = agent_name(stream, index)
-  taskId = index
-
-  # Build dependency wait instruction
-  if stream.depends_on is not empty:
-    dep_files = [board path for each dependency]
-    wait_instruction = """
-    WAIT: Before starting, check that these board files exist: {dep_files}.
-    Poll every 15s. Max wait: 10 minutes.
-    If you receive a message saying "dependency ready", check immediately.
-    """
-  else:
-    wait_instruction = ""
-
-  Task(
-    subagent_type: stream.agent_type,  # right-sized per LLM recommendation
-    name: agent,
-    team_name: TEAM_NAME,
-    prompt: """
-    You are working on: {stream.name}
-    Description: {stream.description}
-
-    {wait_instruction}
-
-    CRITICAL INSTRUCTIONS:
-    1. Work in your worktree (isolation: worktree is set)
-    2. Complete your task with commits in your worktree branch
-    3. When complete, write {BOARD_DIR}/board/{agent}-complete.yaml with:
-       - task_id: {taskId}
-       - agent_name: "{agent}"
-       - stream_description: "{stream.description}"
-       - status: complete
-       - timestamp: (ISO8601)
-       - branch_name: (your worktree branch name)
-       - commit_sha: (your last commit SHA)
-       - deliverables: [list what you produced]
-       - depends_on_completed: [{dep task IDs}]
-       - ready_for: [{agents waiting on you}]
-       - errors: [any non-fatal errors]
-       - duration_seconds: (how long you took)
-    4. Use ABSOLUTE paths for all file references
-    5. Board signal file is the source of truth — write it even if you also send messages
-    """
-  )
-
-  # Optional: notify dependent agents when this stream has known dependents
-  # (latency optimization — not required for correctness)
-
-  agents_spawned.append({name, task_id, stream, agent_type, spawned_at})
-```
-
-### 3e. Dual-Channel Notification (Optional)
-
-After an agent writes its board signal, it MAY also send a message to waiting agents:
+Spawn with:
 
 ```
-SendMessage(
-  type: "message",
-  recipient: "{waiting-agent-name}",
-  content: "Dependency ready — check board signal at {path}",
-  summary: "Dependency {stream.name} ready"
+Agent(
+  subagent_type: stream.agent_type,
+  isolation: "worktree" if stream.writes_files else omitted,
+  description: stream.name,
+  prompt: <rendered template>
 )
 ```
 
-**Rules:**
-- Message is a latency optimization, NOT required for correctness
-- Waiting agent MUST still validate by reading the board YAML
-- If session dies and restarts, polling recovers — no message history needed
-- Messages consume context; files don't. Keep messages short.
+`isolation: "worktree"` bases the worktree on `main`, not on `target_branch`. When the work lives on another branch, either create the worktrees by hand (`git worktree add --detach .claude/worktrees/{name} {target_branch}`; symlink `node_modules`) and give each prompt its absolute path, or run the wave in the shared tree, where disjoint `scope` is the only thing keeping agents off each other's files.
 
-Update `context.yaml`:
-```yaml
-agents_spawned: [list]
-phase_completed: "spawn"
-```
+Record `{name, wave, spawned_at}` in `context.yaml.agents` and set `phase: spawn`.
 
-## Phase 4: Monitor Board
+## Step 4: Collect and verify results
 
-### 4a. Polling Loop
+When an agent returns, parse the result YAML from its final message (shape: the `## Result` block in `references/agent-prompt.md`). The report is a **lead**, not evidence: agents report "tests green", "reverted", "captured", "fixed" and "mutation red" when none of it happened. Accept a stream only after all four checks below pass, run by you, in the stream's worktree or the shared tree:
 
-```
-TIMEOUT_MIN = context.yaml.agent_timeout_min or 10
-START_TIME = now()
-EXPECTED_SIGNALS = len(agents)
+1. **Scope.** List the changed files yourself: `find {repo} -newer {BOARD_DIR}/board/wave-{n}.start -type f -not -path '*/.git/*' -not -path '*/node_modules/*'` in a shared tree, `git diff --stat {target_branch}...{branch_name}` in a worktree. Compare against the stream's `scope` and its reported `changed_files`. Read the diff of every touched file, including files the report left out. In a shared tree the wave's changed files must partition across the wave's scopes; a file inside no stream's scope, or inside another stream's scope, fails the round for the stream that touched it.
+2. **Evidence.** Re-run every command in the result's `evidence` list and compare the output with the claim. A claim that doesn't reproduce fails.
+3. **Coordinator mutation.** Pick one acceptance criterion, break the shipped code for it on committed state, run the test the agent names for it, and watch it go red; restore with `git checkout -- {file}` (clean tree only). A mutation that survives fails the stream. Read-only streams: re-open the cited source for one finding instead.
+4. **Falsifiable tests.** Each test calls the shipped code. A test that re-implements the logic inline, or asserts a value it computed itself, is *vacuous*: reject it whatever colour it shows.
 
-# Adaptive polling interval
-poll_interval = 5  # start at 5s
+A failed check sends the stream back: resume the same agent (`SendMessage`) with the failing command and its output. This counts as the stream's one retry; a second failure escalates to the user. On pass, write the signal verbatim to `{BOARD_DIR}/board/{name}-complete.yaml` with `verified: {scope, evidence, mutation, tests}` recording what you ran.
 
-while true:
-  elapsed = now() - START_TIME
+If the final message has no parsable YAML, write a signal with `status: failed` and `errors: ["no result YAML"]`, and record the agent's last output in `failures`.
 
-  # Escalate polling interval
-  if elapsed > 120:  poll_interval = 10
-  if elapsed > 300:  poll_interval = 30
+**Failure rules** (apply after each wave, not just at the end):
+- A `critical` stream failed or timed out → stop. Write what you have to the board, report to the user which stream failed and why, and offer `--resume` after they fix it. Don't spawn later waves that depend on it.
+- Non-critical failures → log to `failures`, continue. Mention them in synthesis.
+- One retry per agent, for a transient failure (tool error, timeout with clear progress: re-spawn with the same prompt plus the last error) or a failed verification (resume the agent, above). A second failure escalates.
 
-  # Check timeout
-  if elapsed > TIMEOUT_MIN * 60:
-    handle_timeout()
-    break
+## Step 5: Merge and synthesize
 
-  # Count valid signals
-  signal_count = count valid YAML files in {BOARD_DIR}/board/*-complete.yaml
-
-  if signal_count == EXPECTED_SIGNALS:
-    log "✓ All {EXPECTED_SIGNALS} agents completed"
-    break
-
-  log "Waiting: {signal_count}/{EXPECTED_SIGNALS} complete..."
-  sleep(poll_interval)
-```
-
-### 4b. Timeout Handling (Criticality-Aware)
+**Merge** (skip if no stream wrote files). For each completed write stream, in wave order:
 
 ```
-completed = [agents with valid board signals]
-missing = [agents without board signals]
-
-# Check criticality
-critical_missing = [a for a in missing if a.stream.critical]
-non_critical_missing = [a for a in missing if not a.stream.critical]
-
-if critical_missing:
-  # Critical stream failed — cannot proceed
-  log failures to failures.yaml
-  BLOCK and escalate to user:
-    "Critical stream(s) did not complete: {names}. Cannot synthesize."
-
-elif len(completed) / len(agents) >= 0.7:
-  # >= 70% complete and no critical missing → proceed with partial synthesis
-  log warnings for missing non-critical agents
-  proceed to Phase 5
-
-else:
-  # < 70% complete — escalate
-  BLOCK and escalate to user
+git merge {branch_name} --no-ff -m "blackboard: merge {stream.name}"
 ```
 
-### 4c. Validate Board Signals
+On conflict: `git merge --abort`, log the conflicting files to `failures`, and continue with remaining branches. Never auto-resolve — the user or parent coordinator decides. After merging, run the project's test suite (look for `package.json` scripts, `pytest`, `Makefile`, etc.) and record results. Delete merged branches with `git branch -d`.
 
-After collection (or timeout), validate each signal:
+**Synthesize**. If `synthesis_schema` is set, produce exactly those fields from the board signals. Otherwise use the named preset (default `markdown-report`). Presets and schema format: `references/synthesis.md`. Write to `{BOARD_DIR}/artifacts/SYNTHESIS.{md|yaml}`.
 
-```
-for each agent:
-  signal_file = {BOARD_DIR}/board/{agent}-complete.yaml
-
-  if not exists → log critical failure, continue
-  if not valid YAML → log critical failure, continue
-
-  required = [task_id, status, deliverables, duration_seconds]
-  if missing fields → log high failure, continue
-
-  # Record actual duration for stats
-  actual_durations.append({
-    category: categorize(agent.stream),
-    duration: signal.duration_seconds
-  })
-```
-
-Update `failures.yaml` with any validation errors.
-
-### 4d. Update Execution History
-
-After monitoring completes, append actual durations to stats file:
+## Step 6: Report and archive
 
 ```
-STATS_FILE = ~/.claude/blackboard-stats.yaml
-
-for each actual_duration:
-  Append to rolling window (last 20 runs per category)
-  Recalculate median
+BLACKBOARD COMPLETE
+Task:      {description}
+Streams:   {N} ({completed} complete, {failed} failed)
+Merge:     clean | {N} conflicts in {files}
+Tests:     {passed}/{total}
+Synthesis: {path}
 ```
 
-This makes future cost/benefit analyses increasingly accurate.
-
-## Phase 5: Synthesize
-
-### 5a. Merge Worktree Branches
-
-Before synthesis, merge all agent worktree branches into the main feature branch:
-
-```
-for each completed agent (in dependency order):
-  branch = signal.branch_name
-  sha = signal.commit_sha
-
-  git merge {branch} --no-ff -m "Merge {agent.stream.name} from blackboard"
-
-  if merge conflict:
-    log conflict details to failures.yaml
-    flag in synthesis output
-    # Design-ops or user resolves conflicts
-
-# Run integration tests on merged result
-test_result = run project test suite
-if tests fail:
-  log which tests failed and which agent's changes likely caused it
-```
-
-Skip this step if agents didn't use worktrees (e.g., research-only streams).
-
-### 5b. Determine Synthesis Format
-
-Check `context.yaml` for caller-defined schema or named preset:
-
-```
-if context.yaml.synthesis_schema is not null:
-  Use caller-defined schema — map board signal data to requested fields
-elif context.yaml.synthesis_format is a named preset:
-  Use preset template
-else:
-  Default to markdown-report
-```
-
-**Named presets** (shorthand for common schemas):
-
-| Preset | Output | Use Case |
-|--------|--------|----------|
-| `markdown-report` (default) | Human-readable markdown | Standalone invocations |
-| `demo-deployment` | YAML with URLs + resource IDs | Demo-factory build |
-| `artifact-metadata` | YAML with artifact paths + types | Content-factory render |
-| `research-synthesis` | Markdown with sources + findings | Research agents |
-| `build-result` | YAML with test results + commits | Design-ops parallel build |
-
-**Caller-defined schema** (extensible without editing blackboard):
-
-```yaml
-synthesis_schema:
-  required_fields:
-    - artifact_paths
-    - quality_scores
-    - deployment_urls
-    - merge_status
-  output_format: yaml       # yaml | markdown
-  include_timeline: false
-  include_board_signals: true
-```
-
-Blackboard maps board signal data to the requested fields and returns exactly what the caller needs.
-
-### 5c. Write Synthesis
-
-Write to `{BOARD_DIR}/artifacts/SYNTHESIS.{md|yaml}` depending on format.
-
-**Markdown report format (default):**
-
-```markdown
-# Blackboard Synthesis: {Task Description}
-
-**Board:** `{BOARD_DIR}`
-**Started:** {start timestamp}
-**Completed:** {end timestamp}
-**Duration:** {minutes}
-**Streams:** {N} ({N} completed, {N} missing)
-
----
-
-## Executive Summary
-
-{1-2 sentence summary}
-
-**Deliverables:**
-- {count} files produced
-- {count} tasks completed
-- {count} errors/warnings
-- Merge status: {clean | conflicts}
-
----
-
-## Deliverables
-
-| Agent | Stream | Deliverable | Path |
-|-------|--------|-------------|------|
-| {agent} | {stream} | {desc} | `{path}` |
-
----
-
-## Coordination Timeline
-
-| Time | Agent | Event |
-|------|-------|-------|
-| {HH:MM} | {agent-1} | Spawned |
-| {HH:MM} | {agent-1} | Completed ({N}s) |
-
-**Parallel time:** {minutes}
-**Sequential estimate:** {minutes}
-**Time saved:** {delta} minutes
-
----
-
-## Merge Results
-
-{merge status per branch, conflict details if any}
-
-## Integration Test Results
-
-{pass/fail, which tests, which agent's changes caused failures}
-
-## Errors & Warnings
-
-{from failures.yaml}
-```
-
-Update `context.yaml`:
-```yaml
-phase_completed: "synthesis"
-synthesis_file: "{path}"
-```
-
-## Phase 6: Cleanup
-
-### 6a. Shutdown Agents
-
-```
-for each agent in agents_spawned:
-  SendMessage(type: "shutdown_request", recipient: agent.name, content: "Work complete.")
-
-Wait max 30s for confirmations.
-Log any agents that didn't confirm.
-```
-
-### 6b. Delete Team
-
-```
-TeamDelete()
-```
-
-### 6c. Worktree Cleanup
-
-**Claude Code handles worktree cleanup automatically.** When agents finish:
-- No changes → worktree and branch removed automatically
-- Changes committed → branches persist until merge in Phase 5
-
-After successful merge in Phase 5, clean up merged branches:
-```
-for each merged branch:
-  git branch -d {branch_name}
-```
-
-### 6d. Archive Board
-
-```
-if MODE == "standalone":
-  # Archive to .pipeline/completed/
-  mv {BOARD_DIR} .pipeline/completed/blackboard-{TASK_SLUG}-{TIMESTAMP}/
-  log "Board archived at: .pipeline/completed/..."
-elif MODE == "nested":
-  # Leave in place for parent coordinator
-  log "Nested board available to parent at: {BOARD_DIR}"
-```
-
-Update `context.yaml`:
-```yaml
-phase_completed: "complete"
-cleanup_verified: true
-```
-
-## Phase 7: Report to Caller
-
-```
-✓ BLACKBOARD COMPLETE
-=====================
-Task: {task description}
-Board: {BOARD_DIR}
-Mode: {standalone|nested|resume}
-Depth: {nesting level}
-
-Streams: {N} ({N} completed, {N} missing)
-Duration: {minutes} (saved {delta} min vs sequential)
-
-Deliverables:
-  - {summary}
-
-Merge: {clean | N conflicts}
-Integration tests: {pass | fail}
-
-Synthesis: {path to SYNTHESIS.md or .yaml}
-
-{If nested:}
-→ Parent coordinator can read: {BOARD_DIR}/artifacts/SYNTHESIS.{format}
-```
-
-## Resume Mode
-
-When invoked with `--resume {board_dir}`:
-
-1. Read `context.yaml` — get `phase_completed`, `agents_spawned`, `streams`
-2. Scan `board/*-complete.yaml` — identify which agents already finished
-3. Diff: `agents_spawned - completed_signals = missing_agents`
-4. Re-create team (Phase 2)
-5. Re-spawn ONLY missing agents (Phase 3) with same stream definitions
-6. Continue monitoring (Phase 4) — existing board signals count toward completion
-7. Synthesize, cleanup, report as normal
-
-**Why this works:** All state is on disk. Board signals from the previous run are still in `board/`. The new agents write their signals to the same directory. Synthesis reads all signals regardless of which run produced them.
-
-## Integration with Design-Ops v3.1
-
-### /design discover — Parallel Interface Exploration
-
-When `/design discover` identifies a key module boundary, it invokes blackboard to explore design alternatives in parallel:
-
-```
-blackboard(
-  task: "Explore interface designs for {module}",
-  streams: [
-    {name: "minimize-interface", agent_type: "Plan", critical: false},
-    {name: "maximize-flexibility", agent_type: "Plan", critical: false},
-    {name: "optimize-common-caller", agent_type: "Plan", critical: false},
-    {name: "ports-and-adapters", agent_type: "Plan", critical: false}
-  ],
-  synthesis_schema: {
-    required_fields: [interface_signature, usage_example, hidden_complexity, tradeoffs],
-    output_format: markdown
-  }
-)
-```
-
-Design-ops reads the synthesis and presents alternatives to the user.
-
-### /design prp — Parallel Validator + Red-Team (LARGE tier)
-
-```
-blackboard(
-  task: "Validate and red-team PRP: {prp_name}",
-  streams: [
-    {name: "invariant-validation", agent_type: "general-purpose", critical: true},
-    {name: "red-team-review", agent_type: "general-purpose", critical: true}
-  ],
-  synthesis_schema: {
-    required_fields: [blocking_violations, advisory_violations, adversarial_findings, confidence_adjustment],
-    output_format: yaml
-  }
-)
-```
-
-Design-ops reads synthesis to decide go/no-go on the PRP.
-
-### /design build — Parallel Independent Issues (biggest win)
-
-After `/prp-to-issues` produces the dependency graph, design-ops identifies groups of independent issues:
-
-```
-# Issues #2 and #3 both depend on #1 but not each other
-# After #1 completes in main branch:
-
-blackboard(
-  task: "Parallel TDD build: issues #2 and #3",
-  streams: [
-    {name: "issue-2-api-endpoints", agent_type: "general-purpose", critical: true},
-    {name: "issue-3-auth-middleware", agent_type: "general-purpose", critical: true}
-  ],
-  synthesis_schema: {
-    required_fields: [tests_passed, integration_status, files_modified, commit_sha, branch_name, merge_status],
-    output_format: yaml
-  }
-)
-
-# Each agent:
-# 1. Works in its own worktree (isolation: worktree)
-# 2. Runs full TDD cycle (red-green-refactor) for its issue
-# 3. Commits to worktree branch
-# 4. Writes board signal with branch_name + commit_sha
-#
-# Blackboard synthesis:
-# 1. Merges both branches into feature branch
-# 2. Runs integration tests on merged result
-# 3. Reports merge status + test results
-#
-# Design-ops reads synthesis, continues to next issue group
-```
-
-## Integration with Other Coordinators
-
-### Content-Factory
-
-```
-blackboard(
-  task: "Render artifacts in parallel",
-  streams: [
-    {name: "render-deck", agent_type: "general-purpose", critical: true},
-    {name: "render-cheatsheet", agent_type: "general-purpose", critical: false},
-    {name: "render-one-pager", agent_type: "general-purpose", critical: false}
-  ],
-  synthesis_format: "artifact-metadata"
-)
-```
-
-### Demo-Factory
-
-```
-blackboard(
-  task: "Build demo components",
-  streams: [
-    {name: "scaffold-app", agent_type: "general-purpose", critical: true},
-    {name: "deploy-resources", agent_type: "Bash", critical: true},
-    {name: "generate-frontend", agent_type: "general-purpose", critical: true}
-  ],
-  synthesis_format: "demo-deployment"
-)
-```
-
-## Error Handling
-
-### Agent Timeout
-```
-If agent hasn't signaled after timeout:
-1. Check TaskOutput for agent's last output
-2. If stuck (repeating same error):
-   - Send unblock message with hint
-   - Extend timeout by 5 minutes
-   - Max 1 retry per agent
-3. If crashed:
-   - Log to failures.yaml
-   - Apply criticality rules (Phase 4b)
-```
-
-### Malformed Board Signal
-```
-If board YAML is malformed:
-1. Try best-effort parse (extract what's readable)
-2. Send message: "Board signal malformed. Please fix and rewrite."
-3. Wait 2 minutes
-4. If still malformed → apply criticality rules
-```
-
-### Merge Conflicts
-```
-If worktree branch merge conflicts:
-1. Log conflict details (files, markers) to failures.yaml
-2. Include in synthesis output
-3. Design-ops or user resolves manually
-4. Blackboard does NOT attempt auto-resolution
-```
-
-## Code Quality Mandates
-
-When agents write code during blackboard streams, they MUST follow these rules:
-
-**Decomposition rule**: If a function has 3+ independent responsibilities — decompose it. Each sub-function gets its own name, docstring, and failure logging. The dispatcher reads like a table of contents.
-
-**Silent drop rule**: When a precondition fails, log at WARNING level. Never silently skip with `if row: ... else: pass`.
-
-**Consistent filter rule**: If the same lookup appears in multiple code paths, extract it into a shared helper so all paths use the same WHERE clause.
-
-## Anti-Patterns
-
-- Don't use for trivial work (cost/benefit analysis prevents this)
-- Don't nest beyond configured max depth
-- Don't skip cleanup verification (resource leaks)
-- Don't auto-retry indefinitely (max 1 retry per agent)
-- Don't parallelize dependent work (dependency detection prevents this)
-- Don't manage worktree lifecycle manually (Claude Code handles it)
-- Don't rely on messages for state (files are truth)
-- Don't use regex to parse task descriptions (LLM decomposes natively)
+If agent-teams tools are present, send `shutdown_request` to each agent and `TeamDelete`. Then:
+- standalone → `mv {BOARD_DIR} .pipeline/completed/blackboard-{slug}-{epoch}/`
+- nested → leave in place; the parent reads `artifacts/SYNTHESIS.*`
+
+Set `phase: complete`.
+
+## Anti-patterns
+
+- Agents polling for each other's files or messaging each other for state. Waves make this unnecessary.
+- Spawning agents one per message. They run sequentially and you lose the parallelism.
+- Writing anything in the agent prompt as "see SKILL.md" or "follow repo conventions" — the agent has neither.
+- Estimating minutes saved. You can't; decide on stream count and independence instead.
+- Two streams with overlapping `scope`.
+- Retrying more than once, or retrying a failure that isn't transient.
+- Nesting past depth 2 to avoid thinking about decomposition.
+
+## References
+
+- `references/agent-prompt.md` — the spawn prompt template. Read before Step 3.
+- `references/synthesis.md` — presets and caller-defined schema. Read at Step 5.
+- `references/code-quality.md` — rules to paste into prompts for write streams.
+- `references/integrations.md` — how design-ops, content-factory, and demo-factory invoke blackboard. Read only when called by one of them.

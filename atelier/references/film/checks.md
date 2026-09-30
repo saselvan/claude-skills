@@ -19,7 +19,7 @@ A red proof plants the bad value **in the real input** (a copy of `acts.json` or
 - **Exit 1 on hits.** The reference `check-chrome.js` prints violations and still exits 0, and it skips any line starting with `*` or `//`.
 
 ## 4. Pill check (crop vs provenance pills)
-- Each capture writes `*.pills.json` (the bounding box of every `LIVE` / `REPRESENTATIVE` / `AT CAPTURE` pill). Every shot's crop rect must not intersect any pill box. This reference script does exit 1 correctly.
+- Only for an app that still renders provenance pills; a live-or-absent app (`../lakebase-demo.md`) has none, and §5 covers its crops. Each capture writes `*.pills.json` (the bounding box of every `LIVE` / `REPRESENTATIVE` / `AT CAPTURE` pill). Every shot's crop rect must not intersect any pill box. This reference script does exit 1 correctly.
 
 ## 5. Crop-text check (every word inside the crop)
 - For each shot, collect the text of every element in `*.styles.json` whose box intersects the crop. Fail on: `live · representative · at capture · µs · latency figures · latency (except the branch name) · captur · fingerprint · dossier`, plus the copy-lint list.
@@ -31,4 +31,4 @@ A red proof plants the bad value **in the real input** (a copy of `acts.json` or
 Width × height (1920×1080 / 1080×1080), duration within the target range, H.264, 30 fps, and file size. With music, integrated loudness −16 LUFS ±1 (`ffmpeg -af ebur128`) and a licence file next to the render. Open the frames yourself: a render that exits 0 is not a reviewed film.
 
 ## 7. Claimed artifacts exist
-An agent's report is a **lead**, not evidence. Before accepting any "captured", "rendered" or "passed", open the file it names: the capture PNG contains the number, the still shows the frame, the check output shows exit 0. The s1 capture agent claimed probe panes that no capture contained (D16).
+An agent's report is a **lead**, not evidence (atelier's acceptance rule). Before accepting any "captured", "rendered" or "passed", open the file it names: the capture PNG contains the number, the still shows the frame, the check output shows exit 0. The s1 capture agent claimed probe panes that no capture contained (D16).
