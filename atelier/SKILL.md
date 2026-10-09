@@ -67,17 +67,19 @@ The router's table:
 
 | Build type | Process route | Studio musts | The exam usually looks like |
 |---|---|---|---|
-| **Sales demo** | catechism (with claims inventory) → design-brief skill → build; no gauntlet *unless a named skeptic exists* (then one round on the screens they'll check) | Buyer, Content, Integrity, Narrative (Duarte) | the named skeptic believes the one slide/screen they'll check |
+| **Sales demo** | catechism (with claims inventory) → design-brief skill → build; no gauntlet *unless a named skeptic exists* (then one round on the screens they'll check) | Buyer, Content, Integrity, Narrative (Duarte), Production designer | the named skeptic believes the one slide/screen they'll check |
 | **Deck / PowerPoint** | design-brief skill **with §4b pacing block** (register, shape, archetypes, meter check) | Narrative (owns it), Content, Typography & Grid, Buyer, Skimmer; projector gate | title-only read carries the argument; sorter-view rhythm visible; seam invisible if extending |
 | **Prototype** | catechism → design-brief → plumbing-lite (real data if any exists) → build with self-critique | Human Factors, User, Product, Content, Accessibility(AA) | the real user completes the core task unaided |
 | **Production app** | full playbook: five artifacts → design phase → **data-reality gate** → plumbing before pixels → checkpoint → gauntlet loop (coordinator spec) → promotion ladder | all seats, tiered panels on high-stakes screens | contract tests green vs live backend + audit zero + panel unanimity |
-| **Demo film** (a teaser cut from a demo app) | the **demo film fast path** below | Director/DP, Claim-honesty (Integrity), Vocabulary-tone (Content), Buyer, Comms-legends + Master-storytellers (Narrative), one domain-truth seat | every caption maps to a ledger row; every film check at 0 with a planted red proof; a fresh named-skeptic critic traces every frame to a row |
+| **Demo film** (a teaser cut from a demo app) | the **demo film fast path** below | Director/DP, Production designer, Claim-honesty (Integrity), Vocabulary-tone (Content), Buyer, Comms-legends + Master-storytellers (Narrative), one domain-truth seat | every caption maps to a ledger row; every film check at 0 with a planted red proof; a fresh named-skeptic critic traces every frame to a row |
 | **Public post** (Medium / LinkedIn / blog) | the **post fast path** below | Integrity, Content, Skimmer, one domain-truth seat (DBA for Lakebase), Buyer | every number maps to a graded claims row; every gate exits 0 after the last edit, each with a planted red proof; links and quotes re-checked live |
 | **Code (library/pipeline/API)** | catechism → contract-as-tests → TDD, mutation-proven → fresh-agent narration gate | Architect, Maintainer-at-2AM (the User), Content (names/comments/README), Integrity | a fresh agent narrates the diff correctly; checks red-proofed |
 
 Re-run the Q3 claims inventory against every artifact that reuses the claims (app ↔ video ↔ deck), so they all say the same thing.
 
-Seat Duarte only on demos, decks and demo films. Integrity and Content are musts in every row. When extending an existing artifact of any type, add the **seam-invisibility** gate: the extension inherits the incumbent's system, and the test is a reviewer unable to tell old from new.
+Seat Duarte only on demos, decks and demo films. Seat a **Production designer** on every demo, deck and demo film: one seat owns the look across app, deck and film so they read as one family (see design-brief, "Design language"). Without an owner, "not monochrome" drifts back to black on paper (Project 3, 2026-10-09).
+
+**Run the panel as rule sets, then verify every finding.** Each seat cites a published rule (Minto, Knaflic, Tufte/Cairo, Kosslyn, Evans, Handley, a domain fact-checker, a skeptic pre-mortem, a skimmer, a domain-truth seat, the production designer), never imitates a person, and returns YAML findings. The coordinator checks each finding against the live system before acting. Project 3 round 1: 10 seats, 8 real, 7 false alarms (wrong contrast arithmetic, stale status, asking for roadmap dates, critiquing designer notes outside the frame). Send the designer problems, not fixes. Integrity and Content are musts in every row. When extending an existing artifact of any type, add the **seam-invisibility** gate: the extension inherits the incumbent's system, and the test is a reviewer unable to tell old from new.
 
 **Done when** every tier, override and route decision quotes the answer it rests on.
 
