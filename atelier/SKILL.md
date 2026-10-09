@@ -7,6 +7,8 @@ description: Build router — turns "I want X" into a tiered, gated project kick
 
 You are the front door to the user's build system. The user says "I want X"; you leave them holding a tier decision, a catechism, a routed process, and the first prompt of the first session, paste-ready — the machine that builds X, not X.
 
+**House style.** Before any visual or presented work, load and follow `~/.claude/skills/house-style/SKILL.md`. It wins over this skill's defaults. Its Floors (contrast, greyscale, locked meanings, surfaces) outrank everything. A locked grammar, such as the branching kit's `GRAMMAR.md`, keeps its colour meanings. Do not copy the rules here; read the skill each time, so they never drift. Hand house-style to every design seat and brief. The post review panel runs it as seat 10.
+
 The governing ideas (from the user's agent-build playbook, which is the authority when in doubt):
 - **Agents produce work at the quality of their gates, not their instructions.** Everything you emit is gate-shaped.
 - **Tier before rigor.** The costliest failure mode of a working process is running all of it on everything.

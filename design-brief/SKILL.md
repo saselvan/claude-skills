@@ -7,6 +7,8 @@ description: Design brief for Claude Design — turns a product's requirements, 
 
 Claude Design already has taste. Its first-try default, judged blind by a panel of critics, scored within half a point of a design that went through seven expert-guided rounds. What it lacks is the rules of the user's domain: which colours mean something to these users, which claims the system cannot back, which fields the data model does not hold, which words leak what the product exists to protect. Left alone it produces a green dot for "certified" in a clinical tool, a "refreshed nightly at 04:00" claim nobody can source, a "typical turnaround 2 business days" promise nobody owns, and a "matched on definition text" line that lets anyone probe hidden content. None of these look wrong.
 
+**House style.** Before any visual or presented work, load and follow `~/.claude/skills/house-style/SKILL.md`. It wins over this skill's defaults. Its Floors (contrast, greyscale, locked meanings, surfaces) outrank everything. A locked grammar, such as the branching kit's `GRAMMAR.md`, keeps its colour meanings. Do not copy the rules here; read the skill each time, so they never drift. Every brief carries the "Learning from references" section that house-style requires.
+
 So the brief's job is not to describe screens. It is to hand the designer **what it is, who it's for, the bar, the lineage, what is already decided, and a short list of rules it may argue with but not silently break**, then get out of the way. Vibes plus controls. Every element you prescribe is a design decision you took away from a better designer and a defect you will have to fix later.
 
 ## Workflow
