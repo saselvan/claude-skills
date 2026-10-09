@@ -102,7 +102,7 @@ Proven on lakebase-payer-search-blog (2026-10). The kit is `references/post/`; i
 1. **Scaffold, don't copy an old post.** Run `references/post/new-post.sh <dir> "<title>"`. It makes empty CATECHISM (with the claims table), STATE, SESSION_PLAN, DECISIONS (decision policy + `templates/standing-rules.md`), REGISTER, publish checklist, 7-day feedback note, and the gates in `tools/`. Never copy a previous post's CATECHISM or DECISIONS: they carry its claims and names. *Done when* the repo exists, has a remote, and `post.config.json` lists this project's customer, workspace and schema names.
 2. **Catechism with claims first.** Every number the post will use is a graded row with an evidence file before drafting. *Done when* the outline's numbers all map to rows.
 3. **Draft with tags, gate every round.** Tagged source in `drafts/`; after EVERY review round run claims_check, copy_lint, shape_check, snippet_check and screenshot_lint, then `/tone-check`, then `strip_tags.py`. *Done when* all exit 0 on the final source and the publish copy has 0 leftover tags.
-4. **ATTENDED STOP — publish.** Owner reads, publishes by hand (`PUBLISH_CHECKLIST.md`). Visuals for Lakebase come from the branching kit (`~/repos/lakebase-payer-search-blog/visuals/lakebase-branching-kit/`).
+4. **ATTENDED STOP — publish.** Owner reads, publishes by hand (`PUBLISH_CHECKLIST.md`). Visuals for Lakebase come from the branching kit (`~/repos/lakebase-branching-kit/`).
 5. **Feedback at 7 days** (`FEEDBACK_7DAY.md`); the readers' question goes to the ideas board.
 
 Proof the kit works: `references/post/selftest.sh` (scaffolds a fresh repo; each gate passes clean and fails on a planted error).

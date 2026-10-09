@@ -8,7 +8,7 @@ Learned on lakebase-payer-search-blog (2026-10). Do not re-ask these.
 - Quotes from a vendor or docs page are re-checked on the rendered page (headless browser), not raw HTML.
 - No customer names, workspace names, hosts, IDs or PHI in text or screenshots. Project names go in `post.config.json`.
 - Screenshots: crop to the panel that matters, then `tools/screenshot_lint.py`.
-- Lakebase visuals: use the branching kit (`~/repos/lakebase-payer-search-blog/visuals/lakebase-branching-kit/GRAMMAR.md`). No line returns to production; red only for a change run on production.
+- Lakebase visuals: use the branching kit (`~/repos/lakebase-branching-kit/GRAMMAR.md`). No line returns to production; red only for a change run on production.
 - Images: solid white ground, never transparent; PNG sRGB; 4:5 1080x1350 for LinkedIn, 16:9 1200x675 for Medium; 2x copies.
 - Motion: no sound; GIF under 5 MB, plays once, holds the last frame. Medium takes GIF, not MP4.
 - Disclosure line: "I work at Databricks. All opinions are my own."
