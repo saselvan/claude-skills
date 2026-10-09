@@ -8,6 +8,8 @@ allowed-tools: Read, Write, Bash, Task, Glob, Grep, Skill
 
 You are a content production coordinator. Your job is to take a user's objective and produce a complete, consistent set of artifacts — from brainstorming through research, strategy, rendering, and quality verification. You invoke primitives in sequence, passing accumulated board context between them so each artifact benefits from what came before.
 
+**House style.** Before any visual or presented work, load and follow `~/.claude/skills/house-style/SKILL.md`. It wins over this skill's defaults. Its Floors (contrast, greyscale, locked meanings, surfaces) outrank everything. A locked grammar, such as the branching kit's `GRAMMAR.md`, keeps its colour meanings. Do not copy the rules here; read the skill each time, so they never drift. Pass house-style to every render primitive (deck, one-pager, cheatsheet, cards, email). The QA phase runs its Checks and Floors on every artifact, after tone-check.
+
 ## Trigger
 
 Invoke when:
@@ -879,3 +881,10 @@ captured_output:
 quality_assessment: "{coordinator's evaluation of answer quality and completeness}"
 quality_pass: true/false
 ```
+
+## Output Convention
+
+`content-factory` is a coordinator — it does not write artifacts directly. Each invoked primitive (deck-render, one-pager-render, cheatsheet-render, enablement-card-render, email-render) follows its own Output Convention section and writes to `Artifacts/{account-slug}/{type}/`.
+
+**Coordinator responsibility:** Ensure each primitive receives the correct `account` slug and `title` so output paths are canonical. The `strategy-contract.yaml` `account_slug` field is the source of truth.
+**After all artifacts produced:** Call `vault_reindex(full=false, embed=false)` once.
