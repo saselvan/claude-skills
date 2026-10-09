@@ -1,0 +1,16 @@
+{
+  "_comment": "Copy to the post repo root as post.config.json. Project-only names go here, never in the tools.",
+  "max_words": 2500,
+  "max_paragraph_words": 120,
+  "forbidden": [
+    ["\\bacme\\b", "customer name 'acme'"],
+    ["\\bacme_schema\\b", "internal schema name"]
+  ],
+  "screenshot_forbidden": [
+    ["\\bmy-workspace-name\\b", "workspace name"]
+  ],
+  "cite_rules": [
+    {"mention": "Genie Code", "citation": "\\(transcripts/[^)]+\\)"}
+  ],
+  "citation_dirs": ["transcripts", "runs", "evidence", "results"]
+}

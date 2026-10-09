@@ -72,6 +72,7 @@ The router's table:
 | **Prototype** | catechism → design-brief → plumbing-lite (real data if any exists) → build with self-critique | Human Factors, User, Product, Content, Accessibility(AA) | the real user completes the core task unaided |
 | **Production app** | full playbook: five artifacts → design phase → **data-reality gate** → plumbing before pixels → checkpoint → gauntlet loop (coordinator spec) → promotion ladder | all seats, tiered panels on high-stakes screens | contract tests green vs live backend + audit zero + panel unanimity |
 | **Demo film** (a teaser cut from a demo app) | the **demo film fast path** below | Director/DP, Claim-honesty (Integrity), Vocabulary-tone (Content), Buyer, Comms-legends + Master-storytellers (Narrative), one domain-truth seat | every caption maps to a ledger row; every film check at 0 with a planted red proof; a fresh named-skeptic critic traces every frame to a row |
+| **Public post** (Medium / LinkedIn / blog) | the **post fast path** below | Integrity, Content, Skimmer, one domain-truth seat (DBA for Lakebase), Buyer | every number maps to a graded claims row; every gate exits 0 after the last edit, each with a planted red proof; links and quotes re-checked live |
 | **Code (library/pipeline/API)** | catechism → contract-as-tests → TDD, mutation-proven → fresh-agent narration gate | Architect, Maintainer-at-2AM (the User), Content (names/comments/README), Integrity | a fresh agent narrates the diff correctly; checks red-proofed |
 
 Re-run the Q3 claims inventory against every artifact that reuses the claims (app ↔ video ↔ deck), so they all say the same thing.
@@ -93,6 +94,18 @@ The first film (clinical-va-appkit, 2026-09-29) took a full day; the owner wants
 3. **Script (`demo-narrative`, Cohan), then the 10-seat panel plus Director/DP** (`references/film/critic-panel.md`). *Done when* the script gate passes: the last round has 0 HIGH after verification AND the coordinator's reading-time and lint checks are green over the final tables.
 4. **ATTENDED STOP — script gate.** Show the user the scripts and the style direction; settle the licence (Remotion vs HyperFrames), the music and the screen source. Creative work is agreed before anything is built. *Done when* the user's approval and those three decisions are recorded in `DECISIONS.md`.
 5. **Build at low effort.** Ask the user to type `/effort low`. Start from `references/film/remotion-starter.md`; write `references/film/checks.md` as code before the first render. The coordinator runs renders and live-app reads itself; the visual gauntlet and the draft review are attended. *Done when* every check exits 0 with a recorded red proof, `ffprobe` passes on every cut, and the user has signed off the draft.
+
+### Post fast path (a public post from a demo or spike)
+
+Proven on lakebase-payer-search-blog (2026-10). The kit is `references/post/`; it is one station on the content line (idea → sweep → **kickoff** → evidence → draft → gates → publish → feedback).
+
+1. **Scaffold, don't copy an old post.** Run `references/post/new-post.sh <dir> "<title>"`. It makes empty CATECHISM (with the claims table), STATE, SESSION_PLAN, DECISIONS (decision policy + `templates/standing-rules.md`), REGISTER, publish checklist, 7-day feedback note, and the gates in `tools/`. Never copy a previous post's CATECHISM or DECISIONS: they carry its claims and names. *Done when* the repo exists, has a remote, and `post.config.json` lists this project's customer, workspace and schema names.
+2. **Catechism with claims first.** Every number the post will use is a graded row with an evidence file before drafting. *Done when* the outline's numbers all map to rows.
+3. **Draft with tags, gate every round.** Tagged source in `drafts/`; after EVERY review round run claims_check, copy_lint, shape_check, snippet_check and screenshot_lint, then `/tone-check`, then `strip_tags.py`. *Done when* all exit 0 on the final source and the publish copy has 0 leftover tags.
+4. **ATTENDED STOP — publish.** Owner reads, publishes by hand (`PUBLISH_CHECKLIST.md`). Visuals for Lakebase come from the branching kit (`~/repos/lakebase-payer-search-blog/visuals/lakebase-branching-kit/`).
+5. **Feedback at 7 days** (`FEEDBACK_7DAY.md`); the readers' question goes to the ideas board.
+
+Proof the kit works: `references/post/selftest.sh` (scaffolds a fresh repo; each gate passes clean and fails on a planted error).
 
 ## Step 4 — Emit the session kit
 
