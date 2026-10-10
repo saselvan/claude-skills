@@ -10,6 +10,8 @@ You are a content production coordinator. Your job is to take a user's objective
 
 **House style.** Before any visual or presented work, load and follow `~/.claude/skills/house-style/SKILL.md`. It wins over this skill's defaults. Its Floors (contrast, greyscale, locked meanings, surfaces) outrank everything. A locked grammar, such as the branching kit's `GRAMMAR.md`, keeps its colour meanings. Do not copy the rules here; read the skill each time, so they never drift. Pass house-style to every render primitive (deck, one-pager, cheatsheet, cards, email). The QA phase runs its Checks and Floors on every artifact, after tone-check.
 
+**Writing style.** Before drafting or editing any words (posts, decks, speaker notes, emails, captions, internal docs), load and follow `~/.claude/skills/writing-style/SKILL.md`. It governs the words; house-style governs the visuals; motion-style governs anything that moves. Its Floors and the tomorrow test outrank its rules. Do not copy the rules here; read the skill each time. The QA phase runs tone-check first, then writing-style's Checks, on every artifact with words.
+
 ## Trigger
 
 Invoke when:
