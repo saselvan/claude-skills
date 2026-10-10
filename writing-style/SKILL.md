@@ -95,7 +95,7 @@ Each comes from a single rewrite test. In post repos, `tools/style_lint.py` (ate
 
 - Open with the argument, not a scene. (The user notes that others advise the opposite; their own preference is the argument.)
 - Use a plain register, never elevated or sentimental.
-- Write prose. Never use lists in posts: "Screams AI."
+- Write prose. Never use lists in LinkedIn posts: "Screams AI." Medium and blog articles may use a list or numbered steps where the content is a real sequence or set (a how-to); argument stays in prose.
 - Use normal paragraphs. Never put one sentence per line.
 - No parenthetical asides or digressions.
 - Be literal in writing. Analogies belong only in slide speaker notes.
