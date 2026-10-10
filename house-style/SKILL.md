@@ -1,40 +1,41 @@
 ---
 name: house-style
-description: The user's personal house style for anything visual or presented, including slides, decks, dashboards, data visualizations, documents, web pages, apps, UI, posters, and design briefs. Read this before designing, styling, laying out, or critiquing any visual output, and every time the design-brief or atelier skills run. It takes precedence over their defaults, and it requires every design brief to learn from references, starting with Information is Beautiful. Use it whenever the user asks for something that will be looked at, even if they never say "house style," and whenever they ask whether a design is good.
+description: The user's personal house style for anything visual or presented, including slides, decks, dashboards, data visualizations, documents, web pages, apps, UI, posters, and design briefs. Read this before designing, styling, laying out, or critiquing any visual output, and every time the design-brief or atelier skills run. It takes precedence over their defaults, and it requires every design brief to learn from references, starting with Information is Beautiful. Use it whenever the user asks for something that will be looked at, even if they never say "house style," and whenever they ask whether a design is good. For the words on slides, captions, and any other visual, the writing-style skill governs; for anything that moves, the motion-style skill governs.
 ---
 
 # House style
 
 Five rules and one break rule, drawn from an interview about 25 things the user loves and 7 they dislike. Every quotation below is the user's own words. The rule statements were drafted by Claude from those words and approved by the user.
 
-Apply the rules to every visual decision. Where they conflict with another skill's defaults, including design-brief and atelier, these rules win. If a deliverable has explicit brand guidelines (a company or customer template) or a locked color grammar (for example, the Lakebase branching kit's `GRAMMAR.md`), follow those for color and type, keep the other rules, and briefly note any conflict to the user.
+Apply the rules to every visual decision. Where they conflict with another skill's defaults, including design-brief and atelier, these rules win. If a deliverable has explicit brand guidelines (a company or customer template), follow those for color and type, keep the other rules, and briefly note any conflict to the user.
+
+This skill governs how things look. The writing-style skill governs the words on them, including slide titles, captions, and speaker notes. The motion-style skill governs how anything moves, and it inherits this skill.
+
+## Baselines
+
+Before anything ships, it passes both of the user's baselines:
+
+- The tomorrow test: no unearned familiarity, no oversharing, no feigned personableness, "so I am not cringing when I read it tomorrow."
+- The joy test: "I need to be proud of what I did, and it needs to spark joy in me."
+
+## Floors
+
+These outrank the five rules, the break rule, and any brand guidelines. Verve never breaks legibility or meaning.
+
+- Contrast: body text at least 4.5:1 against its background. Large text (24px and up, or 18.66px and up bold) and chart marks at least 3:1.
+- Robustness: every figure still reads in greyscale and for color-blind readers.
+- Locked meanings: where a deliverable's grammar fixes a color's meaning (for example, red means only "changed production" in the branching kit), that meaning holds everywhere in the piece. The grab-me moment then uses size, scale, or space, never the locked color.
+- Surfaces: feeds and phones compress images and may show them in dark mode. Use a solid ground there, never transparency. Tinted pales are fine on slides and web pages; check them after compression.
 
 ## How to use this skill
 
-1. Before designing, read all five rules and decide where the single grab-me moment goes, if anywhere.
+1. Before designing, read the floors and all five rules, choose the narrative shape for the piece (see "Narrative shapes"), and decide where the single grab-me moment goes, if anywhere.
 2. Design.
-3. Before presenting, run each rule's check against the output. Fix failures; don't just report them.
+3. Before presenting, check the floors, then run each rule's check against the output. Fix failures; don't just report them.
 4. When a case is ambiguous, read `references/record.md` for the full interview, and decide from the user's own words.
 5. When writing a design brief, consult references first, starting with Information is Beautiful. See "Learning from references" below.
 
 The "In practice" lines are Claude's translations of the rules into screens, slides, and documents. They are starting points, not the rules themselves. When an "In practice" line seems to fight the rule above it, follow the rule.
-
-## Floors
-
-These outrank the five rules and the break rule. Verve never breaks
-legibility or meaning.
-
-- Contrast: body text at least 4.5:1 against its background. Large text
-  (24px and up, or 18.66px and up bold) and chart marks at least 3:1.
-- Robustness: every figure still reads in greyscale and for color-blind
-  readers.
-- Locked meanings: where a deliverable's grammar fixes a color's meaning
-  (for example, red means only "changed production" in the branching
-  kit), that meaning holds everywhere in the piece. The grab-me moment
-  then uses size, scale, or space, never the locked color.
-- Surfaces: feeds and phones compress images and may show them in dark
-  mode. Use a solid ground there, never transparency. Tinted pales are
-  fine on slides and web pages; check them after compression.
 
 ## 1. Everything breathes
 
@@ -54,7 +55,7 @@ Anything people look at actively gets real, brilliant color, used as pops agains
 
 The user's words: "In a world where beige is considered respectable, here he is showing a verve for life." "Sparse, but very interesting pops of color." "Their pales are not uniform, they show shades of light." Of pastels in a hard-edged grid: "I do not see pastels working in the sharp lines." Of the Leica: "the rangefinder I am looking through."
 
-In practice: at least one brilliant color doing real work on every slide, page, or dashboard; a sparse ground so the color pops; tinted, varied neutrals instead of flat beige or gray; pure, saturated color when the structure is crisp and hard-edged, never pastels on sharp lines; quiet chrome and controls, so the content gets the color.
+In practice: when a colour round or an owner decision has set the palette, it wins; otherwise motion-style's token file is the tested default for films and explainers. At least one brilliant color doing real work on every slide, page, or dashboard; a sparse ground so the color pops; tinted, varied neutrals instead of flat beige or gray; pure, saturated color when the structure is crisp and hard-edged, never pastels on sharp lines; quiet chrome and controls, so the content gets the color.
 
 Check: Is a brilliant color doing work here? Is any large area flat beige or gray-on-gray? Are the pale areas varied, or uniform?
 
@@ -66,7 +67,7 @@ The story makes sense with a few captions. Reveal it progressively, and always s
 
 The user's words: "The story makes sense with just a few captions." "REDUCED COGNITIVE LOAD." "Progressive disclosure." "I don't have to hold too many things in my head at once, or my customers." "I can deliver and hold the attention of my customers better this way." Of Information is Beautiful, a "huge reference": "Illuminating," chosen for showing facts together with their connections, context, and relationships.
 
-In practice: headlines that carry the story on their own; detail revealed in order, one layer at a time; orientation always visible (progress, section markers, "you are here"); every number shown with the context that gives it meaning, such as a comparison, a trend, or a relationship; direct labels on charts instead of legends; few choices on screen at once.
+In practice: every label names what it marks, so a state such as "Not copied" always says what it applies to, as in "No row-level security"; headlines that carry the story on their own; detail revealed in order, one layer at a time; orientation always visible (progress, section markers, "you are here"); every number shown with the context that gives it meaning, such as a comparison, a trend, or a relationship; direct labels on charts instead of legends; few choices on screen at once.
 
 Check: Read only the headlines and captions. Does the story hold? Count how many things the viewer must keep in mind at once, and cut that number.
 
@@ -94,7 +95,7 @@ In practice: consistent spacing, alignment, and type scale; the same element loo
 
 Check: Inspect the edges and details: alignment, spacing, repeated elements, numbers. Anything inconsistent gets fixed before presenting.
 
-Type the user has named: IBM Plex Sans, IBM Plex Mono, and Helvetica, described as "clean, calm." Plex comes first; Helvetica is the fallback. On the web, Helvetica is not hosted, so use a stack: `"IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif` (and `"IBM Plex Mono", Menlo, monospace` for code).
+Type the user has named, described as "clean, calm": IBM Plex Sans and IBM Plex Mono first, Helvetica as the fallback. On the web, use a stack such as `"IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif`, since Helvetica itself isn't web-hosted.
 
 ## Break rule: the grab-me moment
 
@@ -107,6 +108,23 @@ In practice: one deliberate jolt, such as a full-bleed field of brilliant color,
 Check: There is at most one, and you can say why it is there. If it only decorates, it is tacky, not a grab-me moment.
 
 The "once per piece" limit was Claude's addition, approved by the user.
+
+## Narrative shapes
+
+Choose the order of a piece deliberately, by what it is. Take each shape's structure, never its register: the user rejected inspirational uplift as "pandering" in the writing interview.
+
+| Piece | Shape | Source |
+|---|---|---|
+| Customer decks | Alternate between how things are today and how they could be, shifting the weight toward the proposal | Nancy Duarte's sparkline |
+| Internal decks and documents | Situation, complication, question, answer; the answer leads and everything else supports it | Barbara Minto's Pyramid Principle and SCQA |
+| Apps, dashboards, demos | A short guided path first, then open exploration | Segel and Heer's martini glass |
+| Any deck, optionally | One slide where the audience guesses before the reveal | Hans Rosling's quiz; the Upshot's "You Draw It" |
+
+A guess-then-reveal slide counts as the piece's grab-me moment, so a deck has at most one of either.
+
+In a before-and-after piece, the thesis goes on the opening and closing title cards, not in a running header, because a thesis is true for only part of the story.
+
+Check: Read only the slide titles or section headings. They should tell the whole story in order (Cole Nussbaumer Knaflic's test, and rule 3's).
 
 ## Learning from references
 
@@ -140,6 +158,8 @@ Draw on what you know of these works for principles. Name the source when you ap
 - Alberto Cairo, *The Functional Art* and *How Charts Lie*: function and beauty together, and honesty in charts.
 - Josef Albers, *Interaction of Color*: how a color changes with its neighbors; the theory behind "pales that show shades of light."
 - Giorgia Lupi and Stefanie Posavec, *Dear Data*: personal, hand-crafted data humanism.
+- Nancy Duarte, *Resonate* and *DataStory*: the alternation between what is and what could be.
+- Edward Segel and Jeffrey Heer, "Narrative Visualization: Telling Stories with Data" (2010): author-driven versus reader-driven stories, and the martini glass.
 
 Two limits apply:
 
@@ -162,5 +182,9 @@ If nothing fits, say so in one line, with what was searched. Don't force a borro
 - Rothko's "depths" was explained by options Claude offered (soft edges, layered washes, scale); the user chose all three.
 - Information is Beautiful's "context" was chosen from options Claude offered; "illuminating" and "huge reference" are the user's words.
 - The "Learning from references" section was added at the user's request: check Information is Beautiful and other live sources, draw on well-known works from knowledge, and keep the house style on everything else. The source list was proposed by Claude and accepted by the user.
-- The "Floors" section was worded and approved by the user (2026-10-09). It outranks the rules so that brilliance can never win over legibility.
 - The "In practice" lines are Claude's interpretation and have not been reviewed item by item. Revise them as real outputs are judged.
+- The floors came from a review by the user's coding agent; the wording was drafted by Claude and approved by the user.
+- The font order and web stack were approved by the user.
+- The narrative shapes were researched with the user in session and approved by them.
+- The baselines were approved by the user and are shared with the writing-style and motion-style skills.
+- The label rule and the title-card rule came from the first explainer build and were approved by the user.

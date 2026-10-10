@@ -1,0 +1,38 @@
+/* Shared values for the house-style and motion-style skills.
+   Use these instead of retyping numbers, so every build looks and moves the same. */
+:root {
+  /* Palette: house-style rule 2, the tested B2 register for explainers and films */
+  --frame: #BFCCDA;        /* deeper outer ground */
+  --ground: #EAF0F5;       /* pale cool ground, flat; people look through it */
+  --ink: #16202B;          /* primary text */
+  --ink-2: #34404E;        /* secondary text */
+  --line: #8E9DAE;         /* neutral connectors */
+  --edge: #9AA9B9;         /* box and slot borders */
+  --accent: #1F4FD8;       /* cobalt: one brilliant accent, one job at a time */
+  --accent-ink: #16378F;   /* cobalt text on pale cobalt */
+  --accent-pale: #E8EEFC;
+  --gap-fill: #FAECE7;     /* emphasis for a gap or a problem: fill plus lightness change */
+  --gap-edge: #993C1D;
+  --gap-ink: #712B13;
+
+  /* Type */
+  --sans: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Clocks: motion-style rule 5 */
+  --app-fast: 250ms;               /* panels, popovers */
+  --app-large: 400ms;              /* larger surfaces */
+  --app-value: 450ms;              /* in-app number and value changes */
+  --explainer-shape: 750ms;        /* shapes in explainers */
+  --explainer-text: 1400ms;        /* words and numbers in explainers and films */
+  --sweep: 3000ms;                 /* one long-take reveal */
+  --stagger-ranked: 50ms;          /* ranked lists only; whole list within about 1 s */
+
+  /* Easing */
+  --ease-app-enter: cubic-bezier(0.23, 1, 0.32, 1);    /* strong ease-out; exits run faster */
+  --ease-explainer: cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric; text never front-loaded */
+  --ease-film: linear;                                 /* camera-like moves */
+
+  /* Crossfade blur bridge */
+  --blur-bridge: 3px;
+}

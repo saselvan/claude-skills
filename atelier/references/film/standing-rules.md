@@ -18,9 +18,9 @@ Each rule was an owner decision or a gauntlet finding on the Lakebase teaser fil
 9. **One question per film**, answered by the STAR moment, then consequences. Any beat after the climax that starts a new topic turns the film back into a feature list.
 
 ## Look
-10. **Flat, calm surfaces.** White ground, the product's own colour and type law, and one accent that means something (maroon for the miss). Glow, gradient, blur, neon, text-shadow, coloured box-shadow and 3D fail the build. *Check:* chrome grep.
+10. **Flat, calm surfaces.** The ground and palette are house-style's: a solid, flat ground from the token file, never transparent, one brilliant hue per job, and the product's own type law. (Updated 2026-10-10 after the house-style session, as Project 3's owner decision Q1 required; it replaces "white ground, one accent".) Glow, gradient, blur, neon, text-shadow, coloured box-shadow and 3D fail the build; motion-style's crossfade blur is for in-app UI only, never in a film. *Check:* chrome grep.
 11. **Code shots pinned to `file:line`**, at most 8 lines, trimmed only by cutting whole lines and never by editing tokens. No hosts, secrets, endpoint ids or engine name. *Check:* byte-for-byte match against the file at the pinned lines.
-12. **Reading time.** Words ÷ 3 + 0.5 s (minimum 1.2 s), plus 0.3 s for the reveal, must fit the slot. A multi-line card fits the **sum** of its lines. *Check:* reading-time script.
+12. **Reading time.** Captions follow motion-style's caption floor, their one home: at most 42 characters per line and two lines, about 15 characters per second, held 1 to 7 s from the moment the caption settles. A multi-line card fits the **sum** of its lines. (Updated 2026-10-10; it replaces words ÷ 3 + 0.5 s plus 0.3 s, which the floor was stricter than on all eleven captions of Project 3's draft 7.) *Check:* `~/.claude/skills/motion-style/scripts/check_captions.py`.
 
 ## Process
 13. **Scripts and alignment are attended; the build runs at low effort.** Owner: "low effort for implementation and Playwright checks."

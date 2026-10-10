@@ -38,4 +38,15 @@ python3 -c "print('# T\n\n' + ' '.join(['word']*250))" > drafts/bad5.md
 expect "shape planted over word limit" 1 python3 tools/shape_check.py drafts/bad5.md
 printf '%s\n| a | b |\n(runs/score.md)\n' "$clean" > drafts/bad6.md
 python3 tools/strip_tags.py drafts/bad6.md >/dev/null; grep -q "runs/" drafts/bad6.publish.md && { echo "FAIL strip left a lone (runs/...) line"; FAIL=1; } || echo "ok   strip removed lone (runs/...) line"
+expect "style clean" 0 python3 tools/style_lint.py drafts/p.md
+printf '%s\nIt is the policy, not the pipeline. It is the rule, not the tool.\n' "$clean" > drafts/bad7.md
+expect "style planted two contrasts" 1 python3 tools/style_lint.py drafts/bad7.md
+printf '%s\n- one point\n- another point\n' "$clean" > drafts/bad8.md
+expect "style planted list" 1 python3 tools/style_lint.py drafts/bad8.md
+printf '%s\nMy read: it works.\n' "$clean" > drafts/bad9.md
+expect "style planted my read" 1 python3 tools/style_lint.py drafts/bad9.md
+printf '%s\nIt works \xe2\x80\x94 mostly \xe2\x80\x94 on Tuesdays.\n' "$clean" > drafts/bad10.md
+expect "style planted em dashes" 1 python3 tools/style_lint.py drafts/bad10.md
+printf '%s\nThoughts? Comment below.\n' "$clean" > drafts/bad11.md
+expect "style planted engagement ending" 1 python3 tools/style_lint.py drafts/bad11.md
 [ "$FAIL" = 0 ] && echo "ALL PASS ($T)" || { echo "SELFTEST FAILED ($T)"; exit 1; }

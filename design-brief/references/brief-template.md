@@ -12,7 +12,7 @@ These are the only hard rules. Each states the failure it prevents. Everything n
 
 1. [Testable statement] — [failure it prevents].
 2. …
-(5–8 items. Include: domain colour collisions, accessibility floor for this population, claims the system cannot back, content the data model does not hold, leaks the privacy model forbids.)
+(5–8 items. Include: domain colour collisions, accessibility floor for this population, claims the system cannot back, content the data model does not hold, leaks the privacy model forbids, and the style skills' floors that apply.)
 
 ## What this is
 
@@ -34,9 +34,13 @@ I want this to belong to a tradition. Read these (or bring what you know of them
 
 [Contemporary references, for feel, not for copying: three to five, one clause each.]
 
+## Learning from references
+
+[Required by house-style. Live: each page consulted (title and URL), the technique taken, how the design will use it, and the house-style rule it serves. From knowledge: each principle applied and its source, labelled "from knowledge, not checked live". Left out: anything deliberately not taken, and why. If nothing fits, say so in one line, with what was searched.]
+
 ## What is already decided
 
-Read the attached [contract / ADRs]. They constrain content, not visuals: which fields appear, in what order of importance, and what never appears. Layout, type, colour, spacing, motion, and component shape are yours.
+Read the attached [contract / ADRs]. They constrain content, not visuals: which fields appear, in what order of importance, and what never appears. Layout, type, colour, spacing, motion, and component shape are yours, within the style skills (house-style, writing-style, motion-style). If a colour round or an owner decision has set the palette, the token file is attached and decided.
 
 [If there is an existing sibling product: state the relationship in one sentence — shared brand, shared language but different register, or deliberately different — and why. If trust or status signals must be recognisably the same across both, say that.]
 

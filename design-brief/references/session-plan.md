@@ -26,9 +26,13 @@ Critique, in one message: "Review every screen as Nielsen would, then as a GOV.U
 
 Take the user persona's findings over the designers' when they conflict. In the source project the user personas were right every time they disagreed with a designer, and the human reviewer was overruled by them three times.
 
+## Round 3b — motion (films, explainers and app motion only)
+
+Show each motion option one at a time with a switcher, never several moving at once; side by side, the eye cannot judge any of them. Change one thing per comparison: speed, easing, entrance, sequence, emphasis or loop. Judge against motion-style: one event and one caption per beat, the three clocks, words travel with their shapes, and its never list. Record each pick in the user's words.
+
 ## Round 4 — system and hand-off
 
-"Extract the design system. Name: [name]. Two layers: primitive tokens (palette, families, radii) and semantic tokens (`--x-trust-…`, `--x-restricted`, `--x-lifecycle-…`) that point at primitives, so a fork swaps primitives without touching meaning. Write the semantic contract into DESIGN.md: what each token means and what it may not be re-mapped to. Include every rule from the pattern inventory, each stating the failure it prevents. Add: print, focus ring (width and offset), motion (none unless stated), dark mode (say none if none). Then produce the hand-off bundle."
+"Extract the design system. Name: [name]. Two layers: primitive tokens (palette, families, radii) and semantic tokens (`--x-trust-…`, `--x-restricted`, `--x-lifecycle-…`) that point at primitives, so a fork swaps primitives without touching meaning. Write the semantic contract into DESIGN.md: what each token means and what it may not be re-mapped to. Include every rule from the pattern inventory, each stating the failure it prevents. Add: print, focus ring (width and offset), motion (motion-style's clocks and patterns; none unless stated), dark mode (say none if none). Then produce the hand-off bundle."
 
 Replace the contract in the bundle with its current version before handing to engineering; the bundle ships whatever it was given in round 1.
 
