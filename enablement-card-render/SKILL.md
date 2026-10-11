@@ -887,6 +887,100 @@ These invariants must hold for every generation:
 
 ---
 
+## vault_speaker Integration (Production — W5 Cutover)
+
+**Status:** PRIMARY (graduated from shadow mode)
+
+vault_speaker is the primary context source for enablement card generation when account-specific customization is needed. Existing retrieval logic (research atoms, strategy YAML) serves as fallback.
+
+### At generation start:
+
+1. Call vault_speaker: `/vault-speaker --intent deck --account {account_id}`
+   - Only invoke when an account_id is available (account-specific cards). For generic/horizontal cards, skip vault_speaker entirely.
+2. If vault_speaker succeeds (returns confidence != low): use its package as primary context
+   - Account context for role-specific customization comes from vault_speaker
+   - Research atoms, role_profile, and strategy contract still come from existing sources
+3. If vault_speaker fails or returns confidence=low: fall back to existing retrieval logic
+4. Log outcome_tag to vault_speaker_invocations after generation completes
+
+### Fallback behavior:
+
+- vault_speaker timeout (>15s): use existing retrieval logic, log outcome_tag='timeout'
+- vault_speaker error: use existing retrieval logic, log outcome_tag='error'
+- vault_speaker confidence=low for all retrievers: use existing retrieval logic, log outcome_tag='low_confidence_fallback'
+- No account_id available (generic card): skip vault_speaker, use existing logic only
+
+### What vault_speaker provides (when successful):
+
+- **Account context**: deal state and priorities for role-specific customization
+- **Stakeholder profiles**: for calibrating objection responses and proof points to actual contacts
+- **Artifact history**: prior enablement materials delivered
+
+### What existing logic still owns (always):
+
+- Role profile loading from enablement-card-philosophy.md
+- Section composition algorithm from enablement-card-patterns.md
+- Research atom extraction and confidence scoring
+- Pass 0-4 workflow (Socratic, Strategy Skeleton, Generation, Evaluation, Rendering)
+- 10-criteria rubric evaluation
+
+### Logging:
+
+After enablement card generation completes, log the invocation:
+```yaml
+# Append to _System/vault-speaker-invocations.yaml
+- skill: enablement-card-render
+  account: {account_id}
+  timestamp: {ISO 8601}
+  intent: deck
+  outcome_tag: success | timeout | error | low_confidence_fallback | skipped_no_account
+  context_used: vault_speaker | existing_retrieval
+```
+
+---
+
+### Audience Review Quality Gate (Auto-Invoked)
+
+After the enablement card renders, `/audience-review` is automatically invoked to assess how well the card lands with its target audience.
+
+**Process:**
+1. Card written to Artifacts/{account}/{type}/
+2. `/audience-review {card_path}` called automatically
+3. Audience auto-read from strategy.yaml (role_profile drives persona selection: BDR → BDR enablement, AE → AE enablement, SA peer → SA peer, etc.)
+4. Fresh agent assesses: Can the role find answers in 10 seconds? Does it feel credible? Will they use it?
+
+**Verdicts:**
+- 🟢 GREEN (71-100%): Role finds answers quickly, trusts content, ready to use
+- 🟡 YELLOW (41-70%): Interesting but has friction — consider /iterate to address gaps before use
+- 🔴 RED (0-40%): Major gaps in usability or credibility — do not distribute as-is
+
+**Output files:**
+- `{card_path}-audience-review.yaml` (summary: verdict, score, gaps)
+- `{card_path}-audience-review-FULL.md` (full agent assessment)
+
+**If RED/YELLOW:**
+⚠️ Iteration suggested:
+- Gap 1: [what made it hard to use]
+- Gap 2: [what didn't feel credible]
+
+Run: `/iterate {card_path}`
+Then: `/audience-review {card_path}`
+
+---
+
+## Output Convention
+
+**Write path:** `Artifacts/{account-slug}/enablement-cards/{YYYY-MM-DD}-{product}-{role}.md`
+**artifact_type:** `enablement_card`
+**Frontmatter:** Embed canonical frontmatter in the .md file. If a .pdf is rendered from the .md, also create `{filename}.pdf.artifact.md` sidecar.
+**After save:** Call `vault_reindex(full=false, embed=false)`.
+
+Example:
+```
+Artifacts/nwm/enablement-cards/2026-04-09-lakebase-clinical-executive.md
+```
+
+
 ## $ARGUMENTS
 
 Accept the user's input and begin at the appropriate pass. If arguments include a path to a strategy YAML, load it and skip to Pass 1. If arguments are a free-text description, begin at Pass 0.
