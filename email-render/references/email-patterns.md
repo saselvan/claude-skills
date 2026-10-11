@@ -107,6 +107,19 @@ Escalation ONLY applies to technical recipients. Managers, execs, sales — stan
 
 ---
 
+## Readability Targets
+
+| Recipient Type | FK Grade Level | Flesch Reading Ease |
+|---------------|---------------|---------------------|
+| Executive / Sales (Julie tier) | 8-10 | 60-70 |
+| Manager / AE | 10-12 | 50-60 |
+| Technical (SA, engineer) | 10-13 | 45-55 |
+| Mixed thread (default) | 10-12 | 50-60 |
+
+**Passive voice:** Use it deliberately when it softens accountability ("was querying raw binaries" vs "they queried raw binaries"). Grammarly will flag it — ignore it when it's doing real work.
+
+---
+
 ## Challenger Tailoring Matrix
 
 Same content, different framing depending on recipient's buying role:

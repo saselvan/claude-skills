@@ -113,18 +113,23 @@ To distinguish: if the coordinator passes `retry_of: "{previous_email_subject}"`
 At workflow start, check Gmail availability:
 
 ```bash
-# Ensure gcloud is on PATH (required for Gmail API auth)
+# Ensure gcloud is on PATH and PYTHONPATH includes google-auth resources (required for fe-google-tools)
 export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"
+export PYTHONPATH=~/.vibe/marketplace/plugins/fe-google-tools/skills/google-auth/resources
 
 # Test with a lightweight Gmail search — if this succeeds, Gmail is available
-python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py search --query "newer_than:1h" --max-results 1 2>/dev/null
+python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py search --query "newer_than:1h" --max-results 1 2>/dev/null
 ```
 
 - If exit code 0 → set `GMAIL_AVAILABLE = true` — enables Steps 1g, 1h, enhanced 4c, and 8c
 - If non-zero → set `GMAIL_AVAILABLE = false` — fall back to vault-only behavior. In the output summary, report `Gmail status: ❌ Unavailable — drafts saved to vault only`
 
-**Gmail tool path:** `~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py`
-**Requires:** `export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"` (gcloud for API auth)
+**Gmail tool path:** `~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py`
+**Requires:**
+- `export PATH="/opt/homebrew/share/google-cloud-sdk/bin:$PATH"` (gcloud for API auth)
+- `export PYTHONPATH=~/.vibe/marketplace/plugins/fe-google-tools/skills/google-auth/resources` (imports `google_api_utils`)
+
+**CRITICAL:** Every `python3` invocation of any fe-google-tools script MUST have `PYTHONPATH` set, or imports will fail.
 
 **Hard rules:**
 - NEVER send emails — only search, read, and create drafts
@@ -194,7 +199,7 @@ For each recipient identified in context gathering:
 1. **Vault first**: Read stakeholder file `People/clients/[name].md` → check `email:` frontmatter field
 2. **Gmail fallback**: If vault email is empty and GMAIL_AVAILABLE:
    ```bash
-   python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py search --query "to:[Full Name]" --max-results 3
+   python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py search --query "to:[Full Name]" --max-results 3
    ```
    Parse the results to extract the recipient's email address from matching messages.
 3. **Unknown fallback**: If neither works, set `recipient_email: unknown` — skip Gmail draft creation later, flag with `⚠️ VERIFY: No email found for [Name]`
@@ -205,11 +210,11 @@ For each recipient with a resolved email, fetch recent email history:
 
 - **Last sent:**
   ```bash
-  python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py search --query "from:me to:[email] newer_than:30d" --max-results 1
+  python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py search --query "from:me to:[email] newer_than:30d" --max-results 1
   ```
 - **Last received:**
   ```bash
-  python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py search --query "from:[email] to:me newer_than:30d" --max-results 1
+  python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py search --query "from:[email] to:me newer_than:30d" --max-results 1
   ```
 
 Extract from results: date, subject, snippet, messageId, threadId. Store for use in Steps 4c (thread check), 4d (drafting context), 4g (prep notes), and 8c (Gmail draft threading).
@@ -270,7 +275,7 @@ For each email, apply the philosophy doc rules. This is the per-draft loop:
 - **Vault check (always):** Check `Artifacts/Emails/` for recent drafts to same person on same topic
 - **Gmail check (if GMAIL_AVAILABLE and recipient email resolved):**
   ```bash
-  python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py search --query "from:me to:[email] newer_than:7d" --max-results 5
+  python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py search --query "from:me to:[email] newer_than:7d" --max-results 5
   ```
 - **Decision matrix:**
 
@@ -452,11 +457,11 @@ After saving to vault and creating the symlink, optionally create a Gmail draft 
 2. **Create the draft:**
    - **If replying to existing thread** (gmail_message_id captured in Step 4c):
      ```bash
-     python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py create-reply-draft --message-id "[gmail_message_id]" --html "<html body>"
+     python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py create-reply-draft --message-id "[gmail_message_id]" --html "<html body>"
      ```
    - **If new thread:**
      ```bash
-     python3 ~/.claude/plugins/cache/fe-vibe/fe-google-tools/1.1.0/skills/gmail/resources/gmail_builder.py create-draft --to "[recipient_email]" --subject "[subject line]" --html "<html body>" [--cc "cc_emails"]
+     python3 ~/.vibe/marketplace/plugins/fe-google-tools/skills/gmail/resources/gmail_builder.py create-draft --to "[recipient_email]" --subject "[subject line]" --html "<html body>" [--cc "cc_emails"]
      ```
 
 3. **Store draft ID**: Parse the JSON response → extract `id` field → update the vault draft's frontmatter with `gmail_draft_id: [id]`
