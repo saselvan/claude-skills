@@ -486,3 +486,41 @@ Action: Extract domain, key terms, personas, triggers, and action items from the
 > "Cheat sheet for Unity Catalog governance"
 
 Action: Ask for role and usage context, or infer SA + apply as defaults. Render with jargon decoder, decision tree (when to use what), commands, and checklist card types.
+
+## Audience Review Quality Gate (Auto-Invoked)
+
+After the cheatsheet is rendered, `/audience-review` is automatically invoked to assess whether the target audience will find it useful and actionable.
+
+**Process:**
+1. PDF is written to Artifacts/{account}/cheatsheets/
+2. `/audience-review {pdf_path}` is automatically invoked
+3. Audience is auto-read from strategy.yaml or manifest
+4. Fresh agent assumes audience role (SA peer, BDR, architect, etc.) and assesses: will they use this?
+5. Verdict (RED/YELLOW/GREEN) reported to user
+
+**Verdicts:**
+- 🟢 **GREEN (71-100%)**: Audience will use this. Cheatsheet ready for distribution.
+- 🟡 **YELLOW (41-70%)**: Audience finds it useful but has suggestions. Consider `/iterate` before sharing.
+- 🔴 **RED (0-40%)**: Audience unlikely to use. Major gaps in coverage or clarity.
+
+**If YELLOW or RED:**
+```
+⚠️ Suggested Revision
+Gap: [what's missing or unclear]
+
+Run: /iterate {pdf_path}
+Then: /audience-review {pdf_path} (re-review after changes)
+```
+
+## Output Convention
+
+**Write path:** `Artifacts/{account-slug}/cheatsheets/{YYYY-MM-DD}-{title-slug}.pdf`
+**artifact_type:** `cheatsheet`
+**Sidecar:** Create `{filename}.pdf.artifact.md` alongside the .pdf with canonical frontmatter (see `~/.claude/rules/artifacts-write-path.md`). The source .html also lands at same path with `.html` extension.
+**After save:** Call `vault_reindex(full=false, embed=false)`.
+
+Example:
+```
+Artifacts/nwm/cheatsheets/2026-04-09-unity-catalog-governance.pdf
+Artifacts/nwm/cheatsheets/2026-04-09-unity-catalog-governance.pdf.artifact.md
+```
