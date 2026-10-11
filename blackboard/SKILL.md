@@ -13,10 +13,11 @@ Coordinate subagents on a shared task. **Files are truth**: every result is writ
 
 1. Decompose the task into streams (schema below). If only one stream and no handoff complexity, stop — do the work directly.
 2. Create `.pipeline/blackboard-{slug}/` with `context.yaml`.
-3. Topologically sort streams into waves. Touch the wave's start marker, then spawn every agent in the wave in a single message.
-4. As each agent returns, verify it (Step 4), then write its result YAML to `board/{agent}-complete.yaml`. Inject verified deliverables into the next wave's prompts.
-5. Merge worktree branches (write streams only), run tests, write `artifacts/SYNTHESIS.{md|yaml}`.
-6. Report to caller. Archive the board.
+3. **For every write stream, write its acceptance tests yourself first and commit them red** (hostile rows: gap, duplicate, reorder, excluded-kind row, real row shapes). Give the agent the test paths and forbid edits to them; a round whose diff touches them fails. Evidence (2026-10-11, lakebase-agentic-search): when agents wrote both code and tests, 4 of 4 streams shipped tests that could not fail.
+4. Topologically sort streams into waves. Touch the wave's start marker, then spawn every agent in the wave in a single message.
+5. As each agent returns, verify it (Step 4), then write its result YAML to `board/{agent}-complete.yaml`. Inject verified deliverables into the next wave's prompts.
+6. Merge worktree branches (write streams only), run tests, write `artifacts/SYNTHESIS.{md|yaml}`.
+7. Report to caller. Archive the board.
 
 Details for each step follow. Read `references/` files only when the pointer says to.
 
@@ -118,7 +119,7 @@ When an agent returns, parse the result YAML from its final message (shape: the 
 
 1. **Scope.** List the changed files yourself: `find {repo} -newer {BOARD_DIR}/board/wave-{n}.start -type f -not -path '*/.git/*' -not -path '*/node_modules/*'` in a shared tree, `git diff --stat {target_branch}...{branch_name}` in a worktree. Compare against the stream's `scope` and its reported `changed_files`. Read the diff of every touched file, including files the report left out. In a shared tree the wave's changed files must partition across the wave's scopes; a file inside no stream's scope, or inside another stream's scope, fails the round for the stream that touched it.
 2. **Evidence.** Re-run every command in the result's `evidence` list and compare the output with the claim. A claim that doesn't reproduce fails.
-3. **Coordinator mutation.** Pick one acceptance criterion, break the shipped code for it on committed state, run the test the agent names for it, and watch it go red; restore with `git checkout -- {file}` (clean tree only). A mutation that survives fails the stream. Read-only streams: re-open the cited source for one finding instead.
+3. **Coordinator mutation.** For EVERY acceptance criterion (not one), break the shipped code for it on committed state, run the test the agent names for it, and watch it go red; restore with `git checkout -- {file}` (clean tree only). A mutation that survives fails the stream. Read-only streams: re-open the cited source for one finding instead.
 4. **Falsifiable tests.** Each test calls the shipped code. A test that re-implements the logic inline, or asserts a value it computed itself, is *vacuous*: reject it whatever colour it shows.
 
 A failed check sends the stream back: resume the same agent (`SendMessage`) with the failing command and its output. This counts as the stream's one retry; a second failure escalates to the user. On pass, write the signal verbatim to `{BOARD_DIR}/board/{name}-complete.yaml` with `verified: {scope, evidence, mutation, tests}` recording what you ran.
