@@ -1146,16 +1146,34 @@ system: { style.fill: "#E8F4F8" }
 
 ## Output Conventions
 
+**For vault / account work** (customer diagrams, reference architectures):
 ```
-Mermaid files:  docs/diagrams/{name}.mmd       (source)
-                docs/diagrams/{name}.svg       (rendered)
-Excalidraw:     docs/diagrams/{name}.excalidraw (source)
-                docs/diagrams/{name}.png       (exported)
-D2:             docs/diagrams/{name}.d2        (source)
-                docs/diagrams/{name}.svg       (rendered)
-PlantUML:       docs/diagrams/{name}.puml      (source)
-                docs/diagrams/{name}.svg       (rendered)
+Artifacts/{account-slug}/diagrams/{YYYY-MM-DD}-{slug}.{ext}
 ```
+- Account slugs (active): `nwm`, `chn`. Cross-account: `_cross`. Internal: `_internal`.
+- Embed frontmatter in a paired `{slug}-guide.md` sidecar (the diagram source is non-text):
+```yaml
+---
+artifact_id: "{account}-diagram-{YYYY-MM-DD}-{slug}"
+account: "{slug}"
+artifact_type: "diagram"
+title: "{human title}"
+created: "YYYY-MM-DD"
+source_skill: "diagram"
+related_session: null
+---
+```
+- After saving: call `vault_reindex(full=false, embed=false)`.
+
+**For code project work** (README diagrams, GitHub docs):
+```
+docs/diagrams/{name}.mmd       (Mermaid source)
+docs/diagrams/{name}.svg       (rendered)
+docs/diagrams/{name}.excalidraw
+docs/diagrams/{name}.d2
+docs/diagrams/{name}.puml
+```
+No vault_reindex needed for code project diagrams.
 
 Embed in markdown:
 ````markdown
