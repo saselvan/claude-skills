@@ -532,4 +532,65 @@ Merge: git checkout master && git merge evolve/diagram/2026-03-22
 
 ---
 
+---
+
+## Vault Speaker Outcome Analysis
+
+When running `/evolve` on skills that use vault_speaker (retriever skills, prep, forecast, etc.), the evolve loop can incorporate real-world outcome data from `vault_speaker_invocations` to inform challenger generation.
+
+### Querying Outcome Data
+
+Before generating a challenger, query brain.db for outcome signals:
+
+```sql
+-- Success rate per intent (usable / total)
+SELECT intent,
+       COUNT(*) as total,
+       SUM(CASE WHEN outcome_tag = 'usable' THEN 1 ELSE 0 END) as usable,
+       ROUND(SUM(CASE WHEN outcome_tag = 'usable' THEN 1 ELSE 0 END) * 100.0 / COUNT(*), 1) as usable_pct
+FROM vault_speaker_invocations
+WHERE outcome_tag IS NOT NULL
+GROUP BY intent
+ORDER BY usable_pct ASC
+```
+
+### Flagging Intents for Tuning
+
+Intents with **<70% usable rate** are flagged for planner prompt tuning. These represent retrieval packages that users found insufficient:
+
+```python
+TUNING_THRESHOLD = 70.0  # percent
+
+flagged = [row for row in results if row['usable_pct'] < TUNING_THRESHOLD]
+# Each flagged intent should inform the challenger hypothesis:
+# "Intent '{intent}' has only {pct}% usable rate — modify the skill's
+#  retriever selection or prompt to improve package quality for this intent"
+```
+
+### Binary Eval from Outcome Tags
+
+The outcome_tag provides a binary eval signal independent of the skill's own evals.md:
+
+| outcome_tag | Binary eval | Meaning |
+|-------------|-------------|---------|
+| usable | PASS | Package was useful to the caller |
+| incomplete | FAIL | Missing information, caller needed more |
+| abandoned | FAIL | Caller gave up on the retrieval |
+| error | FAIL | Technical failure |
+
+### Integration with Challenger Generation
+
+When generating a challenger for a retriever-related skill:
+
+1. Query `vault_speaker_invocations` for the skill's primary intent
+2. If usable_pct < 70%, the weakest evals from evals.md AND the low outcome rate both inform the hypothesis
+3. Check which retriever_set combinations correlate with 'incomplete' or 'abandoned' outcomes
+4. The challenger should address the specific retriever gap (e.g., "add temporal context when intent=prep and retriever_set lacks temporal-retriever")
+
+### Prerequisite
+
+If `vault_speaker_invocations` table does not exist (migration 0010 pending), skip outcome analysis with a note and proceed with evals.md-only evolution.
+
+---
+
 *"Evals are the spec. The skill is the implementation. Evolution is the compiler."*
