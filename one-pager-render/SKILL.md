@@ -485,11 +485,101 @@ ln -sf /absolute/path/to/[filename].pdf ~/Customer/[account_folder]/02-Decks/[fi
 - Always use full absolute paths in the symlink target
 - If the one-pager has no specific account, skip this step
 
+## Audience Review Quality Gate (Auto-Invoked)
+
+After the one-pager is rendered, `/audience-review` is automatically invoked to assess whether the target audience will find it credible and actionable.
+
+**Process:**
+1. PDF is written to Artifacts/{account}/one-pagers/
+2. `/audience-review {pdf_path}` is automatically invoked
+3. Audience is auto-read from strategy.yaml
+4. Fresh agent assumes audience role and assesses: emotions felt, knowledge gained, likelihood they'll act
+5. Verdict (RED/YELLOW/GREEN) reported to user
+
+**Verdicts:**
+- 🟢 **GREEN (71-100%)**: Audience convinced. One-pager ready for distribution.
+- 🟡 **YELLOW (41-70%)**: Audience interested but has concerns. Consider `/iterate` before sharing.
+- 🔴 **RED (0-40%)**: Audience unlikely to act. Major rework needed before use.
+
+**If YELLOW or RED:**
+```
+⚠️ Suggested Revision
+Gap 1: [what didn't land]
+Gap 2: [what didn't land]
+
+Run: /iterate {pdf_path}
+Then: /audience-review {pdf_path} (re-review after changes)
+```
+
+## vault_speaker Integration (Production — W5 Cutover)
+
+**Status:** PRIMARY (graduated from shadow mode)
+
+vault_speaker is the primary context source for one-pager generation. Existing retrieval logic (strategy YAML parsing, vault_summary, knowledge.md atoms) serves as fallback.
+
+### At generation start:
+
+1. Call vault_speaker: `/vault-speaker --intent deck --account {account_id}`
+2. If vault_speaker succeeds (returns confidence != low): use its package as primary context
+   - Account context, stakeholder profiles, artifact history, and pattern recommendations come from vault_speaker
+   - Strategy YAML directives (variant_type, hero_message, proof_strategy, CTA) still come from the strategy file
+3. If vault_speaker fails or returns confidence=low: fall back to existing retrieval logic
+4. Log outcome_tag to vault_speaker_invocations after generation completes
+
+### Fallback behavior:
+
+- vault_speaker timeout (>15s): use existing retrieval logic, log outcome_tag='timeout'
+- vault_speaker error: use existing retrieval logic, log outcome_tag='error'
+- vault_speaker confidence=low for all retrievers: use existing retrieval logic, log outcome_tag='low_confidence_fallback'
+
+### What vault_speaker provides (when successful):
+
+- **Account context**: deal state, audience priorities, recent momentum
+- **Stakeholder profiles**: for audience tailoring and forwarding test calibration
+- **Artifact history**: prior one-pagers delivered (avoid repetition)
+- **Pattern recommendations**: what framing worked in similar contexts
+
+### What existing logic still owns (always):
+
+- Strategy contract validation (variant_type, hero_message, proof_strategy, CTA)
+- Knowledge.md atom extraction and confidence scoring
+- Layer-by-layer build-evaluate workflow
+- 12-criteria rubric evaluation
+
+### Logging:
+
+After one-pager generation completes, log the invocation:
+```yaml
+# Append to _System/vault-speaker-invocations.yaml
+- skill: one-pager-render
+  account: {account_id}
+  timestamp: {ISO 8601}
+  intent: deck
+  outcome_tag: success | timeout | error | low_confidence_fallback
+  context_used: vault_speaker | existing_retrieval
+```
+
+---
+
 ## Reference Files
 
 Read ALL THREE before starting any one-pager:
 - **`references/design-rules.md`** — Brand palette, fonts, spacing rules, color usage
 - **`references/one-pager-patterns.md`** — HTML/CSS rendering patterns, PDF conversion rules, image handling, pitfall catalog
 - **`references/one-pager-philosophy.md`** — Evaluation rubric (12 criteria, 0-2 scoring, 18/24 pass threshold), 7 failure-mode diagnostics, variant matrix, anti-pattern library, strategy contract schema, expert principles (Minto, Evergreen, Tufte, Duarte, Nielsen, Cutler)
+
+## Output Convention
+
+**Write path:** `Artifacts/{account-slug}/one-pagers/{YYYY-MM-DD}-{title-slug}.pdf`
+**artifact_type:** `one_pager`
+**Sidecar:** Create `{filename}.pdf.artifact.md` alongside the .pdf with canonical frontmatter (schema in `~/.claude/rules/artifacts-write-path.md`). The source .html also lands at same path with `.html` extension.
+**After save:** Call `vault_reindex(full=false, embed=false)`.
+
+Example:
+```
+Artifacts/nwm/one-pagers/2026-04-09-demand-planning-value.pdf
+Artifacts/nwm/one-pagers/2026-04-09-demand-planning-value.pdf.artifact.md
+```
+
 
 $ARGUMENTS
