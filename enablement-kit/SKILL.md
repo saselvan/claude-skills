@@ -558,3 +558,16 @@ captured_output:
 quality_assessment: "Upload successful — content matches source"
 quality_pass: true/false
 ```
+
+## Output Convention
+
+`enablement-kit` is a coordinator. All constituent artifacts land under a shared kit directory:
+
+**Kit root:** `Artifacts/{account-slug}/enablement-kits/{YYYY-MM-DD}-{kit-slug}/`
+**Sub-artifacts:**
+- `deck/` → deck-render writes `.pptx` + `.pptx.artifact.md` here
+- `cheatsheets/` → cheatsheet-render writes `.pdf` + sidecar
+- `one-pagers/` → one-pager-render writes `.pdf` + sidecar
+- `enablement-cards/` → enablement-card-render writes `.md` with frontmatter
+
+**After all artifacts produced:** Call `vault_reindex(full=false, embed=false)` once.
