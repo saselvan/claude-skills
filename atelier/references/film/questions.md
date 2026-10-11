@@ -11,7 +11,7 @@ Ask all six in **one message**, with the defaults filled in, so the user only co
 | 5 | **Format** | 16:9 (1920×1080) and 1:1 (1080×1080), H.264, 30 fps | Crop and safe-area checks on every cut; the 1:1 cut stacks the caption above a tighter crop |
 | 6 | **Screens** | Real app screens, animated (crops and push-ins), plus real repo code shots and plain type cards | Screen source (see "Screen source" below); pill and crop-text checks |
 
-Ask one follow-up only if the answer changes the route: **"Is any of it for customers?"** A yes is a promotion trigger (below).
+Ask one follow-up only if the answer changes the route: **"Is any of it for customers, and does any of it ship under a company template?"** A yes to customers is a promotion trigger (below). A template sets colour and type in place of house-style's, and the app wears the same palette (standing rule 16), so record the answer in `DECISIONS.md` before the production designer's colour round.
 
 ## Screen source (decide at the attended script gate, not before)
 - **Default:** capture every app screen **from one real rehearsal run**, read-only (GET-only script, free port, `<title>` checked). All shots come from that single run.

@@ -41,7 +41,7 @@ Each module writes its measured numbers to an artifact the drawer/claims-ledger 
 
 ## Live or absent
 Every screen shows live state from the running system, or it shows nothing (owner, 2026-09-29: "everything should be live, so there is no need for anything to be representative").
-- The app has two states per screen: live, and a plain error with **Retry**. No replay, representative or authored screen stands in for a failed call, and no provenance label marks one. The synthetic-data banner is the only on-screen marker.
+- The app has two states per screen: live, and a plain error with **Retry**. No replay, representative or authored screen stands in for a failed call, and no provenance label marks one. The synthetic-data banner is the only on-screen marker, and it names what is synthetic ("Synthetic users" when the content is real public data; film standing rule 1).
 - **Retry re-reads.** After a failed write, Retry reads the current state first, because the write may have landed; re-issuing it is the presenter's explicit next action.
 - Films and stills are captured from one live rehearsal run, read-only.
 - A screen the app can't yet back live is cut from the demo path until it can, the same rule as aspirational claims.
