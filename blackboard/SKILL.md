@@ -172,6 +172,7 @@ Set `phase: complete`.
 ## References
 
 - `references/agent-prompt.md` — the spawn prompt template. Read before Step 3.
+- `references/parallel-dev-lessons.md` — 17 rules from a 25-ticket parallel build (design batching, contract-file pins, standing test authority, never trust a report). Read before Step 1 on multi-ticket runs.
 - `references/synthesis.md` — presets and caller-defined schema. Read at Step 5.
 - `references/code-quality.md` — rules to paste into prompts for write streams.
 - `references/integrations.md` — how design-ops, content-factory, and demo-factory invoke blackboard. Read only when called by one of them.
