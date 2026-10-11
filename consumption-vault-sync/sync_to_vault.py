@@ -51,7 +51,7 @@ def query_delta_latest(account_id: str, profile: str = "DEFAULT") -> Optional[Di
     sql = f"""
     WITH latest_analysis AS (
         SELECT MAX(analysis_date) as max_date
-        FROM sa_intelligence.operational_intelligence.weekly_consumption_analysis
+        FROM main.samuel_selvan.weekly_consumption_analysis
         WHERE account_id = '{account_id}'
     )
     SELECT
@@ -71,7 +71,7 @@ def query_delta_latest(account_id: str, profile: str = "DEFAULT") -> Optional[Di
         vector_search_dollars,
         lakeflow_pipeline_dollars,
         interactive_mece_dollars
-    FROM sa_intelligence.operational_intelligence.weekly_consumption_analysis
+    FROM main.samuel_selvan.weekly_consumption_analysis
     WHERE account_id = '{account_id}'
       AND analysis_date = (SELECT max_date FROM latest_analysis)
       AND week_start < DATE_TRUNC('week', CURRENT_DATE())  -- Only complete weeks

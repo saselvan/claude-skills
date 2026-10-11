@@ -80,7 +80,7 @@ def prepare_records(analysis: Dict, account_id: str, account_name: str) -> List[
 def create_table_sql() -> str:
     """Generate CREATE TABLE IF NOT EXISTS SQL."""
     return """
-CREATE TABLE IF NOT EXISTS sa_intelligence.operational_intelligence.weekly_consumption_analysis (
+CREATE TABLE IF NOT EXISTS main.samuel_selvan.weekly_consumption_analysis (
   account_id STRING COMMENT 'Salesforce account ID',
   account_name STRING COMMENT 'Account name',
   analysis_date TIMESTAMP COMMENT 'When this analysis was run',
@@ -143,7 +143,7 @@ def insert_records_sql(records: List[Dict]) -> str:
     values_str = ",\n".join(values)
 
     return f"""
-INSERT INTO sa_intelligence.operational_intelligence.weekly_consumption_analysis VALUES
+INSERT INTO main.samuel_selvan.weekly_consumption_analysis VALUES
 {values_str}
 """
 

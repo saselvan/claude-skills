@@ -121,6 +121,8 @@ python3 ~/.claude/skills/consumption-vault-sync/sync_to_vault.py \
   --delta-profile DEFAULT
 ```
 
+**After sync:** Call `vault_reindex(full=false, embed=false)` to propagate signals into brain.db FTS index.
+
 **Result:** Consumption intelligence integrated with vault for `/forecast` calls
 
 **Important:** Vault sync only uses **complete weeks** (excludes current partial week to avoid polluted WoW comparisons)
