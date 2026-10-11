@@ -39,7 +39,45 @@ Optional:
 
 ## Board Setup (Phase 0)
 
-### 0a. Create board directory
+### 0a. Detect Resume Mode (NEW)
+
+**When to run:** At entry point, check for partial completion from prior run.
+
+```
+Step 0a: Resume Detection
+
+1. CHECK FOR EXISTING BOARD
+   IF board_dir exists from prior invocation:
+     a. List board/*.yaml files to determine what's completed
+     b. Check context.yaml for phase_completed field
+     c. Determine next available phase
+
+2. PRESENT OPTIONS TO USER
+   IF board exists:
+     PROMPT: "Board already exists from prior run:"
+     [A] Resume from where we left off (phase X pending)
+     [B] Start fresh (backup old board, create new one)
+     [C] Manually select phase to restart from
+     [D] Cancel
+   
+   User chooses action:
+   - [A]: Set RESUME_MODE=true, NEXT_PHASE={first incomplete phase}
+   - [B]: Backup board to .pipeline/completed/{timestamp}/, create new board
+   - [C]: Prompt for phase number, set NEXT_PHASE
+   - [D]: Exit
+
+3. LOG DECISION
+   If resuming: "Resuming from Phase {NEXT_PHASE}. Skipping phases 1–{NEXT_PHASE-1}."
+   If fresh: "Starting fresh. Prior board backed up to .pipeline/completed/post-meeting-{timestamp}/"
+```
+
+**Behavior:**
+- If resuming: Skip Phase 1 (already completed), start from Phase 2
+- If starting fresh: Create new board directory, run all phases
+
+---
+
+### 0b. Create Board Directory (moved from 0a)
 
 ```
 .pipeline/post-meeting/
@@ -49,9 +87,9 @@ Optional:
 └── failures.yaml             ← error log (create empty)
 ```
 
-Create this structure using Write/Bash before proceeding.
+Create this structure using Write/Bash before proceeding. (Skip if resuming and board already exists.)
 
-### 0b. Write context.yaml
+### 0c. Write context.yaml
 
 After parsing the transcript (Phase 1), write extracted intelligence to `.pipeline/post-meeting/context.yaml`:
 
@@ -84,6 +122,26 @@ open_questions:
   - question: "{text}"
     asked_by: "{name}"
 medpicc_signals: []
+# Architectural recommendations — when customer asked about X but we recommended Y
+# CRITICAL: prevents newsletter curation from treating "discussed topic" as "customer uses/wants topic"
+# Example: customer asked about streaming → we recommended SQL Federation + scheduled polling
+# Without this field, "streaming" appears as Tier 1 interest and pulls wrong newsletter content
+architectural_recommendations:
+  - topic_asked: "{what the customer asked about or wanted}"
+    recommendation: "{what was actually recommended}"
+    rationale: "{why — one sentence}"
+    vault_signal_tag: "{tag to write to entities.jsonl, e.g., recommendation:use-federation-not-streaming}"
+# Artifacts produced in or as a result of this session — implicit Tier 1/2 signals for future newsletter curation
+# An artifact built = stronger evidence of customer interest than a single mention
+artifacts_produced:
+  - path: "{path to artifact file}"
+    topic_signal: "{what this artifact signals interest in — e.g., 'ETL monitoring agents'}"
+    created: "{YYYY-MM-DD}"
+# Emails drafted/sent as a result of this session — confirm a topic is active
+emails_sent:
+  - path: "{path to email file}"
+    topic_signal: "{what this email signals — e.g., 'streaming architecture follow-up'}"
+    sent_date: "{YYYY-MM-DD}"
 follow_up_emails_needed:
   - recipient: "{name}"
     type: "{follow_up|deliverable|research_answers|etc.}"
@@ -102,9 +160,127 @@ This is the existing `/process-transcript` logic. It produces:
 - Entity updates: `_System/entities.jsonl` (signals, action items, commitments)
 - Stakeholder file updates: `People/clients/[name].md` (new attendees)
 
+#### Phase 1 Success Criteria (NEW)
+
+Before proceeding to Phase 2, validate Phase 1 output meets minimum quality:
+
+```
+Phase 1: Success Criteria Validation
+
+1. SESSION FILE CREATED
+   IF Sessions/[account]/[type]/[date].md does not exist:
+     ERROR: "Session file not created. Transcript parsing failed."
+     ACTION: Check process-transcript errors, re-run with better transcript
+
+2. SPEAKER IDENTIFICATION QUALITY
+   Read session file frontmatter → speaker_confidence field:
+   
+   IF speaker_confidence == "low" (>60% unknown speakers):
+     WARN: "Speaker identification confidence is low. Extracted intelligence may be incomplete."
+     DECISION: [A] Proceed with warnings [B] Cancel and re-transcribe
+     - [A]: Continue to Phase 2, flag session as low-confidence
+     - [B]: Exit processing, request better audio/transcription
+
+   IF speaker_confidence == "medium" (40–60% unknown):
+     WARN: "Speaker identification confidence is medium. Proceed with caution."
+     DECISION: Proceed (auto-selected)
+   
+   IF speaker_confidence == "high" (<40% unknown):
+     OK: Proceed normally
+
+3. MINIMUM ACTION ITEMS EXTRACTED
+   Count action items in context.yaml:
+   
+   IF action_items count == 0 AND meeting_type NOT IN {internal, team_standup, 1on1}:
+     WARN: "No action items extracted from customer meeting. Was anything actually discussed?"
+     DECISION: Proceed anyway (user may clean up in Phase 2)
+
+4. CRITICAL ERRORS
+   If Phase 1 produced any entries in failures.yaml AND marked as "CRITICAL":
+     ERROR: "Phase 1 encountered critical error. Processing blocked."
+     ACTION: Fix root cause, re-run Phase 1
+
+Proceed to Phase 2 after all criteria validated (or approved overrides logged).
+```
+
 **After parsing:**
-1. Write `context.yaml` with all extracted intelligence (see 0b above)
+1. Write `context.yaml` with all extracted intelligence (see 0c above)
+   - **Populate `architectural_recommendations`:** Look for moments where the customer asked about or expressed interest in a capability, but the SA recommended a *different* approach. These must NOT be recorded as customer interest in the original topic — they must be captured as a recommendation signal. Examples:
+     - Customer wants real-time streaming → SA recommended polling/federation → `topic_asked: streaming`, `recommendation: SQL Federation + scheduled jobs`
+     - Customer wants to keep using X tool → SA recommended migrating to Y → capture the recommendation, not the preference
+   - This prevents vault signals from mislabeling "topic discussed" as "customer uses/wants" and polluting future newsletter curation with wrong Tier 1 content
 2. Call `vault_reindex(full=false, embed=true)` to index the new session
+
+### Phase 1.5: V2 Signal Extraction (W1 Track A)
+
+After transcript processing (Phase 1) produces a session file, run the v2 LLM-based signal extractor for structured intelligence extraction. This replaces the ad-hoc signal extraction in Steps 4e-4k of `/process-transcript` with a single Claude API call that produces validated Pydantic output.
+
+**Requires:** `ANTHROPIC_API_KEY` environment variable set.
+
+**Skip condition:** `--legacy` flag was passed (use old extraction path from Phase 1 only).
+
+```
+Phase 1.5: V2 Signal Extraction
+
+1. IMPORT
+   from _System.extractors.signal_extractor import extract_signals, persist_extraction
+
+2. READ SESSION FILE
+   session_text = read(session_path)  # from Phase 1 output
+
+3. EXTRACT
+   result = extract_signals(
+       session_text=session_text,
+       session_id=session_id,      # from brain.db or derived from filename
+       account_id=account_slug,    # e.g., "nwm", "chn"
+       session_type=session_type   # "customer" or "internal"
+   )
+
+4. REVIEW — present extracted intelligence to user for confirmation:
+   - {N} signals (MEDPICC-aligned + extended types)
+   - {N} commitments (with direction: owed_by_us / owed_by_customer / mutual)
+   - {N} stakeholder deltas (stance shifts, new stakeholders, role clarifications)
+   - {N} artifact outcomes
+   - {N} pattern usage observations
+   
+   Show top-3 highest-confidence signals for quick sanity check.
+   User confirms or edits before persistence.
+
+5. PERSIST
+   summary = persist_extraction(result)
+   # Writes to brain.db: signals table, action_items table (commitments),
+   # stakeholders table (deltas)
+   
+   Log: "V2 extraction persisted: {summary}"
+
+6. BOARD SIGNAL
+   Write board/signal-extraction-output.yaml:
+   ```yaml
+   skill_name: "signal-extractor-v2"
+   invoked_at: "{ISO timestamp}"
+   extractor_generation: 2
+   
+   counts:
+     signals: N
+     commitments: N
+     stakeholder_deltas: N
+     artifact_outcomes: N
+     pattern_usages: N
+   
+   top_signals:
+     - type: "{signal_type}"
+       text: "{text}"
+       confidence: N.N
+   
+   quality_pass: true  # always true for v2 (validated by Pydantic)
+   ```
+```
+
+**Relationship to Phase 1 extraction:** Phase 1 (`/process-transcript` Steps 4a-4l) still runs and produces the session file with its own extraction. Phase 1.5 runs the v2 extractor as a SUPPLEMENTARY pass — it may find signals Phase 1 missed, and its output is structured + scored. Over time, Phase 1.5 will subsume the Phase 1 extraction steps.
+
+**Fallback:** If `ANTHROPIC_API_KEY` is not set or the API call fails, log the error to `failures.yaml` and continue to Phase 2. The Phase 1 extraction is still valid.
+
+---
 
 ### Phase 2: Invoke draft-followup
 
@@ -123,18 +299,62 @@ Generate the session recap emails (external + internal).
 5. Note `open_questions_from_session` — if any have `needs_research: true`, queue Phase 3a
 6. Note `action_items_from_session` — items with `covered_in_email: false` feed Phase 3
 
-### Phase 2.5: V2 Smart Follow-Up Routing
+### Phase 2.1: Vault Consistency Validation (NEW)
+
+**After draft-followup completes**, validate wiki-links in the session file are resolvable:
+
+```
+Phase 2.1: Wiki-Link Integrity Check
+
+1. READ SESSION FILE
+   Open Sessions/[account]/[type]/[date].md
+   Extract all wiki-links from frontmatter:
+   - attendees_internal
+   - attendees_customer
+   - use_cases
+   - account
+
+2. VALIDATE EACH LINK
+   For each wiki-link [[Path/to/Entity]]:
+   a. Check if file exists at that path
+   b. IF not found:
+      WARN: "Orphaned link in session frontmatter: [[Path]]. File does not exist."
+      ACTION: "Add to vault manually or remove link if stale."
+      RECORD: failures.yaml entry
+
+3. PROCEED WITH WARNINGS
+   Even if orphaned links found, continue to Phase 2.5 (non-blocking).
+   Flag in processing report that manual cleanup may be needed.
+```
+
+---
+
+### Phase 2.5: V2 Smart Follow-Up Routing (Enhanced)
 
 After draft-followup completes, read its board output and make intelligent routing decisions:
 
 ```
 READ board/draft-followup-output.yaml
 
+# Quality-Pass Check (NEW)
+# NOTE: If quality_pass is false from draft-followup, we may still need email-render
+# to cover uncovered action items. Check below before skipping Phase 3.
+
+quality_pass = board/draft-followup-output.yaml.quality_pass
+IF quality_pass == false:
+  WARN: "Draft-followup quality below threshold (Forward Test < 18/24)."
+  LOG: "Proceeding with warnings. Check final output carefully."
+  # Continue to decision logic below — don't block; just flag
+
 # Decision 1: Is email-render needed?
 uncovered_items = [a for a in action_items_from_session if a.covered_in_email == false]
 IF len(uncovered_items) == 0:
   SKIP Phase 3 entirely (draft-followup covered everything)
   LOG: "All action items covered by session recap — skipping email-render"
+ELIF quality_pass == false:
+  # Low-quality draft → email-render may help cover gaps
+  LOG: "Quality below threshold + uncovered items exist — proceeding with email-render"
+  # Continue to Phase 3
 
 # Decision 2: Is the meeting routine?
 IF meeting_type in {"1on1", "team_standup", "weekly_sync"} AND len(action_items) <= 2:
@@ -164,6 +384,32 @@ ELIF session_type == "internal":
 ```
 
 Apply these routing decisions to the subsequent phases. Each Phase still has its own Skip condition as a safety net — these V2 decisions are additive intelligence, not replacements.
+
+### Phase 2.6: Update Deal Tracker (conditional)
+
+Update the account's running Google Doc deal tracker with workstream entries from this meeting.
+
+**Skip if:** `meeting_type` in `{internal, team_standup, 1on1}` OR no account identified.
+
+```
+1. Read account frontmatter for deal_tracker_doc_id
+2. IF deal_tracker_doc_id is empty:
+   - draft-followup Step 4d will handle creation during its run
+   - Check board/draft-followup-output.yaml for deal_tracker.doc_id after Phase 2 completes
+3. IF deal_tracker_doc_id is populated:
+   - draft-followup Step 4d already updated the doc during Phase 2
+   - Read deal_tracker results from board/draft-followup-output.yaml
+4. Write board entry: board/deal-tracker-output.yaml (from draft-followup board data)
+5. Slack notification text is at: Sessions/[Account]/[type]/emails/[YYYY-MM-DD]_slack.txt
+```
+
+**Note:** The actual doc creation/update logic lives in draft-followup Step 4d. This phase is the coordinator's awareness of the deal tracker — it reads the output and includes it in the processing report.
+
+Add to Phase 7 Processing Report table:
+
+```
+| 2.6 | deal-tracker | {DONE/SKIP} | — | Doc: [link] |
+```
 
 ### Phase 3: Invoke email-render (conditional)
 
@@ -299,7 +545,9 @@ Write a summary to `_System/Logs/post-meeting-report-{timestamp}.md`:
 | Phase | Skill | Status | Quality | Notes |
 |-------|-------|--------|---------|-------|
 | 1 | transcript-parse | {DONE} | — | Session: {path} |
+| 1.5 | signal-extractor-v2 | {DONE/SKIP/FAIL} | — | {N} signals, {N} commitments, {N} deltas |
 | 2 | draft-followup | {DONE/WARN/FAIL} | {score}/{max} | {notes} |
+| 2.6 | deal-tracker | {DONE/SKIP} | — | Doc: {link} |
 | 3 | email-render | {DONE/SKIP/WARN} | {score}/{max} | {notes} |
 | 3a | answer-questions | {DONE/SKIP} | {confidence} | {notes} |
 | 4 | gmail | {DONE/SKIP/ERROR} | — | {N} drafts created |
@@ -332,6 +580,7 @@ For staleness detection (skills that don't produce board output within expected 
 | Primitive | Threshold | Retry | Degrade | Escalate |
 |-----------|-----------|-------|---------|----------|
 | Transcript parse | All speakers identified | Re-parse with vault entity hints | Accept [Unknown] speakers, flag in session.md | Log, user resolves manually |
+| signal-extractor-v2 | Pydantic validation passes | 1 retry with reduced max_tokens | Fall back to Phase 1 extraction only | Log API error, continue to Phase 2 |
 | draft-followup | Forward Test 18/24 | 1 retry with enriched context | Produce with warnings | Log, skip Gmail draft creation |
 | email-render | Q1-Q14 all CLEAN | 1 retry per email | Save with `status: flag_review` | Log warnings |
 | gmail (adapter) | Draft created | 2 retries on API call | Save as local .md only (no Gmail draft) | Log API error |
