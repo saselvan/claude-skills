@@ -50,3 +50,9 @@ logs/
 # Downloaded skill archives
 *.zip
 *.skill
+
+# test output, scratch, old copies (not skills)
+deck-render/rendered/
+verification-ladder-workspace/
+deck-render/_archive/
+node_modules/

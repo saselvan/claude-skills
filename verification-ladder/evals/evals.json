@@ -1,0 +1,19 @@
+{
+  "skill_name": "verification-ladder",
+  "evals": [
+    {
+      "id": 0,
+      "eval_name": "csv-export-loop-scaffold",
+      "prompt": "I'm adding a CSV export endpoint to our FastAPI metrics service (the repo is at ~/.claude/skills/verification-ladder-workspace/sandbox-csv). Last month we shipped an exporter that silently dropped every row with a null owner_principal and nobody noticed for three weeks. This one has to be PROVEN correct before merge, not just tested. Set up the full verification loop for it — the spec, the goal condition, the isolation, the agent setup, whatever your method requires. Do NOT build the endpoint itself yet; produce the loop scaffolding and spec files in the repo.",
+      "expected_output": "A spec file from the template with architecture triad (maker≠grader, state-on-disk, oracle rule), measurable N/M or numeric goal conditions, an adversarial benchmark replaying the null-owner dropped-rows failure verbatim, stop rules (circuit breaker + budget), constraints, deliverable; worktree-per-loop setup step; a /goal string pointing at the acceptance file with grader-verified; agent defs with model pins (grader highest tier / maker opus / explorer haiku); grader-only-PASS ledger discipline.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "eval_name": "revenue-double-count-acceptance",
+      "prompt": "our finance dashboard double-counted refunds last quarter — it showed $1.24M revenue for Q1 when the real number was $1.18M (refunds got added instead of subtracted). we're rebuilding the revenue widget next sprint and my director wants a written guarantee this exact class of bug can't recur. write the acceptance spec and benchmark protocol for the rebuild: what gets measured, against what ground truth, who grades it, and when we're allowed to call it done. put it in ~/.claude/skills/verification-ladder-workspace/sandbox-revenue.",
+      "expected_output": "An acceptance spec + benchmark protocol where the $1.24M double-count is a verbatim adversarial benchmark with a hand-computed oracle ($1.18M from the primary source), oracle rule stated, independent fresh-context grader as sole PASS authority, ledger with grader-only PASS states, measurable run counts, stop rules, and a definition of done tied to grader verdicts not maker claims.",
+      "files": []
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+round	role	run	input_id	E1	E2	E3	E4	E5	E6	E7	E8	E9	E10	E11	E12	E13	total	hypothesis
+0	baseline	1	input1	1	1	1	1	1	1	1	1	0	0	0	1	0	9	-
+0	baseline	2	input1	1	1	1	1	1	1	1	1	0	0	0	0	0	8	-
+0	baseline	3	input1	1	1	1	1	1	1	1	1	0	0	0	1	0	9	-
+0	baseline	1	input2	1	1	1	1	1	1	1	1	0	0	1	1	0	10	-
+0	baseline	2	input2	1	1	1	1	1	1	1	1	0	0	0	1	1	10	-
+0	baseline	3	input2	1	1	1	1	1	1	1	1	0	1	0	1	0	10	-
+0	baseline	1	input3	1	1	1	1	1	1	1	1	0	0	0	0	1	9	-
+0	baseline	2	input3	1	1	1	1	1	1	1	1	0	0	1	0	0	9	-
+0	baseline	3	input3	1	1	1	1	1	1	1	1	0	0	1	1	1	11	-

@@ -1,0 +1,18 @@
+# Pre-Meeting Question Prep — Config
+# Update with your Google Sheet IDs and Apps Script web app URLs
+
+accounts:
+  northwestern-medicine:
+    sheet_id: ""           # From URL: docs.google.com/spreadsheets/d/{THIS}/edit
+    webapp_url: ""         # From Apps Script deploy: https://script.google.com/macros/s/.../exec
+    form_url: ""           # Google Form URL to share with NWM team
+    account_name: "Northwestern Medicine"
+    aliases: ["nwm", "northwestern", "nm"]
+
+# Add more accounts as needed:
+#  chla:
+#    sheet_id: ""
+#    webapp_url: ""
+#    form_url: ""
+#    account_name: "CHLA"
+#    aliases: ["chla", "childrens-la"]
