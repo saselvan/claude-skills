@@ -891,6 +891,83 @@ UPDATE context.yaml:
 5. Capture: app_url, app_name, deploy_status, resource_ids
 6. Write adapter board entry to `board/apps-output.yaml`
 
+#### 4c.5. Generate Data Contract
+
+**Purpose:** Create `DATA_CONTRACT.md` at project root — the anti-hallucination firewall for AI code generators. Must exist BEFORE frontend work (4e) so any AI building the frontend knows exactly what the backend sends.
+
+1. Read all Pydantic models in `app/server/` (or equivalent):
+   ```bash
+   grep -rn "class.*BaseModel" app/server/ --include="*.py"
+   ```
+
+2. Read all API route handlers:
+   ```bash
+   grep -rn "@app\.\(get\|post\|put\|patch\|delete\)" app/server/ --include="*.py"
+   ```
+
+3. For each endpoint, extract:
+   - Route path and method
+   - Response model fields (name, type, source)
+   - Request body fields (if any)
+
+4. Generate `DATA_CONTRACT.md` with three sections:
+
+```markdown
+# Data Contract: What the Backend Actually Sends
+
+## Ground Truth
+
+Every UI field must trace back to a real backend field. If the backend doesn't send it, the UI must not render it.
+
+### {EndpointName} (from `{route}`)
+
+{field_name}  {type}  {description/source}
+...
+
+## Fields That Do NOT Exist
+
+These are not in the data. Never render UI for them:
+{domain-plausible fields that AI will hallucinate — e.g., for HLS: patient_id, clinical_notes, diagnosis_code, etc.}
+
+## Interpretation Rules
+
+{What scores mean, what labels imply, what claims are forbidden}
+```
+
+5. **Negative list generation:** Based on the demo's domain (from `context.yaml → industry`), generate domain-specific hallucination targets:
+   - **HLS:** `patient_id`, `clinical_notes`, `diagnosis_code`, `icd10`, `mrn`, `dob`, `insurance`, `provider_npi`, `lab_results`, `vitals`, `medications`, `allergies`, `staging_info`, `biomarkers`
+   - **FSI:** `ssn`, `account_balance`, `credit_score`, `routing_number`, `tax_id`, `portfolio_value`, `risk_score`
+   - **Retail:** `purchase_history`, `loyalty_points`, `cart_abandonment_rate`, `lifetime_value`
+   - **General:** `created_by`, `updated_at`, `version`, `audit_trail`, `permissions`, `tenant_id`
+
+   Filter to only include fields that are plausible but NOT in the actual schema. Present to user for review.
+
+6. Write outputs:
+   - `DATA_CONTRACT.md` at project root (canonical)
+   - `.cursor/rules/data-contract.mdc` (same content + frontmatter with globs for frontend files)
+
+7. **User review gate:** Present the negative list for confirmation. User may add/remove entries based on domain knowledge. Do NOT auto-advance until user confirms.
+
+8. Write board entry to `board/data-contract-output.yaml`:
+
+```yaml
+skill_name: "data-contract-generator"
+phase: "4c.5"
+invoked_at: "{ISO timestamp}"
+invoked_by: "demo-factory"
+
+artifact_paths:
+  data_contract: "{project_root}/DATA_CONTRACT.md"
+  cursor_rules: "{project_root}/.cursor/rules/data-contract.mdc"
+
+endpoints_documented: N
+positive_fields_total: N
+negative_fields_total: N
+interpretation_rules_count: N
+
+quality_pass: true  # always true after user review
+```
+
 #### 4d. Deploy Resources
 
 **FE-VIBE SKILL:** Use `/databricks-resource-deployment`
