@@ -121,10 +121,12 @@ Use `AskUserQuestion` for each use case. User confirms, tweaks, or adds context.
 
 ## Step 5: Google Tasks Creation
 
-Locate the gtasks builder:
+Locate the gtasks builder (and set PYTHONPATH for shared imports):
 
 ```bash
-GTASKS_BUILDER=$(ls ~/.claude/plugins/cache/fe-vibe/fe-google-tools/*/skills/google-tasks/resources/gtasks_builder.py | sort -V | tail -1)
+# fe-google-tools scripts import google_api_utils from the google-auth resources dir
+export PYTHONPATH=~/.vibe/marketplace/plugins/fe-google-tools/skills/google-auth/resources
+GTASKS_BUILDER=~/.vibe/marketplace/plugins/fe-google-tools/skills/google-tasks/resources/gtasks_builder.py
 ```
 
 Ensure a "Forecast Prep" task list exists (create if not):
