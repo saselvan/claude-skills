@@ -69,4 +69,25 @@ recommendations_for_downstream:
 
 Use the Write tool to create this file. If the file already exists (retry scenario), overwrite it.
 
+### Board Output Validation (BLOCKING)
+
+After writing deck-render-output.yaml, validate before completing.
+If validation fails, FIX the output YAML before writing. Do not write
+an invalid board signal — downstream skills trust it unconditionally.
+
+Required field checks:
+- artifact_path: present, file exists on disk
+- hero_message_as_rendered: present, non-empty string
+- proof_points_used: present, array
+- slide_count: present, matches actual slide count in pptx
+- quality_score: present, <= quality_max
+- quality_max: present, integer
+- quality_pass: true only if quality_score == quality_max
+- per_slide_scores: present, has exactly slide_count entries
+  (minus 1 if slide_zero exists, minus appendix slide count)
+
+Nullable fields (for non-sales deck types):
+- competitive_frame_as_rendered: null or "N/A — [deck_type]" when
+  deck_type is educational, enablement_session, or account_plan
+
 **If `_meta.board_dir` is absent** — skip board write entirely. Do not create any files.

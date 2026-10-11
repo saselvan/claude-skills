@@ -26,22 +26,22 @@ These are the terms that appear in strategy YAML `layout:` fields. Each maps to 
 
 | Strategy Term | Scaffold Key | pptxgenjs Function | Notes |
 |---|---|---|---|
-| `title_slide` | `title` | `addTitleSlideDark()` | Dark default. Light variant: swap `C.bg1` to `"F9F7F4"` and invert text colors. |
+| `title_slide` | `title` | `addTitleSlideDark()` | Structural slide: dark `C.navy` bg, white text. |
 | `stat_hero` | `big_number` | `addBigNumber()` | Auto-sized. See Section 5 for sizing rules. |
 | `feature_grid` | `content_3col_cards` | `addCardGrid3Col()` | 3-column card grid with accent bars. For 4 items use `content_card_quad`. |
 | `two_column_validation` | `content_2col` | `addComparison()` | Two-column with colored accent borders. |
 | `before_after` | `content_2col` | `addComparison(left_accent="maroon", right_accent="green")` | Pain/muted left, solution/bright right. |
-| `architecture_diagram` | `blank` | Custom build | Delegate to diagram/arch-diagram skills. Embed output as image. See design-rules.md Architecture Flow. |
+| `architecture_diagram` | `blank` | Custom build | Dark `C.navyDark` bg. Delegate to diagram/arch-diagram skills. Embed output as image. See design-rules.md Architecture Flow. |
 | `proof_points` | `content_3col_cards` or `content_card_right` | `addCardGrid3Col()` or custom | Metric cards: use 3col_cards. Customer story with image: use content_card_right. |
-| `comparison_table` | `blank` | Custom `addTable()` | Blue header row (`3B8FD4`), dark body rows (`1B3139`). |
+| `comparison_table` | `blank` | Custom `addTable()` | Blue header row (`2272B4`), alternating body rows. |
 | `timeline` | `blank` | Custom timeline build | Style 1: numbered circles on line. Style 2: cards with arrows. |
 | `discussion` | `content_3col_cards` | `addCardGrid3Col()` | Numbered next-step cards. Add number circles above each card. |
-| `story` | `power_statement_2` | `addQuote()` | Dark bg, italic white text, maroon quotation mark. |
+| `story` | `power_statement_2` | `addQuote()` | Dark `C.navy` bg, italic white text, maroon quotation mark. |
 | `agenda` | `content_basic` | `addContentBasic()` | Numbered items with accent-colored dots or circles. |
 | `objection_handling` | `content_2col` | `addComparison(left_accent="maroon", right_accent="green")` | Left: myth/objection (italic, muted t3). Right: reality (bold t1, evidence bullets). |
-| `image_showcase` | `blank` or `content_card_large` | Custom image placement | Full-width real image with title above + caption below. White frame on dark bg. |
-| `section_break` | `section_break` | `addSectionBreak()` | Rotate through variants across the deck. |
-| `closing` | `closing` | `addClosing()` | Must have specific CTA. See Section 9 for enforcement. |
+| `image_showcase` | `blank` or `content_card_large` | Custom image placement | Full-width real image with title above + caption below. |
+| `section_break` | `section_break` | `addSectionBreak()` | Structural slide: dark `C.navy` bg. Rotate through variants across the deck. |
+| `closing` | `closing` | `addClosing()` | Structural slide: dark `C.navy` bg. Must have specific CTA. See Section 9 for enforcement. |
 
 ### Direct Scaffold Keys (Content-Shape Driven)
 
@@ -49,27 +49,27 @@ These are used when choosing layout based on content shape rather than strategy 
 
 | Scaffold Key | pptxgenjs Pattern | When to Use |
 |---|---|---|
-| `title` | `addTitleSlideDark()` | Opening slide. Variant "a" has hero image area on right. |
-| `title_alt` | `addTitleSlideDark()` with image zone | Opening with hero image on right side. |
-| `content_basic` | `addContentBasic()` | Single column, title + body. ONLY when no visual element exists. |
+| `title` | `addTitleSlideDark()` | Opening slide. Structural: dark `C.navy` bg. Variant "a" has hero image area on right. |
+| `title_alt` | `addTitleSlideDark()` with image zone | Opening with hero image on right side. Structural: dark bg. |
+| `content_basic` | `addContentBasic()` | Single column, title + body. Light `C.bg` bg, dark text. ONLY when no visual element exists. |
 | `content_basic_white` | `addContentBasic()` with white bg | White background variant. Light theme only. |
-| `content_card_right` | Custom: text left, image/card right | Text-dominant slide with supplementary visual on right. |
-| `content_card_left` | Custom: image/card left, text right | Mirror of card_right. Alternate with card_right for rhythm. |
-| `content_card_large` | Custom: large card/image dominant | When the visual IS the point, not supplementary. |
-| `content_card_quad` | Custom: 2x2 card grid | 4 items of equal weight. |
-| `content_2col` | `addComparison()` | Any two-column comparison. Accent colors distinguish intent. |
-| `content_2col_icon` | `addComparison()` with icon spots | Two columns + icon placeholders above each header. |
-| `content_3col` | `addContent3Col()` | 3 parallel text columns, no card backgrounds. |
-| `content_3col_icon` | `addContent3Col()` with icon spots | 3 columns with icon placeholders above each. |
-| `content_3col_cards` | `addCardGrid3Col()` | 3 features/capabilities with card backgrounds and accent bars. |
-| `power_statement` | Custom: centered bold statement | Single bold line, centered. 1-2 lines max. |
-| `power_statement_2` | `addQuote()` | Dark bg, italic white quote text. |
+| `content_card_right` | Custom: text left, image/card right | Text-dominant slide with supplementary visual on right. Light bg. |
+| `content_card_left` | Custom: image/card left, text right | Mirror of card_right. Alternate with card_right for rhythm. Light bg. |
+| `content_card_large` | Custom: large card/image dominant | When the visual IS the point, not supplementary. Light bg. |
+| `content_card_quad` | Custom: 2x2 card grid | 4 items of equal weight. Light bg. |
+| `content_2col` | `addComparison()` | Any two-column comparison. Accent colors distinguish intent. Light bg. |
+| `content_2col_icon` | `addComparison()` with icon spots | Two columns + icon placeholders above each header. Light bg. |
+| `content_3col` | `addContent3Col()` | 3 parallel text columns, no card backgrounds. Light bg. |
+| `content_3col_icon` | `addContent3Col()` with icon spots | 3 columns with icon placeholders above each. Light bg. |
+| `content_3col_cards` | `addCardGrid3Col()` | 3 features/capabilities with card backgrounds and accent bars. Light bg. |
+| `power_statement` | Custom: centered bold statement | Single bold line, centered. 1-2 lines max. Light bg. |
+| `power_statement_2` | `addQuote()` | Structural: dark `C.navy` bg, italic white quote text. |
 | `power_statement_3` | Custom: accent bg statement | Alternate power statement style. |
 | `power_statement_4` | Custom: alternate accent | Alternate power statement style. |
-| `big_number` | `addBigNumber()` | Hero statistic. Auto-sized. |
-| `section_break` | `addSectionBreak()` | Topic transition. Rotate variants. |
+| `big_number` | `addBigNumber()` | Hero statistic. Auto-sized. Light bg. |
+| `section_break` | `addSectionBreak()` | Topic transition. Structural: dark bg. Rotate variants. |
 | `blank` | `pres.addSlide()` | Full custom: architecture, table, timeline, logo strip. |
-| `closing` | `addClosing()` | Final slide. CTA required. |
+| `closing` | `addClosing()` | Final slide. Structural: dark bg. CTA required. |
 
 ---
 
@@ -106,6 +106,8 @@ Start here when you know what's on the slide but not which layout to use.
 
 **These are building blocks, not templates.** Use them as starting points but **never call the same layout function for consecutive slides**. Each slide must be individually designed after viewing the previous slide's PNG. Repetition kills visual rhythm.
 
+**Visual rhythm rule:** Structural slides (title, section_break, closing, power_statement_2) use dark `C.navy` backgrounds with white text. Content slides use warm `C.bg` backgrounds with dark text. Architecture slides use `C.navyDark`.
+
 ### Setup (Required for All Layouts)
 
 ```javascript
@@ -114,15 +116,24 @@ const React = require("react");
 const ReactDOMServer = require("react-dom/server");
 const sharp = require("sharp");
 
-// Databricks brand palette
+// LIGHT PALETTE (default)
 const C = {
-  bg1: "0B2026", bgCard: "1B3139", bgLight: "303F47",
-  lava: "FF3621", lavaLight: "2D1510",
-  green: "00A972", greenLight: "0D2920",
-  blue: "3B8FD4", blueLight: "0D1F2D",
-  yellow: "FFAB00", yellowLight: "2D2510",
-  maroon: "C4243E", maroonLight: "1D0D10",
-  navy: "1B5162",
+  bg: "F9F7F4", bgCard: "FFFFFF", bgLight: "EEEDE9",
+  lava: "FF3621", lavaText: "C42B1A",
+  green: "00A972", blue: "2272B4", yellow: "FFAB00",
+  maroon: "C4243E",
+  navy: "1B3139", navyDark: "0B2026",
+  t1: "333333", t2: "545454", t3: "595959",
+  border: "B0B0B0"
+};
+
+// DARK THEME (opt-in via strategy YAML: theme: dark)
+const C_DARK = {
+  bg: "0B2026", bgCard: "1B3139", bgLight: "303F47",
+  lava: "FF3621", lavaText: "FF3621",
+  green: "00A972", blue: "3B8FD4", yellow: "FFAB00",
+  maroon: "C4243E",
+  navy: "1B3139", navyDark: "0B2026",
   t1: "FFFFFF", t2: "DCE0E2", t3: "9EADB5",
   border: "303F47"
 };
@@ -142,24 +153,24 @@ async function iconPng(IC, color, size = 256) {
 
 ### addTitleSlideDark
 
-Scaffold key: `title`
+Scaffold key: `title` | **Structural slide: dark bg**
 
 ```javascript
 function addTitleSlideDark(pres, title, subtitle) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.navy };  // Structural: dark bg
 
   s.addText(title, {
     x: 0.8, y: 2.5, w: 8, h: 1.5,
     fontSize: 44, fontFace: FH, bold: true,
-    color: C.t1, align: "left", valign: "top"
+    color: "FFFFFF", align: "left", valign: "top"
   });
 
   if (subtitle) {
     s.addText(subtitle, {
       x: 0.8, y: 4.2, w: 8, h: 0.6,
       fontSize: 24, fontFace: FB,
-      color: C.t2, align: "left"
+      color: "DCE0E2", align: "left"
     });
   }
 
@@ -175,18 +186,18 @@ function addTitleSlideDark(pres, title, subtitle) {
 
 ### addContentBasic
 
-Scaffold key: `content_basic`
+Scaffold key: `content_basic` | **Content slide: light bg**
 
 ```javascript
 function addContentBasic(pres, sectionLabel, title, bodyText) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.bg };  // Content: warm light bg
 
   if (sectionLabel) {
     s.addText(sectionLabel.toUpperCase(), {
       x: 0.8, y: 0.35, w: 3, h: 0.3,
       fontSize: 10, fontFace: FB, bold: true,
-      color: C.lava, charSpacing: 3
+      color: C.lavaText, charSpacing: 3
     });
   }
 
@@ -206,13 +217,13 @@ function addContentBasic(pres, sectionLabel, title, bodyText) {
 
 ### addCardGrid3Col
 
-Scaffold key: `content_3col_cards`
+Scaffold key: `content_3col_cards` | **Content slide: light bg**
 
 ```javascript
 function addCardGrid3Col(pres, title, cards) {
   // cards = [{ title, body, color }, ...]
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.bg };  // Content: warm light bg
 
   s.addText(title, {
     x: 0.8, y: 0.7, w: 8, h: 0.5,
@@ -226,7 +237,7 @@ function addCardGrid3Col(pres, title, cards) {
     // White card background
     s.addShape(pres.ShapeType.rect, {
       x: cardX[i], y: cardY, w: cardW, h: cardH,
-      fill: { color: "FFFFFF" }, line: { type: "none" },
+      fill: { color: C.bgCard }, line: { type: "none" },
       rectRadius: 0.1, shadow: shd()
     });
 
@@ -236,16 +247,16 @@ function addCardGrid3Col(pres, title, cards) {
       fill: { color: card.color || C.lava }, line: { type: "none" }
     });
 
-    // Card title (dark text on white)
+    // Card title (dark text on white card)
     s.addText(card.title, {
       x: cardX[i] + 0.2, y: cardY + 0.3, w: cardW - 0.4, h: 0.4,
-      fontSize: 16, fontFace: FH, bold: true, color: C.bg1
+      fontSize: 16, fontFace: FH, bold: true, color: C.t1
     });
 
-    // Card body (gray text on white)
+    // Card body (secondary text on white card)
     s.addText(card.body, {
       x: cardX[i] + 0.2, y: cardY + 0.8, w: cardW - 0.4, h: 2.2,
-      fontSize: 11, fontFace: FB, color: C.t3, valign: "top"
+      fontSize: 11, fontFace: FB, color: C.t2, valign: "top"
     });
   });
 
@@ -255,12 +266,12 @@ function addCardGrid3Col(pres, title, cards) {
 
 ### addBigNumber
 
-Scaffold key: `big_number`
+Scaffold key: `big_number` | **Content slide: light bg**
 
 ```javascript
 function addBigNumber(pres, number, label, context) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.bg };  // Content: warm light bg
 
   if (label) {
     s.addText(label, {
@@ -276,7 +287,7 @@ function addBigNumber(pres, number, label, context) {
   s.addText(number, {
     x: 1, y: 1.5, w: 8, h: 2,
     fontSize: numSize, fontFace: FH, bold: true,
-    color: C.lava, align: "center", valign: "middle"
+    color: C.lavaText, align: "center", valign: "middle"
   });
 
   if (context) {
@@ -293,12 +304,12 @@ function addBigNumber(pres, number, label, context) {
 
 ### addSectionBreak
 
-Scaffold key: `section_break`
+Scaffold key: `section_break` | **Structural slide: dark bg**
 
 ```javascript
 function addSectionBreak(pres, title, subtitle) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.navy };  // Structural: dark bg
 
   s.addShape(pres.ShapeType.rect, {
     x: 0, y: 2.5, w: 10, h: 0.05,
@@ -308,13 +319,13 @@ function addSectionBreak(pres, title, subtitle) {
   s.addText(title, {
     x: 1, y: 2.8, w: 8, h: 1,
     fontSize: 36, fontFace: FH, bold: true,
-    color: C.t1, align: "center"
+    color: "FFFFFF", align: "center"
   });
 
   if (subtitle) {
     s.addText(subtitle, {
       x: 1, y: 3.9, w: 8, h: 0.5,
-      fontSize: 18, fontFace: FB, color: C.t2, align: "center"
+      fontSize: 18, fontFace: FB, color: "DCE0E2", align: "center"
     });
   }
 
@@ -324,13 +335,13 @@ function addSectionBreak(pres, title, subtitle) {
 
 ### addComparison
 
-Scaffold key: `content_2col`
+Scaffold key: `content_2col` | **Content slide: light bg**
 
 ```javascript
 function addComparison(pres, title, leftCol, rightCol) {
   // leftCol/rightCol = { label, items: [strings], color }
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.bg };  // Content: warm light bg
 
   s.addText(title, {
     x: 0.8, y: 0.7, w: 8, h: 0.5,
@@ -340,7 +351,7 @@ function addComparison(pres, title, leftCol, rightCol) {
   const colW = 4, colH = 3.5, colY = 1.5;
   const leftX = 0.8, rightX = 5.2;
 
-  // Left column
+  // Left column (white card on warm bg)
   s.addShape(pres.ShapeType.rect, {
     x: leftX, y: colY, w: colW, h: colH,
     fill: { color: C.bgCard },
@@ -356,7 +367,7 @@ function addComparison(pres, title, leftCol, rightCol) {
     fontSize: 12, fontFace: FB, color: C.t2, valign: "top"
   });
 
-  // Right column
+  // Right column (white card on warm bg)
   s.addShape(pres.ShapeType.rect, {
     x: rightX, y: colY, w: colW, h: colH,
     fill: { color: C.bgCard },
@@ -378,12 +389,12 @@ function addComparison(pres, title, leftCol, rightCol) {
 
 ### addQuote
 
-Scaffold key: `power_statement_2`
+Scaffold key: `power_statement_2` | **Structural slide: dark bg**
 
 ```javascript
 function addQuote(pres, quote, attribution) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.navy };  // Structural: dark bg
 
   s.addText("\u201C", {
     x: 1.5, y: 1.8, w: 1, h: 1,
@@ -393,13 +404,13 @@ function addQuote(pres, quote, attribution) {
   s.addText(quote, {
     x: 1.5, y: 2.2, w: 7, h: 2,
     fontSize: 24, fontFace: FB, italic: true,
-    color: C.t1, align: "center", valign: "middle"
+    color: "FFFFFF", align: "center", valign: "middle"
   });
 
   if (attribution) {
     s.addText(`\u2014 ${attribution}`, {
       x: 1.5, y: 4.5, w: 7, h: 0.4,
-      fontSize: 14, fontFace: FB, color: C.t3, align: "right"
+      fontSize: 14, fontFace: FB, color: "9EADB5", align: "right"
     });
   }
 
@@ -409,12 +420,12 @@ function addQuote(pres, quote, attribution) {
 
 ### addContent2Col
 
-Scaffold key: `content_2col` (text-only variant without card borders)
+Scaffold key: `content_2col` (text-only variant without card borders) | **Content slide: light bg**
 
 ```javascript
 function addContent2Col(pres, title, leftText, rightText) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.bg };  // Content: warm light bg
 
   s.addText(title, {
     x: 0.8, y: 0.7, w: 8, h: 0.5,
@@ -439,13 +450,13 @@ function addContent2Col(pres, title, leftText, rightText) {
 
 ### addContent3Col
 
-Scaffold key: `content_3col`
+Scaffold key: `content_3col` | **Content slide: light bg**
 
 ```javascript
 function addContent3Col(pres, title, col1, col2, col3) {
   // col1/2/3 = { header, items: [strings] }
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.bg };  // Content: warm light bg
 
   s.addText(title, {
     x: 0.8, y: 0.7, w: 8, h: 0.5,
@@ -476,23 +487,23 @@ function addContent3Col(pres, title, col1, col2, col3) {
 
 ### addClosing
 
-Scaffold key: `closing`
+Scaffold key: `closing` | **Structural slide: dark bg**
 
 ```javascript
 function addClosing(pres, title, subtitle, cta) {
   const s = pres.addSlide();
-  s.background = { color: C.bg1 };
+  s.background = { color: C.navy };  // Structural: dark bg
 
   s.addText(title, {
     x: 1, y: 2, w: 8, h: 1,
     fontSize: 44, fontFace: FH, bold: true,
-    color: C.t1, align: "center"
+    color: "FFFFFF", align: "center"
   });
 
   if (subtitle) {
     s.addText(subtitle, {
       x: 1, y: 3.2, w: 8, h: 0.6,
-      fontSize: 24, fontFace: FB, color: C.t2, align: "center"
+      fontSize: 24, fontFace: FB, color: "DCE0E2", align: "center"
     });
   }
 
@@ -528,7 +539,7 @@ Context text = `stat_font_size / 4` (floor 16pt). Source text = 9pt. All centere
 
 When a slide includes a visual element (icon, illustration, real image, shape-based diagram), use this tree to pick the right layout.
 
-**For WHEN to use each type of visual (real image vs shape-based vs icons vs text-only), consult deck-philosophy.md Section 9.** This section handles placement, not selection.
+**For WHEN to use each type of visual (real image vs shape-based vs icons vs text-only), consult deck-philosophy.md Section 8.** For image quality gates and narrative arc mapping, see deck-level-review.md. This section handles placement, not selection.
 
 ### Decision Tree
 
@@ -566,16 +577,40 @@ When a slide includes a visual element (icon, illustration, real image, shape-ba
 ### Real Image Code Pattern
 
 ```javascript
-// Full-width hero image on blank slide
+// Full-width hero image on content slide (light bg)
 const s = pres.addSlide();
-s.background = { color: C.bg1 };
+s.background = { color: C.bg };  // Content: warm light bg
 
 s.addText(title, {
   x: 0.8, y: 0.5, w: 8, h: 0.5,
   fontSize: 28, fontFace: FH, bold: true, color: C.t1
 });
 
-// White frame on dark bg (skip on light bg)
+// No frame needed on light bg — image edges are naturally visible
+s.addImage({
+  path: './images/diagram.png',
+  x: 0.5, y: 1.5, w: 9.0, h: 3.5,
+  sizing: { type: 'contain', w: 9.0, h: 3.5 }
+});
+
+// Caption
+s.addText("Source: Databricks documentation", {
+  x: 0.5, y: 5.1, w: 9.0, h: 0.25,
+  fontSize: 9, fontFace: FB, color: C.t3, italic: true, align: "center"
+});
+```
+
+```javascript
+// Full-width hero image on architecture slide (dark bg)
+const s = pres.addSlide();
+s.background = { color: C.navyDark };  // Architecture: dark bg
+
+s.addText(title, {
+  x: 0.8, y: 0.5, w: 8, h: 0.5,
+  fontSize: 28, fontFace: FH, bold: true, color: "FFFFFF"
+});
+
+// White frame on dark bg (required for contrast)
 s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
   x: 0.4, y: 1.4, w: 9.2, h: 3.7,
   fill: { color: "FFFFFF" }, rectRadius: 0.1, shadow: shd()
@@ -590,7 +625,7 @@ s.addImage({
 // Caption
 s.addText("Source: Databricks documentation", {
   x: 0.5, y: 5.1, w: 9.0, h: 0.25,
-  fontSize: 9, fontFace: FB, color: C.t3, italic: true, align: "center"
+  fontSize: 9, fontFace: FB, color: "9EADB5", italic: true, align: "center"
 });
 ```
 

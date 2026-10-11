@@ -95,10 +95,11 @@ Light theme uses the official Databricks brand background (#F9F7F4 warm oat). Th
 
 White boxes with colored left-edge accent bars on warm F9F7F4 background:
 ```javascript
-// White callout box
-s.addShape("rect", { x, y, w, h, fill: { color: "FFFFFF" }, shadow: shd() });
+// White callout box — no shadow, hairline border for definition
+s.addShape("rect", { x, y, w, h, fill: { color: "FFFFFF" },
+  line: { color: "D9D3C6", width: 0.75 }, shadow: undefined });
 // Colored accent bar (left edge)
-s.addShape("rect", { x, y, w: 0.06, h, fill: { color: C.green } });
+s.addShape("rect", { x, y, w: 0.04, h, fill: { color: C.green }, shadow: undefined });
 ```
 Accent bar colors: green (success), blue (info), yellow (warning), lava (brand), maroon (emphasis 18pt+).
 
@@ -128,14 +129,99 @@ const LIGHT_PALETTE = {
 };
 ```
 
-### Theme Switch
+### Theme Switch + B1 Brand Token Override
 
 ```javascript
 // Config: set theme at top of scaffold.js
 // Default: "light" (brand-aligned). Override with strategy.design_decisions.theme
 const THEME = "light"; // "dark" | "light"
-const C = THEME === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
+let C = THEME === "dark" ? { ...DARK_PALETTE } : { ...LIGHT_PALETTE };
+
+// ─── B1 BRAND TOKEN OVERRIDE ────────────────────────────────────
+// If strategy provides design_requirements.visual_vocabulary.brand,
+// override the hardcoded palette with those values.
+//
+// RULES:
+//   visual_register == "branded"       → keep hardcoded Databricks palette (backward compatible)
+//   visual_register == "editorial"     → B1 values from strategy OVERRIDE palette constants
+//   visual_register == "bespoke"       → B1 values from strategy OVERRIDE palette constants
+//   visual_register == "customer_brand"→ B1 values from strategy OVERRIDE palette constants
+//
+// Without this, editorial/customer-brand decks silently render in Databricks colors.
+
+const VISUAL_REGISTER = strategy?.voice_register || "editorial";  // from strategy YAML
+const B1 = strategy?.design_requirements?.visual_vocabulary?.brand;
+
+if (B1 && VISUAL_REGISTER !== "branded") {
+  // Override palette from strategy B1 tokens
+  if (B1.ground)         C.bg = B1.ground;
+  if (B1.ink)            C.t1 = B1.ink;
+  if (B1.ink_secondary)  C.t2 = B1.ink_secondary;
+  // t3 derives from ink_secondary (slightly lighter) or stays default
+  if (B1.accent)         C.lava = B1.accent;
+  if (B1.accent)         C.lavaText = B1.accent;  // assume text-safe unless separate value
+  if (B1.display_font)   FH = B1.display_font;
+  if (B1.text_font)      FB = B1.text_font;
+  // accent_secondary maps to C.blue (the second semantic color)
+  if (B1.accent_secondary) C.blue = B1.accent_secondary;
+  
+  console.log(`B1 OVERRIDE: visual_register=${VISUAL_REGISTER}, palette overridden from strategy`);
+  console.log(`  ground=${C.bg}, ink=${C.t1}, accent=${C.lava}, font=${FH}`);
+}
+// If visual_register == "branded" or no B1 provided: hardcoded Databricks palette stands.
+// B2 structural tokens enforced regardless (see B2 section below).
 ```
+
+**Customer-brand example (NWM):**
+```yaml
+# In strategy YAML:
+voice_register: editorial
+design_requirements:
+  visual_vocabulary:
+    brand:
+      ground: "F5F0EB"        # NWM warm
+      ink: "1C1C1C"           # near-black
+      ink_secondary: "5A5A5A"
+      accent: "4E2A84"        # NWM purple
+      accent_job: "marks the primary insight per view"
+      display_font: "DM Sans" # or NWM brand font if known
+      text_font: "DM Sans"
+```
+This renders the deck in NWM purple, not Databricks oat+lava.
+
+### B2 Structural Constraints (MANDATORY — all modes including branded)
+
+These override the model's convergent defaults. They are brand-independent — no brand
+requires 8px radius, drop shadows, Inter, or symmetric triptychs. A branded deck that
+ships violating B2 has failed validation exactly like an editorial one.
+
+Strategy YAML may supply `design_requirements.visual_vocabulary.structure` — if present,
+use those values. If absent, these are the defaults (same values — they're the floor):
+
+```javascript
+// B2 STRUCTURAL TOKENS — enforced on every slide, every mode
+const B2 = {
+  radius: 0,                    // 0-2px max. NEVER 8px. Use RECTANGLE not ROUNDED_RECTANGLE.
+  containment: "whitespace",    // "whitespace first, hairline second, box never"
+  hairlineColor: "D9D3C6",     // Low-contrast warm gray — the only divider
+  hairlineWeight: 0.75,         // pt
+  shadow: "none",               // Explicit. Set shadow: undefined on every shape.
+  layoutPosture: "asymmetric",  // 2/3 + 1/3 beats three equal columns
+  typeScaleRatio: 1.333,        // Modular scale, not arbitrary px
+};
+
+// SHADOW KILL: pptxgenjs shapes default to inheriting template shadows.
+// Every shape MUST explicitly set shadow: undefined (or { type: "none" })
+// The old shd() factory is DEAD for content slides.
+// Exception: image framing on dark backgrounds — subtle depth is acceptable there.
+```
+
+**Migration from old patterns:**
+- `shadow: shd()` on cards → `shadow: undefined` (kill it)
+- `pres.shapes.ROUNDED_RECTANGLE` → `pres.shapes.RECTANGLE` (sharp corners)
+- Icon-in-circle → Icon inline, tiny, no circle background
+- Three equal columns → asymmetric (e.g., 2/3 + 1/3 split)
+- `.font.name` must be set on EVERY text run — never omit (defaults to Calibri)
 
 **Structural slide override pattern (light theme only):**
 ```javascript
@@ -259,20 +345,30 @@ s.addText("SECTION NAME", {
 
 ---
 
-## 4. Shadow Factory
+## 4. Shadow Control
 
-pptxgenjs mutates shadow objects in place. MUST be a factory function — never reuse a shadow object.
+**B2 RULE: No shadows on content elements.** pptxgenjs shapes inherit template shadows
+by default — you must explicitly kill them. The old `shd()` factory is deprecated for
+content slides.
 
 ```javascript
-const shd = () => ({
+// DEFAULT: No shadow. Use on all cards, shapes, containers.
+// Simply omit `shadow` or set `shadow: undefined` on shapes.
+
+// EXCEPTION ONLY: Image framing on dark backgrounds (subtle depth for contrast).
+// Even then, use minimal shadow — not the old aggressive factory.
+const imgFrameShadow = () => ({
   type: "outer",
-  blur: 6,
-  offset: 2,
+  blur: 4,
+  offset: 1,
   angle: 135,
   color: "000000",
-  opacity: 0.25
+  opacity: 0.15
 });
 ```
+
+**Every shape you add:** If you don't explicitly set `shadow: undefined`, pptxgenjs may
+inherit a shadow from the template. Be explicit.
 
 ---
 
@@ -337,12 +433,11 @@ s.addImage({ data: I.check, x: 0.85, y: 1.0, w: 0.22, h: 0.22 });
 Most documentation diagrams and product screenshots have white backgrounds. On dark slides (`bg: 0B2026`), a white-background image has invisible edges. Always add a white rounded-rectangle frame behind the image:
 
 ```javascript
-// White frame (slightly larger than image, with shadow)
-s.addShape(pres.shapes.ROUNDED_RECTANGLE, {
+// White frame (slightly larger than image — RECTANGLE, minimal shadow exception for dark bg contrast)
+s.addShape(pres.shapes.RECTANGLE, {
   x: imgX - 0.1, y: imgY - 0.1, w: imgW + 0.2, h: imgH + 0.2,
   fill: { color: "FFFFFF" },
-  rectRadius: 0.1,
-  shadow: shd()
+  shadow: imgFrameShadow()  // Exception: image framing on dark bg only
 });
 // Image on top
 s.addImage({
@@ -392,15 +487,17 @@ On light backgrounds, use `595959` instead of `C.t3`.
 ### Card with Left Accent Bar
 
 ```javascript
-// Card background
+// Card background — RECTANGLE, no shadow, hairline border
 s.addShape(pres.shapes.RECTANGLE, {
   x: 0.5, y: 1.4, w: 2.85, h: 1.3,
-  fill: { color: C.bgCard }, shadow: shd()
+  fill: { color: C.bgCard },
+  line: { color: C.hairline || "D9D3C6", width: 0.75 },
+  shadow: undefined  // B2: explicit no shadow
 });
 // Left accent bar (layered on top)
 s.addShape(pres.shapes.RECTANGLE, {
-  x: 0.5, y: 1.4, w: 0.06, h: 1.3,
-  fill: { color: C.blue }
+  x: 0.5, y: 1.4, w: 0.04, h: 1.3,
+  fill: { color: C.blue }, shadow: undefined
 });
 // Card title
 s.addText("Card Title", {
@@ -414,16 +511,17 @@ s.addText("Description text", {
 });
 ```
 
-### Icon in Colored Circle
+### Icon Inline (no circle background)
 
 ```javascript
-// Circle background
-s.addShape(pres.shapes.OVAL, {
-  x: 0.85, y: 1.75, w: 0.5, h: 0.5,
-  fill: { color: C.blue }
+// B2: Icons are small and inline — no colored circle backgrounds.
+// Place icon at text-adjacent size, let whitespace do the separating.
+s.addImage({ data: I.check, x: 0.85, y: 1.8, w: 0.22, h: 0.22 });
+// Text aligned next to icon
+s.addText("Completed", {
+  x: 1.15, y: 1.75, w: 2, h: 0.3,
+  fontSize: 14, fontFace: FB, color: C.t1, margin: 0
 });
-// Icon centered inside (offset ~0.11" from oval edge)
-s.addImage({ data: I.check, x: 0.96, y: 1.86, w: 0.28, h: 0.28 });
 ```
 
 ### Callout Bar
@@ -522,11 +620,13 @@ s.addText([
 
 ### Shapes
 
-**Card background with shadow:**
+**Card background (B2-compliant — no shadow, hairline border):**
 ```javascript
 s.addShape(pres.shapes.RECTANGLE, {
   x: 0.5, y: 1.4, w: 2.85, h: 1.3,
-  fill: { color: C.bgCard }, shadow: shd()
+  fill: { color: C.bgCard },
+  line: { color: "D9D3C6", width: 0.75 },
+  shadow: undefined
 });
 ```
 
@@ -546,13 +646,9 @@ s.addShape(pres.shapes.LINE, {
 });
 ```
 
-**Oval (icon circle background):**
-```javascript
-s.addShape(pres.shapes.OVAL, {
-  x: 0.85, y: 1.75, w: 0.5, h: 0.5,
-  fill: { color: C.blue }
-});
-```
+**Oval — DEPRECATED for icon backgrounds (B2: no icon-in-circle).**
+Use inline icons instead (see "Icon Inline" pattern above).
+Oval is still valid for data visualization (pie slices, progress rings).
 
 **Transparent overlay:**
 ```javascript
