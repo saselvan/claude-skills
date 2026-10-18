@@ -5,8 +5,10 @@
 - [ ] Every link returns 200 today; every quote found on the rendered page today
 - [ ] Owner final read
 - [ ] Medium: paste `drafts/<post>.publish.md`; upload each image by hand; check code blocks and the table render
+- [ ] The outlet's internal submission and review steps are done (private note: `~/obsidian/sa-intel/Reference/Knowledge/blog-publishing-community-fast-path.md`; internal steps stay out of this public repo)
 - [ ] Publish the long post first; copy its URL
 - [ ] LinkedIn: paste the teaser; attach the 4:5 image (or MP4); post
 - [ ] First comment: long-post link + repo link (replace every <PLACEHOLDER>)
 - [ ] Record URLs and publish time in `PUBLISHED.md`
+- [ ] The published links are recorded where the submission route asks
 - [ ] Book the 7-day feedback note

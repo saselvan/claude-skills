@@ -94,6 +94,8 @@ The user's support: Pratchett ("on the floor laughing"), Quinn (snark with subst
 Each comes from a single rewrite test. In post repos, `tools/style_lint.py` (atelier's post kit) checks the ones a script can check.
 
 - Open with the argument, not a scene. (The user notes that others advise the opposite; their own preference is the argument.)
+- In a public technical post, the opening paragraph is the situation: what the subject is and how people use it today, in plain words. Only then the failure, the question and the answer. Never open on a command, a code token or a failure. Check: give the first paragraph to someone who has never heard of the product; they must be able to say what is going on before any error appears. The user's words: "The beginning has to freaking make sense to a reader as to what will be going on."
+- Quote exact error messages verbatim and early. Readers paste them into search engines and AI assistants, so the error text is how the post gets found.
 - Use a plain register, never elevated or sentimental.
 - Write prose. Never use lists in LinkedIn posts: "Screams AI." Medium and blog articles may use a list or numbered steps where the content is a real sequence or set (a how-to); argument stays in prose.
 - Use normal paragraphs. Never put one sentence per line.
@@ -101,6 +103,7 @@ Each comes from a single rewrite test. In post repos, `tools/style_lint.py` (ate
 - Be literal in writing. Analogies belong only in slide speaker notes.
 - Prefer a plain term to an acronym whenever one exists, such as "reporting tool" instead of "BI tool." Otherwise, expand acronyms for public readers: "Always good to expand on acronyms." Skip the expansion only for terms the audience uses daily: "They all know DBUs."
 - Use a crafted title with a plain, descriptive subtitle.
+- A public post's title starts with the words a searcher types: the product and the task, such as "CI/CD for Lakebase synced tables". The named pattern follows a colon. A title with only the named pattern cannot be found: "will an LLM find this, will a Google search find this?"
 - Allow at most one "X, not Y" construction per piece. Use em dashes rarely, if at all. Both are recognizable marks of machine-written text.
 - Prefer concrete, real numbers to general statements.
 - State the strongest opposing case in one sentence and answer it in one.
@@ -164,4 +167,5 @@ These outrank every rule, the baseline, and the channels.
 - The narrative shapes were researched with the user in session (Minto, Duarte, Knaflic, Dykes, Segel and Heer, Rosling, and the Upshot) and approved by them.
 - The joy test was added later and approved by the user; it is shared with house-style and motion-style.
 - The plain-term rule and the video-post rule came from the first explainer build and were approved by the user.
+- The searchable-title, plain-first-sentence and exact-error mechanics came from the CI/CD post (2026-10-14), where the user asked for them as lessons for future blogs. See `references/record.md`, "Lessons from posts".
 - Aligned with atelier's post kit on 2026-10-10, with the user's approval: the disclosure line, and the `style_lint.py` gate.

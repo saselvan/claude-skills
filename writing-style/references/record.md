@@ -194,3 +194,14 @@ Each test showed the same content written two ways that differed in one respect.
     Picked A.
 
 After the rules were approved, the user added the baseline: "Never go with unearned familiarity, oversharing, and feigned personableness. That is the one tangible baseline I would go for, so I am not cringing when I read it tomorrow."
+
+## Lessons from posts
+
+### CI/CD post, "CI/CD for Lakebase synced tables: grants that come back on deploy" (2026-10-14)
+
+The user read the first Google Doc draft and said: "the beginning is kinda abrupt as is the title, will an LLM find this will a Google search find this? Have you looked at any existing Community posts?" Then: "note all these down as lesson learned ... as something to keep in mind for future blogs."
+
+- The draft title was "Grants that come back on deploy": the named pattern alone, with no product or task word. The most-read Community Lakebase posts lead with both (for example "How to perform Semantic Search in Databricks Lakebase", 9,792 views when read on 2026-10-14). The user picked "CI/CD for Lakebase synced tables: grants that come back on deploy", which keeps the name after a colon.
+- The draft opened on `terraform apply`. The closest Community post opens with one sentence that says what Lakebase is. The new opening says what synced tables are and who hits the two failures, then gives the argument.
+- The draft already quoted exact error text, which was kept and moved closer to the top.
+- The first fix still failed. The second opening defined synced tables in one clause and then went straight to the two failures; the situation ("a common way to ship one is Terraform, then psql by hand") sat three paragraphs down. The user: "The beginning has to freaking make sense to a reader as to what will be going on. The beginning paragraph you had here was so mind bogglingly abrupt." The Medium shape (situation, complication, question, answer) was already in this skill and was skipped. The mechanic now says the opening paragraph IS the situation, with a stranger check.
