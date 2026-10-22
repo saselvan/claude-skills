@@ -1,0 +1,12 @@
+{
+  "compositions": [{"dir": "film", "srt": "film.srt"}],
+  "script": "script.md",
+  "claims": ["claims.md"],
+  "numbers_ok": [],
+  "numbers_banned": ["1,615,105"],
+  "banned_words": ["seamless", "traversal"],
+  "banned_on_screen": ["query"],
+  "sql_dir": "sql",
+  "mono_not_sql": [],
+  "must_show": [{"text": "788 seconds from first check to served graph.", "from": 3, "to": 6, "hold": 1.0}]
+}

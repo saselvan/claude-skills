@@ -1,0 +1,85 @@
+1
+00:00:00,000 --> 00:00:04,000
+Who shares patients with Dr. A?
+
+2
+00:00:04,000 --> 00:00:08,000
+Source tables sit
+in Unity Catalog.
+
+3
+00:00:08,000 --> 00:00:14,500
+One path copies data out.
+One starts warehouse SQL.
+
+4
+00:00:14,500 --> 00:00:18,300
+Spark SQL builds the graph.
+
+5
+00:00:18,300 --> 00:00:22,100
+Keys become nodes and edges
+
+6
+00:00:22,100 --> 00:00:26,000
+Patients fold. Under 11 none
+
+7
+00:00:26,000 --> 00:00:30,200
+sum of step run times
+preflight to switch
+
+8
+00:00:30,200 --> 00:00:36,160
+Kit v1: a full copy each build.
+Lakebase can also sync
+changes only.
+
+9
+00:00:36,160 --> 00:00:41,400
+The whole walk is one SQL
+statement. Each hop is one CTE.
+
+10
+00:00:41,400 --> 00:00:47,500
+Two routes, one row.
+Cut keeps 25 per hop.
+
+11
+00:00:49,500 --> 00:00:53,800
+The walk adds hop 3 and hop 4
+the same way.
+
+12
+00:00:53,800 --> 00:01:01,500
+client p95 · warm · in-region
+prepared statements off · 4 CU
+
+13
+00:01:01,500 --> 00:01:04,700
+The same kit walks a tree.
+
+14
+00:01:04,700 --> 00:01:10,500
+From diabetes mellitus,
+one loop adds one is-a level.
+
+15
+00:01:10,500 --> 00:01:15,500
+A rebuild is a new version.
+
+16
+00:01:15,500 --> 00:01:20,500
+Timing graph: 20 seeds equal
+a source-table reference.
+
+17
+00:01:20,500 --> 00:01:26,240
+Graph databases still win
+for ad hoc traversals
+of unknown length
+
+18
+00:01:26,240 --> 00:01:30,600
+github.com/saselvan/
+graph-kit-for-lakebase

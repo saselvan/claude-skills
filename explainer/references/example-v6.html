@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Search belongs in Databricks — prototype v6 (paper, Lakebase is the state)</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --paper: #f7f8fa; --ink: #16202b; --ink-2: #34404e; --muted: #6b7889;
+        --line: #8e9dae; --edge: #9aa9b9; --hair: #d5dce4;
+        --cobalt: #1f4fd8; --gap: #993c1d; --green: #0f8a5f; --orange: #ff3621;
+        --sans: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        --mono: "IBM Plex Mono", ui-monospace, monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+      #root { position: relative; width: 1920px; height: 1080px; background: var(--paper); }
+      .abs { position: absolute; }
+
+      #world { left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 500px; }
+      #kicker { left: 260px; top: 34px; width: 1400px; text-align: center; font-family: var(--mono); font-size: 18px; letter-spacing: 0.08em; color: var(--muted); }
+      #question { left: 260px; top: 66px; width: 1400px; text-align: center; font-size: 50px; letter-spacing: -0.01em; }
+      #divider { left: 960px; top: 200px; width: 1px; height: 700px; background: var(--hair); }
+      .head { width: 860px; text-align: center; }
+      .head .t { font-size: 34px; font-weight: 600; }
+      .head .s { font-family: var(--mono); font-size: 17px; color: var(--muted); margin-top: 8px; }
+      #head-L { left: 50px; top: 200px; }
+      #head-R { left: 1010px; top: 200px; }
+      #svg { left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+
+      .pg { width: 150px; text-align: center; font-size: 17px; color: var(--muted); }
+      .pg .sheet { width: 40px; height: 52px; margin: 0 auto 8px; border: 1px solid var(--edge); border-radius: 3px; background: #fff; }
+
+      /* memory: one row of a table, drawn as grid cells */
+      #mem { left: 1010px; top: 596px; height: 34px; border: 1px solid var(--edge); background: #fff; font-family: var(--mono); font-size: 16px; display: flex; }
+      #mem span { padding: 6px 12px; border-right: 1px solid var(--hair); white-space: nowrap; }
+      #mem span:last-child { border-right: 0; }
+      #mem .k { color: var(--muted); }
+
+      .card { width: 860px; min-height: 124px; padding: 22px 34px; border: 1px solid var(--edge); border-radius: 10px; background: #fff; font-size: 30px; line-height: 1.45; }
+      #card-L { left: 50px; top: 650px; }
+      #card-R { left: 1010px; top: 650px; }
+      #card-R .cl { opacity: 0; font-weight: 500; }
+      #ans-L { font-weight: 500; }
+      #strike { left: 84px; top: 693px; width: 196px; height: 2px; background: var(--gap); transform-origin: left; }
+      .note { width: 860px; text-align: center; font-size: 22px; color: var(--gap); opacity: 0; }
+      #note-L { left: 50px; top: 800px; }
+      .noteR { left: 1010px; top: 800px; }
+
+      /* far layer: seven systems on a ring */
+      #far { left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 960px 500px; }
+      #pipes { left: 0; top: 0; width: 1920px; height: 1080px; overflow: visible; }
+      .sys { width: 250px; height: 84px; border-radius: 8px; border: 1px solid var(--edge); background: #fff; text-align: center; }
+      .sys .name { position: absolute; left: 0; right: 0; top: 14px; font-size: 23px; font-weight: 600; }
+      .sys .db { opacity: 0; top: 26px; }
+      .sys .sub { position: absolute; left: 0; right: 0; top: 50px; font-family: var(--mono); font-size: 14px; color: var(--muted); }
+
+      /* Lakebase: one Postgres database, tables as grid cells */
+      #lake { left: 0; top: 0; width: 1920px; height: 1080px; }
+      #lb { left: 640px; top: 255px; width: 640px; height: 510px; border: 1.5px solid var(--ink-2); border-radius: 10px; background: #fff; }
+      #lb-title { left: 640px; top: 222px; width: 640px; font-family: var(--mono); font-size: 17px; letter-spacing: 0.06em; color: var(--ink-2); }
+      .tbl { font-family: var(--mono); font-size: 14px; }
+      .tbl .th { height: 24px; padding: 3px 8px; color: var(--muted); border-bottom: 1px solid var(--edge); }
+      .row { height: 23px; border-bottom: 1px solid var(--hair); display: flex; align-items: center; padding: 0 8px; white-space: nowrap; }
+      .row i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 8px; }
+      .row .emb { margin-left: auto; display: flex; gap: 2px; }
+      .row .emb b { width: 6px; height: 10px; background: var(--hair); }
+      #boundary { left: 330px; top: 140px; width: 1260px; height: 760px; border: 2px solid var(--orange); border-radius: 22px; }
+      #boundary-label { left: 330px; top: 92px; width: 1260px; text-align: center; font-size: 28px; font-weight: 700; letter-spacing: 0.08em; color: var(--orange); }
+
+      #caption { left: 160px; top: 962px; width: 1600px; height: 60px; text-align: center; font-size: 32px; }
+      .cap { position: absolute; left: 0; right: 0; top: 0; opacity: 0; }
+      #progress { left: 160px; top: 1046px; width: 1600px; height: 14px; }
+      #progress .rail { position: absolute; left: 0; right: 0; top: 6px; height: 1px; background: var(--hair); }
+      #progress .fill { position: absolute; left: 0; top: 6px; width: 1600px; height: 1px; background: var(--ink-2); transform-origin: left; }
+      #progress .tick { position: absolute; top: 2px; width: 1px; height: 9px; background: var(--edge); }
+      #end { left: 0; top: 420px; width: 1920px; text-align: center; }
+      #end .t { font-size: 80px; font-weight: 500; letter-spacing: -0.02em; }
+      #end .t b { color: var(--orange); font-weight: 700; }
+      #end .s { font-family: var(--mono); font-size: 24px; color: var(--muted); margin-top: 24px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="46" data-width="1920" data-height="1080" data-fps="30">
+
+      <div id="world" class="abs clip" data-start="0" data-duration="46" data-track-index="0">
+        <div id="kicker" class="abs">a customer asks</div>
+        <div id="question" class="abs">“What do I have to spend to get the bonus?”</div>
+        <div id="divider" class="abs"></div>
+        <div id="head-L" class="abs head"><div class="t">Search</div><div class="s">finds the nearest page, answers once</div></div>
+        <div id="head-R" class="abs head"><div class="t">Agentic search</div><div class="s">remembers, ties every claim to a page, follows references</div></div>
+        <svg id="svg" class="abs" viewBox="0 0 1920 1080"></svg>
+        <div id="mem" class="abs"><span class="k">memory</span><span>customer</span><span>holds DNB Metal Card</span></div>
+        <div id="card-L" class="abs card"><span id="ans-L">Spend $5,000.</span></div>
+        <div id="strike" class="abs"></div>
+        <div id="note-L" class="abs note">Read 1 page. Never checked the answer.</div>
+        <div id="card-R" class="abs card"></div>
+        <div id="notes"></div>
+        <div id="pages"></div>
+      </div>
+
+      <div id="far" class="abs clip" data-start="0" data-duration="46" data-track-index="1">
+        <svg id="pipes" class="abs" viewBox="0 0 1920 1080"></svg>
+        <div id="systems"></div>
+      </div>
+
+      <div id="lake" class="abs clip" data-start="0" data-duration="46" data-track-index="2">
+        <div id="lb-title" class="abs">LAKEBASE · one Postgres database</div>
+        <div id="lb" class="abs"></div>
+        <div id="tables"></div>
+      </div>
+
+      <div id="boundary" class="abs clip" data-start="0" data-duration="46" data-track-index="3"></div>
+      <div id="boundary-label" class="abs clip" data-start="0" data-duration="46" data-track-index="4">DATABRICKS</div>
+
+      <div id="caption" class="abs clip" data-start="0" data-duration="46" data-track-index="5">
+        <div id="c1" class="cap">A customer asks one question.</div>
+        <div id="c2" class="cap">Plain search finds the nearest page by meaning, and answers from it.</div>
+        <div id="c3" class="cap">Agentic search first reads what it remembers about this customer.</div>
+        <div id="c4" class="cap">It finds the same page, and ties each claim to it.</div>
+        <div id="c5" class="cap">The page names another page. Known, but not read yet.</div>
+        <div id="c6" class="cap">So it follows the reference, exactly, and checks again.</div>
+        <div id="c7" class="cap">Four pages. Every claim tied to its source.</div>
+        <div id="c8" class="cap">Most teams stitch seven systems. Every hop is a copy, a queue and a delay.</div>
+        <div id="c9" class="cap">Pages, memory, sessions, citations, app state: tables in one Lakebase database.</div>
+        <div id="c10" class="cap">On Databricks: one copy of the data, one set of permissions, short paths.</div>
+      </div>
+
+      <div id="progress" class="abs clip" data-start="0" data-duration="46" data-track-index="6"><div class="rail"></div><div class="fill"></div></div>
+
+      <div id="end" class="abs clip" data-start="0" data-duration="46" data-track-index="7">
+        <div class="t">Search belongs in <b>Databricks</b>.</div>
+        <div class="s">agentic search is the proof</div>
+      </div>
+    </div>
+
+    <script>
+      // ---------------- Data. Change ROUNDS to change N. ----------------
+      const ROUNDS = [
+        { page: "Offer terms",    colour: "#1f4fd8", clause: "Spend $5,000",                 pointsTo: "Promo calendar", note: "Offer terms say “see Promo calendar”. Not read yet." },
+        { page: "Promo calendar", colour: "#6b3fd4", clause: " within 60 days.",             pointsTo: "Exclusions",     note: "Promo calendar says “see Exclusions”. Not read yet." },
+        { page: "Exclusions",     colour: "#0f8a5f", clause: "<br/>Returns cancel the bonus.", pointsTo: "Fees",          note: "Exclusions say “see Fees”. Not read yet." },
+        { page: "Fees",           colour: "#a35d00", clause: " Card fees don’t count.",      pointsTo: null,             note: "Every claim is tied to a page. Done." }
+      ];
+      const PAGES = [
+        ["Offer terms", 1110, 425], ["Promo calendar", 1330, 525], ["Exclusions", 1550, 425], ["Fees", 1770, 525],
+        ["Card tiers", 1110, 318], ["Travel perks", 1330, 318], ["Rewards FAQ", 1550, 318], ["Privacy", 1770, 318]
+      ];
+      const QUERY = [1052, 488];
+      const ROUND_LEN = [2.9, 2.3, 1.9, 1.6, 1.3, 1.1, 1.0, 0.9];
+      // Seven systems teams stitch together; `to` is what each becomes on Databricks ("Lakebase" ones merge).
+      const SYSTEMS = [
+        ["Access control", "Unity Catalog"], ["Vector database", "Lakebase"], ["Session cache", "Lakebase"],
+        ["Model API", "Model Serving"], ["Eval tool", "MLflow"], ["Memory store", "Lakebase"], ["App database", "Lakebase"]
+      ];
+      const FINAL = { "Unity Catalog": [365, 330], "Model Serving": [365, 560], "MLflow": [1305, 445] };
+      const DUR = 46;
+      const EDGE = "#9aa9b9", GAP = "#993c1d", GREEN = "#0f8a5f", COBALT = "#1f4fd8", ORANGE = "#ff3621";
+
+      // ---------------- Build: pages, query, threads ----------------
+      const NS = "http://www.w3.org/2000/svg";
+      const svg = document.getElementById("svg");
+      const mk = (tag, attrs, parent = svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+      const pos = {};
+      const pagesDiv = document.getElementById("pages");
+      ["L", "R"].forEach(side => {
+        const dx = side === "L" ? -960 : 0;
+        PAGES.forEach(([name, x, y], i) => {
+          pos[`${side}:${name}`] = [x + dx, y];
+          const d = document.createElement("div");
+          d.className = "abs pg"; d.id = `pg${side}${i}`;
+          d.style.left = `${x + dx - 75}px`; d.style.top = `${y - 30}px`;
+          d.innerHTML = `<div class="sheet"></div><div class="lbl">${name}</div>`;
+          pagesDiv.appendChild(d);
+        });
+        const [qx, qy] = [QUERY[0] + dx, QUERY[1]];
+        const cp = mk("clipPath", { id: `clip${side}` });
+        mk("rect", { x: 1010 + dx, y: 285, width: 860, height: 300 }, cp);
+        for (let k = 0; k < 3; k++) mk("circle", { id: `rip${side}${k}`, cx: qx, cy: qy, r: 0, fill: "none", stroke: COBALT, "stroke-width": 1, "clip-path": `url(#clip${side})` });
+        mk("circle", { id: `q${side}`, cx: qx, cy: qy, r: 6, fill: COBALT });
+      });
+      // memory row → query: a short, tight read
+      mk("line", { id: "memline", x1: 1060, y1: 596, x2: QUERY[0], y2: QUERY[1] + 6, stroke: COBALT, "stroke-width": 1.5, "stroke-dasharray": 120, "stroke-dashoffset": 120 });
+      const pg = (side, name) => `#pg${side}${PAGES.findIndex(p => p[0] === name)}`;
+      const below = (side, name) => { const [x, y] = pos[`${side}:${name}`]; return [x, y + 52]; };
+
+      const card = document.getElementById("card-R");
+      card.innerHTML = ROUNDS.map((r, i) => (r.clause.startsWith("<br/>") ? "<br/>" : "") + `<span class="cl" id="cl${i}" style="color:${r.colour}">${r.clause.replace("<br/>", "")}</span>`).join("");
+      const notes = document.getElementById("notes");
+      ROUNDS.forEach((r, i) => { const n = document.createElement("div"); n.className = "abs note noteR"; n.id = `nt${i}`; n.textContent = r.note; if (!r.pointsTo) n.style.color = GREEN; notes.appendChild(n); });
+      const TOP = 650;
+      const clauseBox = i => document.getElementById(`cl${i}`).getBoundingClientRect();
+
+      const taut = [], pending = [];
+      ROUNDS.forEach((r, i) => {
+        const b = clauseBox(i), cx = b.left + b.width / 2;
+        const [px, py] = below("R", r.page);
+        const p = mk("path", { d: `M ${cx} ${TOP} Q ${(cx + px) / 2} ${(TOP + py) / 2 + 30} ${px} ${py}`, fill: "none", stroke: r.colour, "stroke-width": 1.5 });
+        const L = p.getTotalLength(); p.setAttribute("stroke-dasharray", L); p.setAttribute("stroke-dashoffset", L);
+        taut.push(p);
+        if (r.pointsTo) {
+          // Known but unread: a dashed thread straight to the named page.
+          const sx = Math.min(b.right + 12, 1840);
+          const [tx, ty] = below("R", r.pointsTo);
+          pending.push(mk("path", { d: `M ${sx} ${TOP} Q ${(sx + tx) / 2} ${(TOP + ty) / 2 + 24} ${tx} ${ty}`, fill: "none", stroke: GAP, "stroke-width": 2, "stroke-dasharray": "7 7", opacity: 0 }));
+        } else pending.push(null);
+        if (i > 0) {
+          const [x1, y1] = pos[`R:${ROUNDS[i - 1].page}`], [x2, y2] = pos[`R:${r.page}`];
+          const w = mk("line", { id: `w${i}`, x1, y1, x2, y2, stroke: r.colour, "stroke-width": 1.5 });
+          const L2 = Math.hypot(x2 - x1, y2 - y1); w.setAttribute("stroke-dasharray", L2); w.setAttribute("stroke-dashoffset", L2);
+        }
+      });
+
+      // ---------------- Build: seven systems on a ring ----------------
+      const pipes = document.getElementById("pipes");
+      const sysDiv = document.getElementById("systems");
+      const ring = SYSTEMS.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / SYSTEMS.length; return [960 + 690 * Math.cos(a), 500 + 380 * Math.sin(a)]; });
+      SYSTEMS.forEach(([old, to], i) => {
+        const d = document.createElement("div");
+        d.className = "abs sys"; d.id = `sys${i}`;
+        d.innerHTML = `<span class="name old">${old}</span><span class="name db">${to}</span><span class="sub">own copy · own access</span>`;
+        sysDiv.appendChild(d);
+        gsap.set(d, { left: ring[i][0] - 125, top: ring[i][1] - 42 });
+        const a = ring[i], b = ring[(i + 1) % ring.length];
+        mk("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "#8e9dae", "stroke-width": 1.5, "stroke-dasharray": "8 8" }, pipes);
+        const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2, n = i === 3 ? 7 : 3;
+        for (let k = 0; k < n; k++) mk("rect", { class: k >= 3 ? "qx" : "q", x: mx - 7, y: my - 7 - k * 15, width: 14, height: 12, rx: 2, fill: k >= 3 ? GAP : EDGE }, pipes);
+      });
+
+      // ---------------- Build: Lakebase tables ----------------
+      const T = document.getElementById("tables");
+      const table = (id, left, top, width, header, rows) => {
+        const t = document.createElement("div");
+        t.className = "abs tbl"; t.id = id; t.style.left = `${left}px`; t.style.top = `${top}px`; t.style.width = `${width}px`;
+        t.innerHTML = `<div class="th">${header}</div>` + rows.map((r, i) => `<div class="row" id="${id}-r${i}">${r}</div>`).join("");
+        T.appendChild(t); return t;
+      };
+      const colourOf = name => (ROUNDS.find(r => r.page === name) || {}).colour || "#c3ccd6";
+      const emb = `<span class="emb">${"<b></b>".repeat(6)}</span>`;
+      table("t-pages", 660, 278, 300, "pages · chunk, embedding", PAGES.map(([n]) => `<i style="background:${colourOf(n)}"></i>${n}${emb}`));
+      table("t-mem", 985, 278, 275, "memory", ["customer · holds DNB Metal Card"]);
+      table("t-sess", 985, 360, 275, "sessions", ["q · What do I have to spend…", "a · Spend $5,000 within 60…"]);
+      table("t-cite", 985, 466, 275, "citations · claim → page", ROUNDS.map((r, i) => `<i style="background:${r.colour}"></i>claim ${i + 1} → ${r.page}`));
+      table("t-app", 660, 520, 300, "app_state", ["answer card · rendered"]);
+      // Each pages row starts where its page sits in the zoomed-out scene, then slides into the table.
+      PAGES.forEach(([, x, y], i) => {
+        const r = document.getElementById(`t-pages-r${i}`).getBoundingClientRect();
+        const sx = 960 + (x - 960) * 0.36, sy = 500 + (y - 500) * 0.36;
+        gsap.set(`#t-pages-r${i}`, { x: sx - (r.left + 10), y: sy - (r.top + 11), scale: 0.25, transformOrigin: "left center", opacity: 0 });
+      });
+
+      // Progress ticks at act starts.
+      [4, 11, 26.8, 33, 41.5].forEach(t => { const d = document.createElement("div"); d.className = "tick"; d.style.left = `${(t / DUR) * 1600}px`; document.getElementById("progress").appendChild(d); });
+
+      // ---------------- Timeline ----------------
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const E = "power2.inOut", SHAPE = 0.75, TEXT = 1.4;
+      const cap = (id, at) => tl.to(id, { opacity: 1, duration: 0.6, ease: E }, at);
+      const capOut = (id, at) => tl.to(id, { opacity: 0, duration: 0.4, ease: E }, at);
+
+      gsap.set("#question", { opacity: 0, y: 10 });
+      gsap.set(["#divider", "#head-L", "#head-R", ".pg", "#mem", "#card-L", "#card-R", "#note-L", "#qL", "#qR", "#pipes", "#lb", "#lb-title", ".tbl .th", "#t-mem-r0", "#t-sess-r0", "#t-sess-r1", "#t-cite .row", "#t-app-r0", "#boundary", "#boundary-label", "#end", ".qx"], { opacity: 0 });
+      gsap.set("#strike", { scaleX: 0 });
+      gsap.set("#progress .fill", { scaleX: 0 });
+      gsap.set("#far", { scale: 1 / 0.36 });
+      tl.to("#progress .fill", { scaleX: 1, duration: DUR, ease: "none" }, 0);
+
+      function search(side, at) {
+        const dx = side === "L" ? -960 : 0, [qx, qy] = [QUERY[0] + dx, QUERY[1]], SPEED = 260;
+        tl.to(`#q${side}`, { opacity: 1, duration: 0.3 }, at);
+        for (let k = 0; k < 3; k++) tl.fromTo(`#rip${side}${k}`, { attr: { r: 0 }, opacity: 0.6 }, { attr: { r: 520 }, opacity: 0, duration: 2.0, ease: "none" }, at + 0.1 + k * 0.3);
+        let nearest = null, best = 1e9;
+        PAGES.forEach(([name]) => {
+          const [x, y] = pos[`${side}:${name}`], d = Math.hypot(x - qx, y - qy);
+          tl.to(`${pg(side, name)} .sheet`, { backgroundColor: gsap.utils.interpolate("#ffffff", "#c9d6fb", Math.exp(-d / 170)), duration: 0.4 }, at + 0.1 + d / SPEED);
+          if (d < best) { best = d; nearest = name; }
+        });
+        return nearest;
+      }
+
+      // ACT 1 — question
+      tl.to("#question", { opacity: 1, y: 0, duration: TEXT, ease: E }, 0.2);
+      cap("#c1", 0.2);
+
+      // ACT 2 — plain search
+      capOut("#c1", 3.6); cap("#c2", 4.0);
+      tl.to(["#divider", "#head-L"], { opacity: 1, duration: TEXT, ease: E }, 4.0);
+      tl.to(PAGES.map((_, i) => `#pgL${i}`), { opacity: 1, duration: SHAPE, ease: E }, 4.6);
+      const nL = search("L", 5.3);
+      tl.to(`${pg("L", nL)} .sheet`, { backgroundColor: COBALT, borderColor: COBALT, duration: 0.4 }, 6.9);
+      tl.to(`${pg("L", nL)} .lbl`, { color: COBALT, duration: 0.4 }, 6.9);
+      tl.to("#card-L", { opacity: 1, duration: TEXT, ease: E }, 7.3);
+      tl.to("#card-L", { borderColor: GAP, duration: SHAPE, ease: E }, 9.0);
+      tl.to("#ans-L", { color: GAP, duration: SHAPE, ease: E }, 9.0);
+      tl.to("#strike", { scaleX: 1, duration: SHAPE, ease: E }, 9.0);
+      tl.to("#note-L", { opacity: 1, duration: TEXT, ease: E }, 9.2);
+
+      // ACT 3 — agentic search: memory first, then search, then rounds
+      capOut("#c2", 10.6); cap("#c3", 11.0);
+      tl.to("#head-R", { opacity: 1, duration: TEXT, ease: E }, 11.0);
+      tl.to(PAGES.map((_, i) => `#pgR${i}`), { opacity: 1, duration: SHAPE, ease: E }, 11.4);
+      tl.to("#mem", { opacity: 1, duration: SHAPE, ease: E }, 11.6);
+      tl.to("#mem", { borderColor: COBALT, duration: 0.3 }, 12.3);
+      tl.to("#memline", { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "none" }, 12.3);   // a short, tight read
+      tl.to("#card-R", { opacity: 1, duration: SHAPE, ease: E }, 12.4);
+      search("R", 12.7);
+      capOut("#c3", 13.4); cap("#c4", 13.8);
+      tl.to(["#mem", "#memline"], { opacity: 0, duration: SHAPE, ease: E }, 13.6);   // read, then out of the way
+
+      let t = 14.3;
+      ROUNDS.forEach((r, i) => {
+        const len = ROUND_LEN[i] ?? 0.9, id = pg("R", r.page);
+        if (i > 0) {
+          // Follow the reference: a straight wire snaps (exact, linear). The dashed thread becomes solid.
+          tl.to(`#nt${i - 1}`, { opacity: 0, duration: 0.3 }, t);
+          tl.to(`#w${i}`, { attr: { "stroke-dashoffset": 0 }, duration: 0.28, ease: "none" }, t);
+          tl.to(pending[i - 1], { opacity: 0, duration: 0.35 }, t + 0.25);
+          tl.set(`${id} .sheet`, { borderStyle: "solid" }, t + 0.28);
+          t += 0.3;
+          if (i === 1) { capOut("#c5", t - 0.3); cap("#c6", t); }
+        }
+        tl.to(`${id} .sheet`, { backgroundColor: r.colour, borderColor: r.colour, duration: 0.3 }, t);
+        tl.to(`${id} .lbl`, { color: r.colour, duration: 0.3 }, t);
+        tl.to(`#cl${i}`, { opacity: 1, duration: Math.min(TEXT, len * 0.45), ease: E }, t + 0.1);
+        tl.to(taut[i], { attr: { "stroke-dashoffset": 0 }, duration: len * 0.3, ease: E }, t + 0.15);
+        const check = t + len * 0.5;
+        if (r.pointsTo) {
+          // The page names another page: known but unread. Dashed thread, dashed outline.
+          const tid = pg("R", r.pointsTo);
+          tl.to(pending[i], { opacity: 1, duration: 0.4, ease: E }, check);
+          tl.set(`${tid} .sheet`, { borderStyle: "dashed", borderColor: GAP }, check);
+          tl.to(`${tid} .lbl`, { color: GAP, duration: 0.3 }, check);
+          tl.to(`#nt${i}`, { opacity: 1, duration: 0.5, ease: E }, check + 0.1);
+          if (i === 0) { capOut("#c4", check); cap("#c5", check + 0.3); }
+        } else {
+          tl.to("#card-R", { borderColor: GREEN, duration: 0.4 }, check);
+          tl.to(`#nt${i}`, { opacity: 1, duration: 0.6, ease: E }, check);
+          capOut("#c6", check - 0.2); cap("#c7", check + 0.2);
+        }
+        t += len;
+      });
+      PAGES.forEach(([name], i) => { if (!ROUNDS.some(r => r.page === name)) tl.to(`#pgR${i}`, { opacity: 0.35, duration: SHAPE, ease: E }, t); });
+
+      // ACT 4 — zoom out: seven systems, every hop a copy, a queue and a delay
+      const Z = 26.8;
+      capOut("#c7", Z - 0.3);
+      tl.to(["#world", "#far"], { scale: (i) => (i === 0 ? 0.36 : 1), duration: 3.0, ease: "none" }, Z);
+      tl.to("#pipes", { opacity: 1, duration: SHAPE, ease: E }, Z + 1.4);
+      tl.to("#world", { opacity: 0.35, duration: SHAPE, ease: E }, Z + 2.6);
+      cap("#c8", Z + 2.6);
+      tl.to(".qx", { opacity: 1, duration: 0.25, stagger: 0.35 }, Z + 3.1);
+
+      // ACT 4b — it is all tables (from 33 s): pages become rows; the four stores merge into one Lakebase
+      const C = 33.0;
+      capOut("#c8", C - 0.2);
+      tl.to("#pipes", { opacity: 0, duration: SHAPE, ease: E }, C);
+      tl.to(PAGES.map((_, i) => `#t-pages-r${i}`), { opacity: 1, duration: 0.3 }, C);
+      tl.to("#world", { opacity: 0, duration: SHAPE, ease: E }, C + 0.2);
+      tl.to(["#lb", "#lb-title", "#t-pages .th"], { opacity: 1, duration: TEXT, ease: E }, C + 0.3);
+      tl.to(["#t-mem .th", "#t-sess .th", "#t-cite .th", "#t-app .th"], { opacity: 1, duration: SHAPE, ease: E }, C + 1.6);
+      tl.to(PAGES.map((_, i) => `#t-pages-r${i}`), { x: 0, y: 0, scale: 1, duration: TEXT, ease: E }, C + 0.3);
+      cap("#c9", C + 0.3);
+      SYSTEMS.forEach(([, to], i) => {
+        const s = `#sys${i}`, [cx, cy] = ring[i];
+        if (to === "Lakebase") {
+          tl.to(s, { x: 960 - cx, y: 510 - cy, scale: 0.3, opacity: 0, duration: TEXT, ease: E }, C + 0.3);   // merges into the one database
+        } else {
+          const [fx, fy] = FINAL[to];
+          tl.to(s, { x: fx - (cx - 125), y: fy - (cy - 42), borderColor: ORANGE, duration: TEXT, ease: E }, C + 2.6);
+          tl.to([`${s} .old`, `${s} .sub`], { opacity: 0, duration: 0.6, ease: E }, C + 2.6);
+          tl.to(`${s} .db`, { opacity: 1, duration: 0.7, ease: E }, C + 3.3);
+        }
+      });
+      tl.to("#t-mem-r0", { opacity: 1, color: COBALT, duration: SHAPE, ease: E }, C + 1.5);
+      tl.to(["#t-sess-r0", "#t-sess-r1"], { opacity: 1, duration: SHAPE, ease: E }, C + 1.8);
+      tl.to("#t-cite .row", { opacity: 1, duration: SHAPE, ease: E }, C + 2.1);
+      tl.to("#t-app-r0", { opacity: 1, duration: SHAPE, ease: E }, C + 2.4);
+      tl.to(["#boundary", "#boundary-label"], { opacity: 1, duration: TEXT, ease: E }, C + 2.8);
+      capOut("#c9", C + 4.6); cap("#c10", C + 5.0);
+
+      // ACT 5 — end card
+      const F = 41.5;
+      capOut("#c10", F - 0.2);
+      tl.to(["#far", "#lake", "#boundary", "#boundary-label"], { opacity: 0, duration: SHAPE, ease: E }, F);
+      tl.to("#end", { opacity: 1, duration: TEXT, ease: E }, F + 0.6);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
