@@ -6,7 +6,7 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 FILM="$(cd "${1:?usage: run_checks.sh <film-dir>}" && pwd)"
-export PYTHONDONTWRITEBYTECODE=1
+export PYTHONDONTWRITEBYTECODE=1 HYPERFRAMES_NO_TELEMETRY=1 HYPERFRAMES_NO_UPDATE_CHECK=1
 status=0
 
 python3 -I "$HERE/check_film.py" "$FILM" || status=1

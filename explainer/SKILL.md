@@ -46,8 +46,8 @@ Senior enterprise architects. They want to see state boundaries, latency, storag
    - `BRIEF.md` (format: `~/.agents/skills/hyperframes/references/brief-format.md`): `workflow: general-video`, `flow: companion`, `storyboard: yes`, `message:` the claim from step 1, `audience:` senior architects. `## Notes` holds the negatives and the honesty gate's number set. With BRIEF.md present, HyperFrames asks no brief questions.
    - `STORYBOARD.md`, one row per beat, with timestamps: the event, its cause, what is lit vs dimmed, the grammar entry used, the on-screen copy **in quotes** (quoted text renders verbatim; unquoted text gets paraphrased), the technique (a named registry block, if one fits), and the exact "do not" lines.
    For architect pieces, start from `references/sequences.md`.
-6. **Review the text, before any render.** This is the only panel. Run it on `STORYBOARD.md` and the script, not on a cut. Three seats: claims (every number and mechanism against the claim register), domain truth (a DBA or the platform owner for that system), and an architect (the skeptic). Most of the v5 film's HIGH findings could be seen in its text. Fix what they find, then show the owner the text and wait for an OK (owner stop 1).
-7. **Build with HyperFrames.** Copy `starter-v5/` (see its README) and make the posted layout first; it is usually LinkedIn's 4:5. Follow `hyperframes-core` for the composition contract, and keep `npx hyperframes preview` open while you iterate. A change made without the preview is a guess. Two rules are this skill's own:
+6. **Review the text, before any render.** This is the only panel. Run it on `STORYBOARD.md` and the script, not on a cut. Three seats: claims (every number and mechanism against the claim register), domain truth (a DBA or the platform owner for that system), and an architect (the skeptic). Most of the v5 film's HIGH findings could be seen in its text. Fix what they find. Then pose each frame as a still (no motion) on one board, and show the owner the text and the board together; wait for an OK (owner stop 1). Stills cost seconds to change; a cut costs minutes (`references/hyperframes-playbook.md` §1-2).
+7. **Build with HyperFrames, by `references/hyperframes-playbook.md`.** It holds the command prefix, the seek-safe GSAP rules, the craft numbers and the voice path. Copy `starter-v5/` (see its README) and make the posted layout first; it is usually LinkedIn's 4:5. Follow `hyperframes-core` for the composition contract, and keep `npx hyperframes preview` open while you iterate. A change made without the preview is a guess. Two rules are this skill's own:
    - Repeated structure (rounds, pages, systems) comes from a data list at the top, so N changes in one place.
    - Measure text positions once at load, before any transform runs.
 8. **Check with code, before the first render.** Fill in the film's `checks.json` and run `scripts/run_checks.sh <film-dir>` (see `scripts/README.md`). It checks numbers, words, SQL, captions, text size by frame height, overlap and text left hidden, then `hyperframes lint` and `check`. Render only when it exits 0. Look at a contact sheet yourself, then run the taste checks.
@@ -61,7 +61,7 @@ v5 (2026-10-21 to 22) took two days for a 90 s film. The owner: "This is extreme
 - A film of 90 s or less gets 1 day.
 - It is one composition, one worktree and one preview loop. A film is not a ticket chain.
 - Make the posted layout first. The second layout comes after the first is posted.
-- The owner stops at most twice: after the storyboard text, and after the first full cut.
+- The owner stops at most twice: after the storyboard text and its stills board, and after the first full cut.
 - Write a time for each stage before you start: text, build, checks, cut. If a stage goes over its time, stop and ask the owner what to cut.
 
 ## Heuristics
@@ -133,3 +133,4 @@ v5 (2026-10-21 to 22) took two days for a 90 s film. The owner: "This is extreme
 - `references/example-v6.html`: a working HyperFrames composition (paper look) that follows the build contract.
 - `starter-v5/`: the v5 film as a starter (dark look, panels, code panel, caption track, local fonts). Copy it for a new film.
 - `scripts/`: the code checks and `run_checks.sh`, pointed at a film's `checks.json`.
+- `references/hyperframes-playbook.md`: how to use HyperFrames in one loop (commands, seek-safe GSAP, craft numbers, voice, render), with its research notes in `references/hyperframes-research/`.
