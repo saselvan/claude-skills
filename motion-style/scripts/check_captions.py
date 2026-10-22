@@ -14,7 +14,33 @@ Exit code 1 if any caption fails.
 """
 import argparse
 import json
+import re
 import sys
+
+
+def _parse_srt_time(ts: str) -> float:
+    h, m, rest = ts.strip().split(":")
+    s, ms = rest.replace(".", ",").split(",")
+    return int(h) * 3600 + int(m) * 60 + int(s) + int(ms) / 1000.0
+
+
+def _load_captions(path: str) -> list[dict]:
+    raw = open(path, encoding="utf-8").read().strip()
+    if raw.startswith("["):
+        return json.loads(raw)
+    blocks = re.split(r"\n\s*\n", raw)
+    caps = []
+    for block in blocks:
+        lines = [ln for ln in block.strip().splitlines() if ln.strip()]
+        if not lines:
+            continue
+        ts_idx = 1 if re.match(r"^\d+$", lines[0].strip()) else 0
+        if ts_idx >= len(lines) or "-->" not in lines[ts_idx]:
+            continue
+        start_s, end_s = lines[ts_idx].split("-->")
+        text = "\n".join(lines[ts_idx + 1 :])
+        caps.append({"start": _parse_srt_time(start_s), "end": _parse_srt_time(end_s), "text": text})
+    return caps
 
 
 def main() -> int:
@@ -24,7 +50,7 @@ def main() -> int:
     ap.add_argument("--cps", type=float, default=15.0)
     args = ap.parse_args()
 
-    caps = json.load(open(args.path))
+    caps = _load_captions(args.path)
     failed = 0
     for c in caps:
         text = c["text"]

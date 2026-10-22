@@ -6,6 +6,10 @@ Fill every bracket from stages 1–3. Delete any sentence that prescribes an ele
 
 You are the lead product designer on this. I am not going to tell you what it should look like. I am going to tell you what it is, who it is for, what bar it has to clear, whose work it should stand in the lineage of, what is already decided, and the handful of things it must never do. Then I want you to turn this into your own design prompt, ask me whatever is ambiguous, and only then start drawing.
 
+## The claim
+
+[One sentence the artifact exists to prove, quoted with its source path, and its level: feature, product or platform.] Everything on the first screen serves this sentence. If an element does not, it goes behind a click or goes away. [If stage 3b ran: the approved storyboard is attached; it decides order, emphasis and the eye path, and you decide everything visual.]
+
 ## Non-negotiables
 
 These are the only hard rules. Each states the failure it prevents. Everything not on this list is your call. If you think one of these is wrong, argue with me before you comply.

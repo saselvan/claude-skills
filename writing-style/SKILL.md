@@ -7,6 +7,8 @@ description: The user's personal writing style for prose published or shared und
 
 Five rules, one break rule, a set of mechanics, channel rules, and floors, drawn from an interview about 18 writers the user loves, 5 things they dislike, 6 pieces of their own work, and 21 side-by-side rewrite tests. Every quotation below is the user's own words. The rule statements were drafted by Claude from those words and approved by the user.
 
+Which skill runs when: atelier's "The skill map".
+
 One line frames all of it: "Envy is ignorance, imitation is suicide." The style learns from the writers the user loves and never imitates any of them.
 
 ## Baselines
@@ -95,9 +97,14 @@ Each comes from a single rewrite test. In post repos, `tools/style_lint.py` (ate
 
 - Open with the argument, not a scene. (The user notes that others advise the opposite; their own preference is the argument.)
 - In a public technical post, the opening paragraph is the situation: what the subject is and how people use it today, in plain words. Only then the failure, the question and the answer. Never open on a command, a code token or a failure. Check: give the first paragraph to someone who has never heard of the product; they must be able to say what is going on before any error appears. The user's words: "The beginning has to freaking make sense to a reader as to what will be going on."
+- In a post about an experiment, the opening says what was tested, why, and what it ran on. Name each product on first use with a plain gloss, such as "Lakebase, Databricks' serverless Postgres database." The user's words: "What was I testing?" Check: after the first paragraph, a stranger can say what was being improved and on which product.
+- Name every change. For each option, variant or experiment, one plain line says what was changed and what kind of change it is (rows added to a table, one line of a function changed). No code is needed. The user's words: "Very unclear throughout this post just what it is we changed." "No need to show exact code but at least give them an indication of what it is we changed." Check: a reader can list the options without opening the repo.
+- Describe each change by what it does, in plain words, and name the object it changes (the synonym table, the search function). Leave out the internals: algorithm names, weights and limits ("BM25 ×1.5", "trigram LIMIT 50"). In a deep dive, a number may follow as a short tail ("50 instead of 100"). The user's words: "Too inside baseball, maybe we make it less technical and broader while making it obvious these are changes on the index or some other object in PG." Check: each line reads as "verb + what it does + which object", and a reader who does not know Postgres can follow it.
+- State the rules before the result. Every bar, floor or threshold appears before the number that clears it, with its arithmetic ("9.2, which is 1% of 920"). The user's words: "Where did we declare the parameters of the experiment? How does the reader know 9.2 counts as a win and what is special about 9.2?" Check: no number is judged ("a win", "too thin") before the reader has seen the rule that judges it.
+- Anchor every referent. "One option" becomes "one of the 5"; "the winner" says which one. The user's words: "Of the 5?" Check: each "one", "it", "the winner" and "this change" points to something the reader has already seen named.
 - Quote exact error messages verbatim and early. Readers paste them into search engines and AI assistants, so the error text is how the post gets found.
 - Use a plain register, never elevated or sentimental.
-- Write prose. Never use lists in LinkedIn posts: "Screams AI." Medium and blog articles may use a list or numbered steps where the content is a real sequence or set (a how-to); argument stays in prose.
+- Write prose. Never use lists in LinkedIn posts: "Screams AI." Medium and blog articles, and LinkedIn articles, may use a list or numbered steps where the content is a real sequence or set (a how-to, or the options an experiment tested); argument stays in prose. The user chose the LinkedIn-article case on 2026-10-15.
 - Use normal paragraphs. Never put one sentence per line.
 - No parenthetical asides or digressions.
 - Be literal in writing. Analogies belong only in slide speaker notes.
@@ -156,7 +163,8 @@ These outrank every rule, the baseline, and the channels.
 - Accuracy: never invent numbers, quotes, facts, or experiences. If something is missing, ask.
 - Never name an institution as a Databricks customer unless the user has confirmed it.
 - No confidential figures, pricing, or internal names in public writing.
-- Databricks' social media policy applies to anything public. The user supplies its specifics; don't guess them. Public posts carry the disclosure line from atelier's post standing rules: "I work at Databricks. All opinions are my own."
+- Databricks' social media policy applies to anything public. The user supplies its specifics; don't guess them. Posts carry no disclosure line (atelier's post standing rules; owner, 2026-10-22: the CEO no longer wants it on each post).
+- The user is a Databricks SA. Public writing never says a Databricks product got something wrong, made a mistake or missed a step. Honesty about the experiment itself stays: thin margins, untested steps, limits of the method, documented platform rules stated neutrally. The user's words: "I don't know that I want this, given I am a Databricks SA." "Cut it in both. I am a Databricks SA for crying out loud." A review panel or skeptic seat that asks for such a line for "honesty" does not override this floor. Check: find every sentence where a Databricks product is the subject of a failure, miss or bug, and cut or reframe it.
 - On the Databricks blog, Databricks' editorial guidelines govern structure. Don't guess them either.
 
 ## Provenance
@@ -168,4 +176,5 @@ These outrank every rule, the baseline, and the channels.
 - The joy test was added later and approved by the user; it is shared with house-style and motion-style.
 - The plain-term rule and the video-post rule came from the first explainer build and were approved by the user.
 - The searchable-title, plain-first-sentence and exact-error mechanics came from the CI/CD post (2026-10-14), where the user asked for them as lessons for future blogs. See `references/record.md`, "Lessons from posts".
+- The experiment-opening, name-every-change, rules-before-result and anchor-every-referent mechanics, the LinkedIn disclosure exception and the Databricks-SA floor came from the user's Google Doc comments on the payer-search LinkedIn article (2026-10-14/15), when the user asked for the skill to learn them. See `references/record.md`, "Lessons from posts".
 - Aligned with atelier's post kit on 2026-10-10, with the user's approval: the disclosure line, and the `style_lint.py` gate.

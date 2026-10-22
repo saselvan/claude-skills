@@ -5,7 +5,7 @@ description: The user's motion style for animation inside apps and for animated 
 
 # Motion style
 
-This skill inherits house-style whole: its five rules, its break rule, its floors, its palette guidance, its type, and its narrative shapes. Read house-style first. The writing-style skill governs every word, including captions; this skill governs only how things move and when.
+This skill inherits house-style whole: its five rules, its break rule, its floors, its palette guidance, its type, and its narrative shapes. Read house-style first. The writing-style skill governs every word, including captions; this skill governs only how things move and when. Which skill runs when: atelier's "The skill map"; films are built with HyperFrames through the explainer skill.
 
 Everything here comes from side-by-side screen tests with the user, checked against expert guidance. Quotations are the user's own words. Everything is in service of the story.
 

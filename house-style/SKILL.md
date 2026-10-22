@@ -9,7 +9,7 @@ Five rules and one break rule, drawn from an interview about 25 things the user 
 
 Apply the rules to every visual decision. Where they conflict with another skill's defaults, including design-brief and atelier, these rules win. If a deliverable has explicit brand guidelines (a company or customer template), follow those for color and type, keep the other rules, and briefly note any conflict to the user.
 
-This skill governs how things look. The writing-style skill governs the words on them, including slide titles, captions, and speaker notes. The motion-style skill governs how anything moves, and it inherits this skill.
+This skill governs how things look. The writing-style skill governs the words on them, including slide titles, captions, and speaker notes. The motion-style skill governs how anything moves, and it inherits this skill. Which skill runs when: atelier's "The skill map".
 
 ## Baselines
 
@@ -134,7 +134,7 @@ There are two kinds of reference: live sources, which are opened on the web duri
 
 ### Live sources
 
-Always check Information is Beautiful, which the user calls a "huge reference." Then add at most two more from the list, chosen by fit with the brief.
+Always check Information is Beautiful, which the user calls a "huge reference." The list below is a starting point, not a limit. Then search the open web for the best sources for this brief's form, domain and audience, and use whichever genuinely fit. Prefer sources the audience already trusts (for a clinical chart, journal and methods-handbook guidance; for a deck, a design system or visual journalism team that solved the same chart form), and sources that explain their reasoning over galleries. There is no fixed number of sources; open as many pieces as genuinely relate, usually three to eight in total. A source that matches both the form and the audience beats one that matches only one of them.
 
 - Information is Beautiful (https://informationisbeautiful.net): context, meaning facts shown with their connections, comparisons, and relationships. Search with `site:informationisbeautiful.net <subject or form>`, or start from the blog (https://informationisbeautiful.net/blog) and interactive graphics (https://informationisbeautiful.net/interactive). The homepage renders mostly navigation when fetched as text, so go through search results or specific pages.
 - The Pudding (https://pudding.cool): visual essays and scrollytelling. Best for narrative pacing and progressive disclosure (rule 3). Its how-to guides are at https://pudding.cool/topics/#how.
@@ -144,7 +144,7 @@ Always check Information is Beautiful, which the user calls a "huge reference." 
 
 Process:
 
-1. Search each chosen source for the brief's subject and form, and open one to three pieces in total that genuinely relate to the brief.
+1. Search for the brief's subject and form, in the listed sources and on the open web, and open the pieces that genuinely relate to the brief. Record what was searched, so a thin result is visible.
 2. Look at how each piece shows context, and at its structure, labeling, pacing, and use of color.
 3. Take techniques, not designs. Do not reproduce a specific graphic, its layout, its illustrations, or its branding. Name the source of every technique taken.
 
@@ -181,7 +181,7 @@ If nothing fits, say so in one line, with what was searched. Don't force a borro
 - All rules approved by the user in the interview session.
 - Rothko's "depths" was explained by options Claude offered (soft edges, layered washes, scale); the user chose all three.
 - Information is Beautiful's "context" was chosen from options Claude offered; "illuminating" and "huge reference" are the user's words.
-- The "Learning from references" section was added at the user's request: check Information is Beautiful and other live sources, draw on well-known works from knowledge, and keep the house style on everything else. The source list was proposed by Claude and accepted by the user.
+- The "Learning from references" section was added at the user's request: check Information is Beautiful and other live sources, draw on well-known works from knowledge, and keep the house style on everything else. The source list was proposed by Claude and accepted by the user. On 2026-10-16 the user widened it: the list is a starting point, and each brief searches the open web for the best sources that fit, with no fixed cap (the old rule allowed at most two more from the list).
 - The "In practice" lines are Claude's interpretation and have not been reviewed item by item. Revise them as real outputs are judged.
 - The floors came from a review by the user's coding agent; the wording was drafted by Claude and approved by the user.
 - The font order and web stack were approved by the user.

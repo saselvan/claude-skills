@@ -12,7 +12,8 @@ Learned on lakebase-payer-search-blog (2026-10). Do not re-ask these.
 - Images: a solid ground from the token file (house-style), never transparent; PNG sRGB; 4:5 1080x1350 for LinkedIn, 16:9 1200x675 for Medium; 2x copies. (Was "solid white ground"; updated 2026-10-10 after the house-style session.)
 - Motion: no sound; GIF under 5 MB, plays once, holds the last frame. Medium takes GIF, not MP4. Because the GIF plays once, its last frame carries the point (the STAR or the closing card). This file is the one home for platform specs; motion-style cites it.
 - Words: writing-style governs the text; `tools/style_lint.py` runs with the other gates.
-- Disclosure line: "I work at Databricks. All opinions are my own."
+- No disclosure line ("I work at Databricks. All opinions are my own.") on any post: Medium, blog, LinkedIn post or LinkedIn article. The owner, 2026-10-22: "our CEO now does not want us to put that on each post." This replaces the rulings of 2026-10-15 and 2026-10-16.
+- No line says a Databricks product got something wrong; the owner is a Databricks SA (2026-10-15). Experiment limits stay; product-fault framing goes. See writing-style, Floors.
 - Publishing, and any public claims file, is an owner hard stop.
 - Keep all work in the repo (never /tmp) and push to a remote from day one.
 
