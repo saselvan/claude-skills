@@ -93,12 +93,27 @@ def main() -> int:
         return 1
     heard = read_words(tpath)
     cues = read_srt(spath)
-    margin = 0.25
+    # ASR word times run early: Parakeet put cue onsets 0.33-0.36 s before the audio (silencedetect, 2026-10-26)
+    margin = float(cfg.get("transcript_margin", 0.5))
     probs = []
-    for s, e, text in cues:
+    # each heard word belongs to one cue: the last cue that starts (less the margin) at or before the word
+    owner = {}
+    for a, b, w in heard:
+        k = max((i for i, c in enumerate(cues) if c[0] - margin <= a), default=None)
+        if k is not None and a <= cues[k][1] + margin:
+            owner.setdefault(k, []).append(w)
+    for k, (s, e, text) in enumerate(cues):
         want = tokens(text)
-        core = [w for a, b, w in heard if a >= s - margin and b <= e + margin]
+        core = owner.get(k, [])
         got = tokens(" ".join(core))
+        # ASR splits compounds ("lake base"): join two heard tokens when together they spell the next wanted token
+        j, fixed = 0, []
+        while j < len(got):
+            if j + 1 < len(got) and got[j] + got[j + 1] in want and got[j] not in want:
+                fixed.append(got[j] + got[j + 1]); j += 2
+            else:
+                fixed.append(got[j]); j += 1
+        got = fixed
         if got == want:
             continue
         # allow edge words to belong to either cue: compare the multiset difference without the first/last token
