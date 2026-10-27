@@ -1,7 +1,7 @@
 1
-00:00:00,000 --> 00:00:03,000
-One walk, 4 hops.
+00:00:00,000 --> 00:00:04,500
+One walk takes four hops in one statement.
 
 2
-00:00:03,000 --> 00:00:06,000
-Each hop is one CTE.
+00:00:04,500 --> 00:00:09,000
+Each hop is one CTE inside the statement.

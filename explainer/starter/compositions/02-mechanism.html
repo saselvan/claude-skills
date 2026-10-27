@@ -1,0 +1,68 @@
+<!-- Scene 02: an exact lookup. Beat 2, rhythm: peak. handoff_in: the question headline from scene 01 at the same
+     position, shrinking to its context size over DUR.words. The pointer travels at SPEED.edge (exact, linear); the row
+     lights on one frame; the highlight then drains on EASE.settle. -->
+<template id="s02-template">
+  <div data-composition-id="s02" data-width="1080" data-height="1350">
+    <div id="s02-q" class="question">Who shares patients with Dr. A?</div>
+    <div id="s02-head" class="headline">The index goes straight to the row.</div>
+    <div id="s02-grid" data-panel="rows">
+      <div class="row" data-row="0"><span class="mono">Dr. A</span><span class="mono">Dr. B</span></div>
+      <div class="row" data-row="1"><span class="mono">Dr. A</span><span class="mono">Dr. C</span></div>
+      <div class="row" data-row="2"><span class="mono">Dr. A</span><span class="mono">Dr. D</span></div>
+      <div class="row" data-row="3"><span class="mono">Dr. B</span><span class="mono">Dr. F</span></div>
+    </div>
+    <div id="s02-pointer"></div>
+    <div id="s02-lbl" class="label">hit: one row</div>
+
+    <style>
+      [data-composition-id="s02"] .question {
+        position: absolute; left: 80px; top: 120px; width: 920px; transform-origin: 0 0;
+        font-size: var(--fs-question); font-weight: 600; line-height: 1.1; color: var(--ink);
+      }
+      [data-composition-id="s02"] .headline { position: absolute; left: 80px; top: 300px; width: 920px; }
+      [data-composition-id="s02"] #s02-grid {
+        position: absolute; left: 80px; top: 520px; width: 920px;
+        border: var(--stroke) solid var(--sys-a); border-radius: var(--radius); background: var(--sys-a-surface);
+      }
+      [data-composition-id="s02"] .row {
+        display: flex; gap: 48px; padding: 18px 28px; font-size: var(--fs-code); color: var(--ink-2);
+        border-top: 1px solid var(--sys-a-dim);
+      }
+      [data-composition-id="s02"] .row:first-child { border-top: 0; }
+      [data-composition-id="s02"] #s02-pointer {
+        position: absolute; left: 30px; top: 540px; width: 28px; height: 28px; border-radius: 50%;
+        background: var(--now);
+      }
+      [data-composition-id="s02"] #s02-lbl { position: absolute; left: 700px; top: 448px; color: var(--ink-3); }
+    </style>
+    <script>
+      (function () {
+        var id = "s02";
+        var root = document.querySelector('[data-composition-id="' + id + '"]');
+        var q = root.querySelector("#s02-q"), head = root.querySelector("#s02-head");
+        var rows = root.querySelectorAll(".row"), ptr = root.querySelector("#s02-pointer"), lbl = root.querySelector("#s02-lbl");
+        var hit = rows[2];
+        // geometry once, at build time, before any transform (never in a callback)
+        var dy = hit.offsetTop + hit.offsetHeight / 2 - 14;   // pointer centre to the hit row's centre
+        var travel = (hit.offsetTop) / SPEED.edge;             // exact: constant speed, duration from distance
+
+        gsap.set(head, { opacity: 0, y: 12 });
+        gsap.set(lbl, { opacity: 0, y: 12 });
+        gsap.set(ptr, { y: 0 });
+
+        var tl = gsap.timeline({ paused: true });
+        // handoff_in: the question shrinks to context, carrying its words at the words tempo
+        tl.to(q, { scale: 0.5, duration: DUR.words, ease: EASE.move }, 0);
+        tl.fromTo(head, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: DUR.words, ease: EASE.move }, 0.4);
+        // the exact event: linear travel, then the row lights on one frame
+        tl.to(ptr, { y: dy, duration: travel, ease: EASE.exact }, 2.0);
+        tl.set(hit, { backgroundColor: tok("--now"), color: tok("--now-ink") }, 2.0 + travel);
+        tl.fromTo(lbl, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: DUR.shape, ease: EASE.move }, 2.0 + travel);
+        // presentation: the highlight drains, eased, never linear
+        tl.to(hit, { backgroundColor: tok("--sys-a-surface"), color: tok("--ink"), duration: DUR.shape, ease: EASE.settle }, 2.0 + travel + DUR.hold);
+        tl.set({}, {}, 8);
+        window.__timelines[id] = tl;
+      })();
+    </script>
+  </div>
+</template>

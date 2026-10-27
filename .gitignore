@@ -56,3 +56,6 @@ deck-render/rendered/
 verification-ladder-workspace/
 deck-render/_archive/
 node_modules/
+
+# dated backups of SKILL.md
+*.bak-*

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <title>explainer starter (4:5)</title>
+    <link rel="stylesheet" href="tokens.css" />
+    <script src="assets/gsap.min.js"></script>
+    <script src="tokens.js"></script>
+    <style> html, body { width: 1080px; height: 1350px; } </style>
+  </head>
+  <body>
+    <!-- The root holds only scene hosts and audio. Scenes are compositions/*.html, one per beat, host id = inner id
+         = timeline key. data-fps 60 for the posted layout (owner ruling 2026-10-26); 30 for a scratch draft if the render is slow. -->
+    <div id="film" data-composition-id="film" data-start="0" data-duration="13" data-width="1080" data-height="1350" data-fps="60">
+      <div class="clip" id="s01" data-composition-id="s01" data-composition-src="compositions/01-question.html"
+           data-start="0" data-duration="5" data-track-index="1"></div>
+      <div class="clip" id="s02" data-composition-id="s02" data-composition-src="compositions/02-mechanism.html"
+           data-start="5" data-duration="8" data-track-index="1"></div>
+      <div class="clip" id="cap" data-composition-id="cap" data-composition-src="compositions/captions.html"
+           data-start="0" data-duration="13" data-track-index="2"></div>
+      <!-- <audio id="voice" src="assets/voice/voice.wav" data-start="0" data-duration="13" data-track-index="3"></audio> -->
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["film"] = gsap.timeline({ paused: true }); // the root animates nothing; scenes own their motion
+    </script>
+  </body>
+</html>

@@ -1,0 +1,88 @@
+{
+"segments": [
+{
+"words": [
+{
+"word": "One",
+"start": 0.0,
+"end": 0.562
+},
+{
+"word": "walk",
+"start": 0.562,
+"end": 1.125
+},
+{
+"word": "takes",
+"start": 1.125,
+"end": 1.688
+},
+{
+"word": "four",
+"start": 1.688,
+"end": 2.25
+},
+{
+"word": "hops",
+"start": 2.25,
+"end": 2.812
+},
+{
+"word": "in",
+"start": 2.812,
+"end": 3.375
+},
+{
+"word": "one",
+"start": 3.375,
+"end": 3.938
+},
+{
+"word": "statement.",
+"start": 3.938,
+"end": 4.5
+},
+{
+"word": "Each",
+"start": 4.5,
+"end": 5.062
+},
+{
+"word": "hop",
+"start": 5.062,
+"end": 5.625
+},
+{
+"word": "is",
+"start": 5.625,
+"end": 6.188
+},
+{
+"word": "one",
+"start": 6.188,
+"end": 6.75
+},
+{
+"word": "CTE",
+"start": 6.75,
+"end": 7.312
+},
+{
+"word": "inside",
+"start": 7.312,
+"end": 7.875
+},
+{
+"word": "the",
+"start": 7.875,
+"end": 8.438
+},
+{
+"word": "statement.",
+"start": 8.438,
+"end": 9.0
+}
+]
+}
+]
+}

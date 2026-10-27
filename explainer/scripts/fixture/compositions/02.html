@@ -1,0 +1,20 @@
+<template id="s02-template">
+  <div data-composition-id="s02" data-width="1080" data-height="1350">
+    <div class="headline" id="h2">788 seconds from first check to served graph.</div>
+    <div class="label" id="lab2">served views</div>
+    <style>
+      [data-composition-id="s02"] .headline { position: absolute; left: 60px; top: 80px; width: 960px; }
+      [data-composition-id="s02"] .label { position: absolute; left: 100px; top: 460px; font-size: 40px; }
+    </style>
+    <script>
+      (function () {
+        var h2 = document.querySelector('[data-composition-id="s02"] #h2');
+        gsap.set(h2, { opacity: 0, y: 12 });
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(h2, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: DUR.words, ease: EASE.move }, 0);
+        tl.set({}, {}, 4.5);
+        window.__timelines["s02"] = tl;
+      })();
+    </script>
+  </div>
+</template>

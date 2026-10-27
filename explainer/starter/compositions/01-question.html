@@ -1,0 +1,30 @@
+<!-- Scene 01: the question. Beat 1 of the arc. rhythm: HOLD. handoff_out: the question headline at top (x 80, y 120,
+     opacity 1) and the kicker; scene 02 starts with the same headline in the same place and shrinks it. -->
+<template id="s01-template">
+  <div data-composition-id="s01" data-width="1080" data-height="1350">
+    <div id="s01-q" class="question">Who shares patients with Dr. A?</div>
+    <div id="s01-kicker" class="label mono">illustrative names and counts</div>
+
+    <style>
+      [data-composition-id="s01"] .question {
+        position: absolute; left: 80px; top: 120px; width: 920px;
+        font-size: var(--fs-question); font-weight: 600; line-height: 1.1; color: var(--ink);
+      }
+      [data-composition-id="s01"] .label { position: absolute; left: 80px; top: 420px; color: var(--ink-3); }
+    </style>
+    <script>
+      (function () {
+        var id = "s01";
+        var root = document.querySelector('[data-composition-id="' + id + '"]');
+        var q = root.querySelector("#s01-q"), k = root.querySelector("#s01-kicker");
+        // Frame 0 is the settled question (motion-style export rule). The kicker arrives with a small move: nothing
+        // appears from nothing, and the words travel with their shape.
+        gsap.set(k, { opacity: 0, y: 12 });
+        var tl = gsap.timeline({ paused: true });
+        tl.fromTo(k, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: DUR.words, ease: EASE.move }, 1.4);
+        tl.set({}, {}, 5); // pins the scene length for the harness; the host's data-duration is the real clock
+        window.__timelines[id] = tl;
+      })();
+    </script>
+  </div>
+</template>

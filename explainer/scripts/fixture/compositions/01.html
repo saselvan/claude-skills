@@ -1,0 +1,22 @@
+<template id="s01-template">
+  <div data-composition-id="s01" data-width="1080" data-height="1350">
+    <div class="headline" id="h1">Who shares patients with Dr. A?</div>
+    <div class="panel" data-panel="Lakebase">
+      <div class="label" id="lab">served views</div>
+      <div class="code mono" id="code" data-code>GROUP BY e.dst_node_id</div>
+    </div>
+    <style>
+      [data-composition-id="s01"] .headline { position: absolute; left: 60px; top: 80px; width: 960px; }
+      [data-composition-id="s01"] .panel { position: absolute; left: 60px; top: 420px; width: 960px; height: 520px; border: 3px solid var(--sys-a); }
+      [data-composition-id="s01"] .label { position: absolute; left: 40px; top: 40px; font-size: 40px; }
+      [data-composition-id="s01"] .code { position: absolute; left: 40px; top: 160px; font-size: 40px; }
+    </style>
+    <script>
+      (function () {
+        var tl = gsap.timeline({ paused: true });
+        tl.set({}, {}, 4.5);
+        window.__timelines["s01"] = tl;
+      })();
+    </script>
+  </div>
+</template>

@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
-"""Open one HyperFrames composition in the local headless Chrome, seek it every STEP seconds, and record the text.
+"""Open one scene (or one whole composition) in the local headless Chrome, seek it every STEP seconds, and record the
+text, the tweens, and whether the paint is the same each time the same instant is sought.
 
 Local only: network requests are blocked and any attempt is reported. Stdlib only: the DevTools protocol runs over
---remote-debugging-pipe, so no port is opened. Ported from the v5 film's checks/check_layout.py (2026-10-22).
+--remote-debugging-pipe, so no port is opened. Ported from the v5 film's checks/check_layout.py (2026-10-22); scene
+files, the tween audit and the determinism pass added 2026-10-26 (not yet run in a browser at that date).
+
+Two inputs:
+- a scene file (`compositions/NN.html`, a `<template>` with its own timeline): it is pasted into the film's
+  `scripts/scene-harness.html` (or a film-root copy, if one exists) and opened from a temporary copy next to `index.html`, so `tokens.css` and `assets/` resolve;
+- a whole composition (`index.html` with `section.clip` beats and `window.__timelines.main`), as before.
 
 Markup it reads (the starter uses all of it):
 - the root `[data-composition-id]` with data-width, data-height and data-duration; beats are `section.clip` children
   with data-start and data-duration; the GSAP timeline is `window.__timelines.main`.
-- `[data-caption-band]`: the burned caption track. `[data-panel="name"]`: a panel (its frame parts may sit in a
+- `[data-caption-band]`: the burned caption track. `.label`/`[data-label]` and `.headline`/`[data-headline]`: the text
+  classes the `words` (4-word labels) and `hierarchy` checks read. `[data-panel="name"]`: a panel (its frame parts may sit in a
   `[data-frame]` child). `[data-in="name"]`: text drawn on that panel without being its DOM child. `[data-tab]`: text
   on a panel's top edge. `[data-layout-allow-overlap]`: text that may cross other text. `[data-code]`: a code panel
   whose rows are real SQL.
@@ -70,7 +78,7 @@ class Browser:
         self.proc = subprocess.Popen(
             [str(chrome), "--remote-debugging-pipe", f"--user-data-dir={self._profile}", "--no-first-run",
              "--disable-background-networking", "--disable-component-update", "--disable-sync", "--no-pings",
-             "--disable-default-apps", "--disable-extensions", "--disable-gpu", "--hide-scrollbars",
+             "--disable-default-apps", "--disable-extensions", "--disable-gpu", "--disable-partial-raster", "--hide-scrollbars",
              "--host-resolver-rules=MAP * ~NOTFOUND", "--allow-file-access-from-files",
              "--force-device-scale-factor=1", f"--window-size={width},{height}", "about:blank"],
             preexec_fn=wire, pass_fds=(3, 4), stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
@@ -125,7 +133,9 @@ PROBE = r"""
   await document.fonts.ready;
   const root = document.querySelector("[data-composition-id]");
   if (!root) return { error: "no [data-composition-id] root" };
-  const total = +root.dataset.duration, FW = +root.dataset.width, FH = +root.dataset.height;
+  const total = cfg.duration || +root.dataset.duration || tl.duration(), FW = +root.dataset.width, FH = +root.dataset.height;
+  // a seek helper for the determinism pass (run from Python between screenshots)
+  window.__probeSeek = (t) => new Promise((r) => { tl.seek(t, true); requestAnimationFrame(() => requestAnimationFrame(r)); });
   let secs = [...root.children].filter((e) => e.matches("section.clip"))
     .map((el) => ({ el, t0: +el.dataset.start, t1: +el.dataset.start + +el.dataset.duration }));
   if (!secs.length) secs = [{ el: root, t0: 0, t1: total }];
@@ -242,6 +252,7 @@ PROBE = r"""
     elems.push({ id, text: el.textContent.replace(/\s+/g, " ").trim(), family: fam,
                  mono: /mono|code|courier/i.test(fam), code: !!el.closest("[data-code]"),
                  caption: !!el.closest("[data-caption-band]"),
+                 label: !!el.closest(".label,[data-label]"), headline: !!el.closest(".headline,[data-headline]"),
                  maxSize: 0, painted: [], fontLoaded: loaded.has(fam.toLowerCase()) });
     return id;
   };
@@ -275,7 +286,7 @@ PROBE = r"""
       if (r) panels.push({ el: pn, r });
     }));
     const pr = new Map(panels.map((p) => [p.el, p.r]));
-    const texts = [], full = [], cap = [];
+    const texts = [], full = [], cap = [], cross = [];
     live.forEach((s) => {
       const w = document.createTreeWalker(s.el, NodeFilter.SHOW_TEXT);
       for (let node = w.nextNode(); node; node = w.nextNode()) {
@@ -317,11 +328,12 @@ PROBE = r"""
         lines += shown.length;
         const clean = node.textContent.replace(/\s+/g, " ").trim();
         if (o >= cfg.shown) full.push(clean);
+        if (o >= cfg.shown && !el.closest("[data-tab],[data-headline],[data-caption-band]")) cross.push(clean);
         if (el.closest("[data-caption-band]") && o >= 0.5) cap.push(clean);
         texts.push({ el, rects: shown, box: union(shown), free: !!el.closest("[data-layout-allow-overlap]") });
       }
     });
-    frames.push({ t, text: full.join(" "), caption: cap.join(" ") });
+    frames.push({ t, text: full.join(" "), caption: cap.join(" "), cross: cross.join(" ") });
     texts.forEach((x) => {
       if (!owner.has(x.el)) {
         let o = null;
@@ -349,16 +361,59 @@ PROBE = r"""
         if (a.rects.some((ra) => b.rects.some((rb) => crosses(ra, rb)))) add("text-overlap", t, name(a.el), name(b.el));
       }
   }
+  // ---------- tween audit: what every tween animates, with which ease, when ----------
+  const META = new Set(["ease", "duration", "delay", "immediateRender", "overwrite", "stagger", "repeat", "yoyo",
+    "repeatDelay", "onUpdate", "onComplete", "onStart", "onReverseComplete", "onRepeat", "callbackScope", "paused",
+    "lazy", "id", "data", "inherit", "runBackwards", "startAt", "parent", "keyframes", "transformOrigin", "svgOrigin"]);
+  const tweens = tl.getChildren(true, true, false).map((tw) => {
+    let abs = tw.startTime(), p = tw.parent;
+    while (p && p !== tl) { abs += p.startTime(); p = p.parent; }
+    const tg = tw.targets().map((x) => x && x.nodeType === 1 ? (x.id ? "#" + x.id : name(x)) : "obj");
+    const props = Object.keys(tw.vars || {}).filter((k) => !META.has(k));
+    const own = tw.vars && tw.vars.ease;
+    const easeRaw = own || (gsap.defaults() && gsap.defaults().ease) || "power1.out";
+    return { targets: tg.slice(0, 4), props, ease: typeof easeRaw === "string" ? easeRaw : "custom", easeInherited: !own,
+             duration: Math.round(tw.duration() * 1000) / 1000, start: Math.round(abs * 1000) / 1000,
+             end: Math.round((abs + tw.duration()) * 1000) / 1000, isSet: tw.duration() === 0 };
+  });
   return { width: FW, height: FH, duration: total, step: cfg.step, samples: frames.length, lines,
-           elements: elems, frames, findings: [...findings.values()], loadedFonts: [...loaded] };
+           elements: elems, frames, findings: [...findings.values()], loadedFonts: [...loaded], tweens };
 })
 """
 
 
-def probe(index: Path) -> dict:
+HARNESS_FALLBACK = Path(__file__).resolve().parent / "scene-harness.html"  # never in a project: lint reads it as a 2nd root
+
+
+def _diff(a: bytes, c: bytes) -> dict:
+    """How two PNGs differ: pixels that differ at all, and the largest channel difference (0-255)."""
+    try:
+        import io
+        from PIL import Image, ImageChops
+    except ImportError:
+        return {"px": -1, "max": 255}
+    d = ImageChops.difference(Image.open(io.BytesIO(a)).convert("RGB"), Image.open(io.BytesIO(c)).convert("RGB"))
+    m = d.convert("L").point(lambda v: 255 if v else 0)
+    return {"px": int(m.histogram()[255]), "max": int(max(hi for _, hi in d.getextrema()))}
+
+
+def probe(index: Path, duration: float | None = None, determinism_at: list[float] | None = None,
+          scene_id: str | None = None) -> dict:
+    """index: a scene file or a whole composition. duration: the host clip's data-duration for a scene.
+    determinism_at: instants to screenshot twice (seek there, away, back); mismatches go in out["nondeterministic"]."""
     src = index.read_text(encoding="utf-8")
     width = int(re.search(r'data-width="(\d+)"', src).group(1))
     height = int(re.search(r'data-height="(\d+)"', src).group(1))
+    temp = None
+    if "<template" in src:
+        # a scene: paste it into the film's harness, next to index.html, so tokens.css and assets/ resolve
+        film_root = index.resolve().parent.parent if index.resolve().parent.name == "compositions" else index.resolve().parent
+        harness = film_root / "scene-harness.html"
+        if not harness.exists():
+            harness = HARNESS_FALLBACK
+        temp = film_root / f".probe-{scene_id or index.stem}.html"
+        temp.write_text(harness.read_text(encoding="utf-8").replace("<!--SCENE-->", src), encoding="utf-8")
+        index = temp
     b = Browser(find_chrome(), width, height)
     try:
         b.send("Target.setDiscoverTargets", {"discover": False})
@@ -372,7 +427,7 @@ def probe(index: Path) -> dict:
         b.send("Page.addScriptToEvaluateOnNewDocument", {"source": "window.__timelines = window.__timelines || {};"},
                session)
         b.send("Page.navigate", {"url": index.resolve().as_uri()}, session)
-        cfg = {"step": STEP, "vis": VISIBLE, "shown": SHOWN, "tol": TOL}
+        cfg = {"step": STEP, "vis": VISIBLE, "shown": SHOWN, "tol": TOL, "duration": duration}
         res = b.send("Runtime.evaluate", {"expression": f"{PROBE}({json.dumps(cfg)})", "awaitPromise": True,
                                           "returnByValue": True, "timeout": 900000}, session)
         if "exceptionDetails" in res:
@@ -383,9 +438,29 @@ def probe(index: Path) -> dict:
         out["blocked"] = sorted({e["params"]["request"]["url"] for e in b.events
                                  if e.get("method") == "Network.requestWillBeSent"
                                  and not e["params"]["request"]["url"].startswith(("file:", "data:", "about:", "blob:"))})
+        # ---------- determinism: same time, same pixels ----------
+        out["nondeterministic"] = []
+        if determinism_at:
+            import base64
+            import hashlib
+            total = out["duration"]
+
+            def shot(t: float) -> bytes:
+                b.send("Runtime.evaluate", {"expression": f"window.__probeSeek({t})", "awaitPromise": True}, session)
+                return base64.b64decode(b.send("Page.captureScreenshot", {"format": "png"}, session)["data"])
+
+            for t in sorted({round(min(max(0.0, x), total), 3) for x in determinism_at}):
+                a = shot(t)
+                shot(total if t < total / 2 else 0.0)
+                c = shot(t)
+                if hashlib.md5(a).hexdigest() != hashlib.md5(c).hexdigest():
+                    out["nondeterministic"].append(dict(t=t, **_diff(a, c)))
+                    out.setdefault("nondeterministic_png", {})[str(t)] = [base64.b64encode(a).decode(), base64.b64encode(c).decode()]
         return out
     finally:
         b.close()
+        if temp is not None:
+            temp.unlink(missing_ok=True)
 
 
 def main() -> int:

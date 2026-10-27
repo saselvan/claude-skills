@@ -1,0 +1,75 @@
+{
+  "scenes": [
+    {
+      "file": "compositions/01-question.html",
+      "id": "s01",
+      "start": 0,
+      "duration": 5
+    },
+    {
+      "file": "compositions/02-mechanism.html",
+      "id": "s02",
+      "start": 5,
+      "duration": 8
+    },
+    {
+      "file": "compositions/captions.html",
+      "id": "cap",
+      "start": 0,
+      "duration": 13,
+      "captions": true
+    }
+  ],
+  "srt": "film.srt",
+  "script": "script.md",
+  "claims": [
+    "claims.md"
+  ],
+  "numbers_ok": [],
+  "numbers_banned": [],
+  "banned_words": [
+    "seamless",
+    "powerful",
+    "blazing"
+  ],
+  "banned_on_screen": [],
+  "sql_dir": null,
+  "mono_not_sql": [
+    "illustrative names and counts",
+    "Dr. A",
+    "Dr. B",
+    "Dr. C",
+    "Dr. D",
+    "Dr. F"
+  ],
+  "must_show": [
+    {
+      "text": "Who shares patients with Dr. A?",
+      "scene": "s01",
+      "from": 0,
+      "to": 5,
+      "hold": 3.0
+    },
+    {
+      "text": "The index goes straight to the row.",
+      "scene": "s02",
+      "from": 1.0,
+      "to": 8,
+      "hold": 1.0
+    }
+  ],
+  "label_div": 36,
+  "caption_div": 20,
+  "allowed_eases": [
+    "power2.inOut",
+    "none"
+  ],
+  "duration_set": [
+    0.25,
+    0.75,
+    1.4
+  ],
+  "hold_window": 20,
+  "hold_min": 1.5,
+  "transcript": null
+}

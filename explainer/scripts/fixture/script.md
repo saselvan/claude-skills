@@ -1,1 +1,1 @@
-Who shares patients with Dr. A? One walk, 4 hops. Each hop is one CTE.
+Who shares patients with Dr. A? One walk takes four hops in one statement. Each hop is one CTE inside the statement.

@@ -1,0 +1,7 @@
+{
+  "assertions": [
+    { "kind": "appearsBy", "selector": "#s01-q", "bySec": 0.1 },
+    { "kind": "appearsBy", "selector": "#s02-head", "bySec": 7.0 },
+    { "kind": "staysInFrame", "selector": "#s02-grid" }
+  ]
+}

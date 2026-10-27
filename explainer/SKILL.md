@@ -1,136 +1,145 @@
 ---
 name: explainer
-description: Make clean, interactive explainer graphics and short motion pieces that win senior architects' mind share for Lakebase and Databricks, where the motion itself shows how the mechanism works (an exact lookup snaps, a vector search flows by distance, a branch shares its parent's blocks). Use when the user wants an explainer, an animated or interactive graphic, a demo film, a "show how X works" piece, or a visual for a blog, deck, or customer conversation about any part of the platform. Model-neutral; Claude, Cursor or Gemini can follow it. Output is one HTML file that HyperFrames can record.
+description: Make short, deterministic, code-driven explainer films and animated graphics for technical systems, where the motion itself shows how the mechanism works (an exact lookup snaps, a nearness search flows by distance, a shared thing points back to one source). Use when the user wants an explainer, a demo film, a "show how X works" piece, an animated or interactive graphic, or a visual for a blog, deck or customer conversation about any system, platform or product. Model-neutral. Output is one HyperFrames project (a root composition, one scene file per beat) that renders to MP4.
 ---
 
 # Explainer
 
 The motion explains the concept. A viewer should know what *kind* of thing happened before reading a word.
 
-This skill inherits three others, which you read first: house-style (the look), motion-style (timing, easing, the long take), and writing-style (every word on screen). For a still architecture diagram, use the `diagram` skill instead. Where this fits: atelier's "The skill map". design-brief comes before this skill (the bar, the claims, the message hierarchy); HyperFrames comes after it (the build).
+This skill decides what is true, what the motion means, and when the owner is asked. HyperFrames decides how it is built: read `/hyperframes` (its `references/format.md`, `motion.md`, `review.md`, `spec.md`, `sound.md`) and `/hyperframes-cli` for the build, through `references/playbook.md` here. Three of the owner's skills govern the look, the clock and the words and win where they differ: house-style, motion-style, writing-style. Read them first if they are installed; if they are not, `references/playbook.md` §0 lists the numbers this skill needs from them.
 
-These are heuristics, not rules. The worked examples show the reasoning; reason the same way for anything new, and look things up while you work.
+Every rule below either names its check (a script, a flag, or a count a reviewer can do) or is marked *taste*. A rule with neither does not belong here: an A/B test (`references/precedents.md`, 2026-10-21) showed advice-shaped rules did not move the output.
+
+## Audience and register
+
+Default audience: senior engineers and architects. They want state boundaries, latency, storage layout and failure containment, and they distrust marketing. `BRIEF.md` can name another audience; the method does not change.
+
+- No clouds, gears, rockets, glowing brains, stock icons. *Check:* the architect test (taste).
+- No guess-first, quiz or "you draw it" moves. Interaction lets the viewer inspect: follow one record, turn a real setting, open the receipt behind a claim.
+- Say the simplification on screen ("1,024 dimensions, shown as 3"). *Check:* `numbers` and `words` in `scripts/check_film.py`.
 
 ## Look
 
-- **Default: paper.** A light ground, thin grey 1 px lines, a lot of empty space, and one highlight per frame. This is the information-design tradition: Tufte's restraint, a Swiss grid, Distill-style figures. Bartosz Ciechanowski's essays and Hrishi Olickel's talks are recent examples of it, not its source. Use it for blogs, decks, explainers and anything an architect reads.
-- **Film: dark.** When the piece starts as a movie, use a dark ground with brighter accents. The owner's ruling (2026-10-20): "A and like you said B for movies if we start with a movie in mind."
-- Both grounds use the house-style palette and the same colour-per-concept identity, so a piece can move between them.
-- **What makes a film look finished** (what 3Blue1Brown gets from Manim, borrowed without it): strong colours on the dark ground, one colour per system plus one bright "what happens now" colour; very few marks on screen; one shape turning into the next; eased timing with holds; large type; the voice carries the sentences. No glow (a glow is a blur, and motion-style bans blur in films): use a solid ring or a thicker stroke. No 3D unless a dimension carries data.
+Two registers, both on the house-style palette and type, one colour per concept so a piece can move between them.
 
-## The audience
+- **Paper** (default for blogs, decks, anything read): light ground, thin 1 px lines, empty space, one highlight per frame.
+- **Film** (when the piece starts as a movie): dark ground, one colour per system plus one bright "what happens now" colour, very few marks, large type, one shape becoming the next.
 
-Senior enterprise architects. They want to see state boundaries, latency, storage layouts, and failure containment. They distrust marketing.
+Both: no glow, blur, gradient, shadow, 3D or camera move (motion-style; HyperFrames' `data-motion-blur` and blur-based transitions stay off). *Check:* `hyperframes lint`, the `ease-presentation` check, a greyscale still.
 
-- No clouds, gears, rockets, glowing brains, or stock icons.
-- No guess-first, quiz or "you draw it" moves; they are disrespectful to this room. Interaction lets the viewer *inspect*: follow one record, turn a real setting, open the receipt behind a claim.
-- Say the simplification out loud ("1,024 dimensions, shown as 3"). Architects trust a flagged convenient lie and punish a hidden one.
+## Method: four phases, two owner stops
 
-## Method
+Time boxes are for a film of 90 s or less. A phase that runs over stops and asks what to cut; it does not keep going. The owner is interrupted at the two stops and when a box is blown, not otherwise.
 
-1. **Write the claim and the interaction thesis.** One sentence each. The claim says what the viewer should believe afterwards. The thesis says how the motion feels: "One question, two paths: one guesses, one checks. Then the camera pulls back to show that it all lives in one place."
-2. **Find what each thing physically is.** For every mechanism on screen, ask:
-   - Exact or approximate?
-   - Discrete or continuous?
-   - Copied or shared?
-   - Instant, or over time?
-   - Who may see it?
-   - What changes, and what stays?
+| Phase | Output | Box |
+|---|---|---|
+| **0 Plan** | claim; arc; script as spoken sentences; `STORYBOARD.md` with one row per beat (event, physical cause, lit vs dimmed, grammar entry, headline / secondary read / caption, quoted copy, rhythm word, handoff in and out, do-not lines); the number set; `BRIEF.md`, `SPEC.md` | 90 min |
+| **1 Pose** | `tokens.css`, the hero frame of each scene in static CSS, one stills board from one `snapshot` run, the text review (claims, domain truth, skeptic) | 60 min, then **owner stop 1** (text + board) |
+| **2 Animate** | scene by scene; each scene's checks pass before the next starts | 3 h |
+| **3 Assemble** | voice and `.srt`, root timeline, full checks, `--quality draft` render, contact sheet with the builder's own seen/fixed list | 90 min, then **owner stop 2** (the cut) |
+| **4 Deliver** | one scene file per owner note, delivery render, second layout, `precedents.md` entry | the rest |
 
-   Then check the answers against the real system: read `~/.claude/docs/lakebase-platform-facts.md` (Part 1 is verified), then the docs or Glean. The picture must be true. If a branch shares blocks, never draw a copy.
+### 0 Plan
 
-   If you cannot reach those sources (another model, another machine), state no absolute number and no mechanism detail you cannot cite. Use `[verify]` placeholders or neutral notation (`t₀ + Δt`, `LSN n`), and list every one of them in your report.
-3. **Choose the motion from the answers.** See `references/grammar.md` for worked examples and the visual variables behind them. Exact things snap; approximate things flow and fall off with distance; shared things point back to one source; restricted things go dark in place.
-4. **Find references by theme.** Pick 2 or 3 pieces from the schools in `references/schools.md` (Information is Beautiful by topic, NYT, The Economist, Distill, Bret Victor, Bartosz Ciechanowski, Red Blob Games, 3Blue1Brown). For each, say exactly what you borrow. Then run the **bar fit check**: put each reference next to the owner's rulings for that beat (no camera move, no rerun, a fixed number set). If a reference needs something a ruling forbids, take a new reference or ask the owner now, before any build or judging round. Save the real frames of each reference in a `refs/<name>/` folder, with the URL and the time; a reference you cannot open is dropped, never described.
-5. **Storyboard before code, as the HyperFrames hand-off.** This skill decides what is true and what the motion means; the HyperFrames skills (`~/.agents/skills/hyperframes`, `general-video`, `hyperframes-core`) decide how it is built. The seam is two files at the project root:
-   - `BRIEF.md` (format: `~/.agents/skills/hyperframes/references/brief-format.md`): `workflow: general-video`, `flow: companion`, `storyboard: yes`, `message:` the claim from step 1, `audience:` senior architects. `## Notes` holds the negatives and the honesty gate's number set. With BRIEF.md present, HyperFrames asks no brief questions.
-   - `STORYBOARD.md`, one row per beat, with timestamps: the event, its cause, what is lit vs dimmed, the grammar entry used, the on-screen copy **in quotes** (quoted text renders verbatim; unquoted text gets paraphrased), the technique (a named registry block, if one fits), and the exact "do not" lines.
-   For architect pieces, start from `references/sequences.md`.
-6. **Review the text, before any render.** This is the only panel. Run it on `STORYBOARD.md` and the script, not on a cut. Three seats: claims (every number and mechanism against the claim register), domain truth (a DBA or the platform owner for that system), and an architect (the skeptic). Most of the v5 film's HIGH findings could be seen in its text. Fix what they find. Then pose each frame as a still (no motion) on one board, and show the owner the text and the board together; wait for an OK (owner stop 1). Stills cost seconds to change; a cut costs minutes (`references/hyperframes-playbook.md` §1-2).
-7. **Build with HyperFrames, by `references/hyperframes-playbook.md`.** It holds the command prefix, the seek-safe GSAP rules, the craft numbers and the voice path. Copy `starter-v5/` (see its README) and make the posted layout first; it is usually LinkedIn's 4:5. Follow `hyperframes-core` for the composition contract, and keep `npx hyperframes preview` open while you iterate. A change made without the preview is a guess. Two rules are this skill's own:
-   - Repeated structure (rounds, pages, systems) comes from a data list at the top, so N changes in one place.
-   - Measure text positions once at load, before any transform runs.
-8. **Check with code, before the first render.** Fill in the film's `checks.json` and run `scripts/run_checks.sh <film-dir>` (see `scripts/README.md`). It checks numbers, words, SQL, captions, text size by frame height, overlap and text left hidden, then `hyperframes lint` and `check`. Render only when it exits 0. Look at a contact sheet yourself, then run the taste checks.
-9. **Show the first full cut** (owner stop 2). Fix what the owner names, re-run the checks, render, and present.
-10. **Record the verdict.** Add the owner's words to `references/precedents.md`.
+1. **Claim and thesis**, one sentence each. The claim is what the viewer believes afterwards; the thesis is how the motion feels.
+2. **What each thing physically is.** For every mechanism: exact or approximate; discrete or continuous; copied or shared; instant or over time; who may see it; what changes and what stays. Then check against the real system: `references/domains/<domain>.md` (facts marked verified), then docs. The picture must be true. No facts file for this domain: no absolute number and no mechanism detail you cannot cite; `[verify]` placeholders, listed in the report.
+3. **Motion from the answers**: `references/grammar.md`. Exact things snap; approximate things flow and fall off with distance; shared things point back to one source; restricted things go dark in place.
+4. **Arc.** Question → the usual tax (one beat, struck through) → the mechanism (the peak, about 60% of the time) → the receipt and the claim. The concession, if any, is one beat before the end, never the end. *Check:* the last caption states the claim.
+5. **Script as speech.** Every caption is a sentence with a subject and a verb; 6–11 words, mean about 8; no label strings or middots in the caption band (evidence labels sit beside their number, small, mono). Third person for anything posted; "you" only in a cut for people the owner has met. No wit from the vendor's seat. One sentence of plain relief after the densest beat ("That is the whole trick."). *Checks:* `fragments`, `sentence-length`.
+6. **Rhythm.** Each beat gets one word: `build`, `HOLD`, `peak`, `settle`, `breath`. Exactly one `peak`. At least one `HOLD` of 1.5 s or more per 20 s. A `breath` is 2.5 s at most (HyperFrames `sweep_static` fails 3 s of no change). *Checks:* `peak`, `hold`, `metronome`.
+7. **References by theme**, two or three from `references/schools.md`; say what each lends. Run the bar-fit check: a reference that needs something a ruling forbids is replaced now. Save real frames in `refs/<n>/` with the URL; a reference you cannot open is dropped.
+8. **Write the seam files.** `BRIEF.md` and `STORYBOARD.md` from `starter/` (formats: `/hyperframes` `references/storyboard.md`, `spec.md`). Quoted copy renders verbatim; unquoted copy gets paraphrased.
 
-## Budget
+### 1 Pose
 
-v5 (2026-10-21 to 22) took two days for a 90 s film. The owner: "This is extremely unacceptable." The scope grew, the panel ran on a render instead of the text, and the work was cut into 7 tickets and 7 worktrees.
+**Hand-build the mechanism; take the furniture from the catalog.** The beat that carries the idea (the grammar row:
+a pointer snapping to a row, rings spreading by distance, a track forking at one LSN) is hand-built; it is why the
+film exists. Code panels, counters, captions, charts, lower thirds, flowcharts and seams come from
+`hf-safe.sh catalog --query "<what it does>" --json`, installed with `add`, reskinned to `tokens.*` and stripped of
+their demo copy and default eases. Each storyboard row names its `technique:` as `hand: <grammar entry>` or a block
+name. *Check:* the `technique:` line exists on every row; a block's defaults still pass `ease-family` and the
+banned-defaults list.
 
-- A film of 90 s or less gets 1 day.
-- It is one composition, one worktree and one preview loop. A film is not a ticket chain.
-- Make the posted layout first. The second layout comes after the first is posted.
-- The owner stops at most twice: after the storyboard text and its stills board, and after the first full cut.
-- Write a time for each stage before you start: text, build, checks, cut. If a stage goes over its time, stop and ask the owner what to cut.
+Scenes are the unit: `compositions/NN-<name>.html`, one per beat, `<template>`-wrapped, host id = inner id = timeline key, sharing `tokens.css` and `tokens.js`. Build each scene's fullest moment in static CSS with real copy and fonts and no motion. Shoot every still in one run (`playbook.md` §2) onto one board. Run the text review on `STORYBOARD.md` and the script, not on a cut. Show the owner the text and the board together: "which frames change?" Re-pose only those.
 
-## Heuristics
+### 2 Animate
 
-- **One concrete case first, then the system.** A real question, a real record, a real failure. Zoom out only after the case has landed (Bret Victor's ladder of abstraction).
-- **Follow the data.** Track one record or one query through every step. The viewer's eye rides it.
-- **One concept, one look, everywhere.** A page, a product or a source keeps its colour and shape in every frame. Change the look only where the meaning differs.
-- **Show progress, not repetition.** If a loop runs N times, each round must leave something visible behind: a page lit, a clause added, a gap closed. Never draw a circle the viewer watches go round.
-- **The cause is on screen.** If a step fails, the viewer sees why (a claim whose thread hangs loose, a page not yet read) before the fix starts.
-- **Physics only where it is the real math.** Vector space is real geometry; a Pareto frontier is real. Never invent physics for decoration.
-- **Keep motion on separate axes when flows run together.** Writes inside a database move vertically, within its grid. Syncs and change streams (synced tables, CDF) move horizontally, in their own channels. Two flows on one axis become a traffic jam.
-- **Latency is distance; cost is size; risk is the blast radius.** Short tight paths for in-platform calls, long multi-hop spans for pipelines and external services.
-- **Grow the diagram in place.** Add panels next to the last one, as a speaker builds a whiteboard drawing. Do not replace the whole screen.
-- **One idea fills the frame.** The panel that carries this beat grows large in place; the other panels shrink to small context or leave, and come back when they matter. Resize the panels in place; motion-style's comfort rules apply, and motion always serves the story. Four equal panels on screen make every mark small. Check: the main panel covers about 60% of the frame or more; each context panel covers 15% or less. When the beat is about how parts connect, the whole map is the one idea: keep it whole (the A/B result in `references/precedents.md`).
-- **Show one thing becoming the next.** Prefer a continuous change (a row in the stripes becomes a dot, two lines merge into one count) to lighting up or fading in. A cut or a fade loses the cause. Check: in the motion strip, the main object of the end frame is already on screen in the start frame, and you can name the element that changed.
-- **Plan for a voice.** Write the beats as if someone narrates them. The screen carries the picture and a few words; sentences belong to the voice or the caption track, not the frame. Check: count labels on marks apart from sentences. A frame has one sentence at most (the caption); a label has 4 words or fewer.
-- **The headline states the finding**, as The Economist does. "One copy of the data, one set of permissions." Not "Architecture overview".
-- **Label every new symbol the first time it appears**, directly on it ("sync queue", "backed up: data downstream is stale"). An unlabelled stack of blocks reads as a bar chart. After the first time, the symbol can stand alone.
-- **Sparse.** Every mark carries meaning (Tufte). If removing an element makes the frame better, it stays removed.
+By `references/playbook.md` §3–4. Inline for up to about six scenes. Beyond that, two or three scenes per worker in one wave; each worker reads only its packet (`STORYBOARD.md` rows, `tokens.*`, the handoff states) and writes only its own scene file. In Claude Code the wave is the `blackboard` skill. After each scene: `scripts/run_checks.sh <film> --scene NN`. A fix round touches one scene file and reruns that scene; after two fix rounds on one scene, stop and show the owner.
+
+### 3 Assemble
+
+Voice (`playbook.md` §6), `.srt` from the same script, root timeline, `scripts/run_checks.sh <film>` all green, `check --json` with `browserSkipped:false`, one draft render, `scripts/contact_sheet.py`. The builder looks at the sheet, lists what it saw (overlap, repeated text, a caption naming something not in frame, faint scope text), fixes, re-renders, and puts the seen/fixed list in the report. Then owner stop 2.
+
+### 4 Deliver
+
+One owner note → one measurable change → one scene file, recorded in the storyboard row. Delivery render. Second layout only after the first is posted. Owner's verdict into `references/precedents.md`; `recipe freeze` so the next film starts from this one (`playbook.md` §8).
+
+## Heuristics (each with its check)
+
+- **One concrete case first, then the system.** *Check:* beat 1 is a real question in a person's words.
+- **Follow the data.** One record or query rides through every step. *Check:* name the element on screen in every beat.
+- **One concept, one look.** A source or product keeps its colour and shape everywhere. *Check:* `tokens.css` has one colour per system, and `words` bans synonyms for a named thing.
+- **Show progress, not repetition.** Each round leaves something behind. *Check:* no `repeat` on anything but a finite effect.
+- **The cause is on screen** before the fix starts. *Check:* in each beat's row, the "physical cause" column names a visible element.
+- **Physics only where it is the real math.** *Taste.*
+- **Separate axes for flows that run together** (writes vertical, syncs horizontal). *Check:* storyboard row.
+- **Latency is distance; cost is size; risk is the blast radius.** *Check:* storyboard row.
+- **Grow the diagram in place**; the panel that carries this beat covers about 60% of the frame, context panels 15% or less, unless the beat is about how parts connect, in which case the whole map stays whole. *Check:* `snapshot` at the beat midpoint, measured.
+- **One thing becomes the next.** The end frame's main object is already on screen at the start, and you can name the element that changed. *Check:* `crossing`.
+- **Plan for a voice.** The screen carries the picture and a few words; sentences belong to the caption track. A label is four words or fewer. *Check:* `words` (label length), `text-size`.
+- **The headline states the finding** ("One copy of the data, one set of permissions."), the secondary read holds labels and metrics, the caption says what it means; headline and caption never say the same thing. *Check:* `hierarchy`.
+- **Label every new symbol the first time it appears**, on the symbol. *Check:* storyboard row lists first appearances.
+- **Sparse.** If removing a mark improves the frame, it stays removed. *Taste.*
+
+## Motion (the clock is motion-style's)
+
+- Shape moves about 0.75 s; anything carrying words 1.4 s; small state changes 0.25 s. Three sizes, no others. *Check:* `duration-set`.
+- Presentation eases symmetrically: `EASE.move` = `power2.inOut` for moves and resizes, `EASE.settle` = `power2.inOut` for colour drains and opacity. Linear only for the geometry of an exact event: an edge drawing at constant speed, a pointer switching, a row lighting on one frame. Never on opacity, colour, border, fill or stroke colour, clip-path reveals of text. *Checks:* `ease-presentation`, `ease-family`.
+- Things that belong together move together. Stagger only where order carries meaning, about 50 ms a step, the whole stagger under 1 s. An effect follows its cause immediately. *Check:* `overlap` (reports serialised cause-effect pairs; a judgement, not a gate).
+- A landed title is dead still. No breathing, floating or pulsing. *Check:* `hold`, `check --json` has no `keepsMoving` assertion on titles.
+- Numbers roll; they never count through values that did not happen. Captions roll as whole lines at 1.4 s.
+- Something crosses every beat boundary; where a beat enters a new element, the element fills with its colour, holds 0.6 s, then a 0.5 s crossfade. One hard cut per film at most, on purpose. *Checks:* `crossing`, `check --at-transitions`.
+- Frame 0 is the question, settled; the first 3 s work with no sound. *Check:* `must_show` row for beat 1 from 0 s.
+- Words travel with their shapes: text arrives with the element it belongs to, never a beat after. *Check:* `keyframes --shot` of one headline and its panel on one strip.
 
 ## Honesty gate (non-negotiable)
 
-- Every number on screen cites a source: a verified fact, a doc, or a logged run. A number without one is replaced or cut. Placeholder numbers in a storyboard are marked `[verify]`.
-- When the owner has ruled which run or result set to use, every number on screen comes from that set. A cited number from another set fails the gate. Check each number against the ruling, not only against its source.
-- Text on screen meets house-style's minimum sizes at 1080p. Check it on the still at 100%, not on a scaled contact sheet.
-- A comparison's "before" is the real path with one switch off, never a filtered or edited copy (`~/.claude/rules/prompt-why-first.md`, "Comparisons protect their own honesty").
-- A scripted, mocked or illustrative run is labelled as such on screen. A hero answer that claims to be the product comes from a real-model run.
-- Another model's description of a video, paper or product is a lead, not a fact. Check it before it shapes a claim.
+- Every number on screen or in the `.srt` is in a claims file. One without is replaced or cut; a storyboard placeholder is `[verify]`. *Check:* `numbers`.
+- When the owner has ruled which result set to use, every number comes from that set. *Check:* `numbers_banned` holds the other set.
+- A comparison's "before" is the real path with one switch off, never a filtered copy; a named scenario names the question, never the expected result; a hero answer comes from a real run or is labelled scripted on screen (`prompt-why-first.md`, "Comparisons protect their own honesty").
+- Code rows on screen are pieces of real lines. *Check:* `sql`.
+- Another model's description of a video, paper or product is a lead, not a fact.
+- Text meets the floors at 1080p on the still at 100%, not on a scaled sheet. *Check:* `text-size`.
 
-## Taste checks
+## Keys and uploads
 
-- **5-second test:** is the claim clear in 5 seconds?
-- **Greyscale:** emphasis survives without colour.
-- **The architect test:** would a principal engineer wince at any frame? Clouds, vague arrows and uncited numbers make them wince.
-- **Take one away:** remove one element. If the frame improves, keep it removed.
-- **Mechanism test:** pause on any frame. Can you say which real operation it shows, and is the motion true to it?
-- The house-style and motion-style checks, then the owner's baselines (the tomorrow test and the joy test).
+- Nothing of the film (a frame, the script, a voice) goes to an outside AI service unless the owner says so for that
+  film: `snapshot` runs with `--describe false`, `capture` with `--skip-vision`, and the vision and voice keys are
+  unset for every command (`scripts/hf-safe.sh`). The owner's words, 2026-10-26: the rule was always about Gemini and
+  the API keys, not about the network.
+- The default voice is local Kokoro through `hyperframes tts`; word timings are a local `hyperframes transcribe`;
+  Mac `say` for a scratch pass. A HeyGen voice is the owner's pick, in words, per film.
+- `publish` and cloud renders (`cloud`, `lambda`, `cloudrun`) upload the project: asked for first. `feedback` sends a
+  report to HeyGen: off.
+- Everything else (`add`, `catalog`, `skills update`, `upgrade`, `init`, `usage`, model and font downloads) is
+  ordinary package traffic and runs without asking.
+- The probe still blocks and reports any network request the composition itself makes, so every font and asset is
+  local and the render is reproducible on another machine. *Checks:* `network`, `fonts`, `transcript`.
 
-## Judging by other models (only if the owner asks)
+## Taste checks, after the code checks
 
-- Blind judges run only when the owner asks for them. The text review in Method step 6 is the default panel.
-- Judging costs the most. The v2 film loop ran 4 h 47 min with 2 judges per beat per round. The owner: "I know Opus 5.5 is the dude for motion graphics but I'll need to make the other parts less expensive". When the owner asks, judges run once, at the end, on the whole sheet; per-beat rounds only for the beats that fail.
-- Judges come from other model families. Stamp the judge's model id into each pack and each answer file.
-- Show every pair in both orders, in fresh runs. GPT-5.6 Sol picked the second sheet in 28 of 31 answers (A/B, 2026-10-21); count its answers, but give it little weight. Use controls that swap with the order.
-- When both judges name the same gap, fix it without asking. When they split, the owner decides; write the tiebreak rule before round 1.
-- A heuristic counts only if blind judges can see it. A rule that made no difference in a blind test gets a concrete check, or it goes.
-- Options for the owner have names, not letters ("shrink-walk", "keep-split"). Repeat the chosen name back before you act on it.
-
-## Nothing is uploaded without the owner's OK
-
-- Downloads are fine: fonts, packages, a HyperFrames browser. Uploads are not: no frame, file, text or voice goes to an outside service, and no agent posts anything. The owner does every upload.
-- Download each font family in the font stack and load it with a local `@font-face` (the starter does this). A font that is not loaded falls back to another font, and the text sizes and checks are then wrong.
-- Some HyperFrames commands call outside services. `hyperframes snapshot` sent a frame to Gemini and installed a package without asking (2026-10-21), because `GEMINI_API_KEY` was set. Run it as `env -u GEMINI_API_KEY npx hyperframes snapshot ...`, and use `--skip-vision` with `capture`.
-- A voice or music from `media-use` can call an outside service too. Use a local scratch voice (Mac `say`) for timing. The final voice is the owner's pick, in words: "my own voice" or "a computer voice".
+5-second test; greyscale; the architect test; take one away; the mechanism test (pause anywhere and name the real operation); then the owner's baselines, the tomorrow test and the joy test. Blind judges run only when the owner asks, once, on the whole sheet, from another model family, in both orders.
 
 ## Output
 
-- One self-contained HTML file, 1920×1080, with a data list at the top for the parts that repeat, plus `BRIEF.md` and `STORYBOARD.md`.
-- The rendered MP4 and a contact sheet of stills (one frame per beat).
-- The storyboard and the sources for every number, next to the file.
-- **For a film that is posted** (LinkedIn plays it muted): a narration script and an `.srt` subtitle file made from the same script. The first 3 s work with no sound: no blank frames, the question on screen at frame 0.
+A HyperFrames project: `index.html` (root, scene hosts, caption track, audio), `compositions/*.html`, `tokens.css`, `tokens.js`, `BRIEF.md`, `STORYBOARD.md`, `SPEC.md`, `script.md`, `claims.md`, `checks.json`, `<root>.motion.json`, the `.srt`, the rendered MP4, the contact sheet, and `REVIEW.md` by following /hyperframes references/review.md over snapshot --at stills. Posted layout first (usually 4:5 for LinkedIn, muted, captions burned in and the `.srt` alongside, a thumbnail from frame 0).
 
 ## References
 
-- `references/grammar.md`: mechanism → physical meaning → motion, across the platform, plus Bertin's visual variables.
-- `references/sequences.md`: the architect argument (the "two-world tax") and four storyboards (unify, branch, recover, remember).
-- `references/schools.md`: the schools and creators to draw on, and the teaching moves seen in 3Blue1Brown and Hrishi Olickel.
-- `references/precedents.md`: pieces made so far and the owner's verdicts.
-- `references/example-v6.html`: a working HyperFrames composition (paper look) that follows the build contract.
-- `starter-v5/`: the v5 film as a starter (dark look, panels, code panel, caption track, local fonts). Copy it for a new film.
-- `scripts/`: the code checks and `run_checks.sh`, pointed at a film's `checks.json`.
-- `references/hyperframes-playbook.md`: how to use HyperFrames in one loop (commands, seek-safe GSAP, craft numbers, voice, render), with its research notes in `references/hyperframes-research/`.
+- `references/playbook.md`: the build with HyperFrames, one loop, with every command through `hf-safe.sh`.
+- `references/grammar.md`: mechanism → physical meaning → motion, generic. `references/domains/databricks.md`: the platform rows and the verified facts pointer. Add a domain as one file.
+- `references/schools.md`, `references/precedents.md`: references by theme; pieces made and the owner's verdicts.
+- `starter/`: a two-scene project in the scene structure, with the templates and `scene-harness.html`.
+- `scripts/`: `run_checks.sh`, `check_film.py`, `film_probe.py`, `check_captions.py`, `check_transcript.py`, `contact_sheet.py`, `hf-safe.sh`, `selftest.sh`, `cleanup.sh`. Keys of `checks.json`: `scripts/README.md`.
+- `MIGRATION.md`: the one-time steps for Claude Code (clean the folder, confirm the installed HyperFrames skill set and version, move v5 into `starter/` shape).

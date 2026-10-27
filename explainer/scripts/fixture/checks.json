@@ -1,12 +1,64 @@
 {
-  "compositions": [{"dir": "film", "srt": "film.srt"}],
+  "scenes": [
+    {
+      "file": "compositions/01.html",
+      "id": "s01",
+      "start": 0,
+      "duration": 4.5
+    },
+    {
+      "file": "compositions/02.html",
+      "id": "s02",
+      "start": 4.5,
+      "duration": 4.5
+    },
+    {
+      "file": "compositions/cap.html",
+      "id": "cap",
+      "start": 0,
+      "duration": 9,
+      "captions": true
+    }
+  ],
+  "srt": "film.srt",
   "script": "script.md",
-  "claims": ["claims.md"],
+  "claims": [
+    "claims.md"
+  ],
   "numbers_ok": [],
-  "numbers_banned": ["1,615,105"],
-  "banned_words": ["seamless", "traversal"],
-  "banned_on_screen": ["query"],
+  "numbers_banned": [
+    "1,615,105"
+  ],
+  "banned_words": [
+    "seamless",
+    "traversal"
+  ],
+  "banned_on_screen": [
+    "query"
+  ],
   "sql_dir": "sql",
   "mono_not_sql": [],
-  "must_show": [{"text": "788 seconds from first check to served graph.", "from": 3, "to": 6, "hold": 1.0}]
+  "must_show": [
+    {
+      "text": "788 seconds from first check to served graph.",
+      "scene": "s02",
+      "from": 1.0,
+      "to": 4.5,
+      "hold": 1.0
+    }
+  ],
+  "label_div": 36,
+  "caption_div": 20,
+  "allowed_eases": [
+    "power2.inOut",
+    "none"
+  ],
+  "duration_set": [
+    0.25,
+    0.75,
+    1.4
+  ],
+  "hold_window": 20,
+  "hold_min": 1.5,
+  "transcript": "transcript.json"
 }

@@ -1,0 +1,25 @@
+<template id="cap-template">
+  <div data-composition-id="cap" data-width="1080" data-height="1350">
+    <div class="band" id="band" data-caption-band></div>
+    <style>
+      [data-composition-id="cap"] { background: transparent; }
+      [data-composition-id="cap"] .band { position: absolute; left: 60px; top: 1110px; width: 960px; height: 200px; }
+      [data-composition-id="cap"] .cue { position: absolute; left: 0; right: 0; bottom: 0; font-size: 68px; line-height: 1.1; }
+    </style>
+    <script>
+      (function () {
+        var band = document.querySelector('[data-composition-id="cap"] #band');
+        var CUES = [[0, 4.5, "One walk takes four hops in one statement."], [4.5, 9, "Each hop is one CTE inside the statement."]];
+        var tl = gsap.timeline({ paused: true });
+        CUES.forEach(function (c, i) {
+          var el = document.createElement("div"); el.className = "cue"; el.textContent = c[2]; band.appendChild(el);
+          gsap.set(el, { opacity: 0, y: 8 });
+          tl.fromTo(el, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: DUR.words, ease: EASE.move, immediateRender: false }, c[0]);
+          if (i < CUES.length - 1) tl.to(el, { opacity: 0, y: -8, duration: DUR.tick, ease: EASE.settle }, c[1] - DUR.tick);
+        });
+        tl.set({}, {}, 9);
+        window.__timelines["cap"] = tl;
+      })();
+    </script>
+  </div>
+</template>

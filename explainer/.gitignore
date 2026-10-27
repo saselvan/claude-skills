@@ -1,3 +1,5 @@
 __pycache__/
+*.pyc
+.DS_Store
 checks-out/
-*.bak-*
+.probe-*.html
