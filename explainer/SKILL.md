@@ -140,6 +140,6 @@ A HyperFrames project: `index.html` (root, scene hosts, caption track, audio), `
 - `references/playbook.md`: the build with HyperFrames, one loop, with every command through `hf-safe.sh`.
 - `references/grammar.md`: mechanism → physical meaning → motion, generic. `references/domains/databricks.md`: the platform rows and the verified facts pointer. Add a domain as one file.
 - `references/schools.md`, `references/precedents.md`: references by theme; pieces made and the owner's verdicts.
-- `starter/`: a two-scene project in the scene structure, with the templates and `scene-harness.html`.
+- `starter/`: a two-scene project in the scene structure, with the templates (the probe harness is `scripts/scene-harness.html`, never copied into a film).
 - `scripts/`: `run_checks.sh`, `check_film.py`, `film_probe.py`, `check_captions.py`, `check_transcript.py`, `contact_sheet.py`, `hf-safe.sh`, `selftest.sh`, `cleanup.sh`. Keys of `checks.json`: `scripts/README.md`.
 - `MIGRATION.md`: the one-time steps for Claude Code (clean the folder, confirm the installed HyperFrames skill set and version, move v5 into `starter/` shape).
