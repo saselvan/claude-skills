@@ -87,6 +87,11 @@ For anything with a first screen, a sequence, or motion (a demo page, a deck, an
 3. **A greyscale wireframe** that follows the frames. Boxes and words only, no styling.
 4. **A cut list** when an older version exists: every element is kept, moved to a drawer or deleted, with one reason each.
 
+**Choose the arc before the frames, and name its source.** Duarte's sparkline (house-style, "Narrative shapes") is one choice, not the default. When the room must learn an idea before it can judge the product, use a **teaching arc**: start from what the audience already knows, show where it stops, then close that gap with the new idea, made concrete on one real case. Sources (principles from knowledge; do not quote or cite pages from memory):
+- Chip Heath and Dan Heath, *Made to Stick*: anchor the new idea in a schema the audience already holds, open a curiosity gap before giving the answer, and make it concrete with one real example.
+- Grant Wiggins and Jay McTighe, *Understanding by Design*: plan backward from what the audience must understand at the end, and name the evidence that would show they understood.
+In practice: before a product deck on search, teach what search is against what the room knows (a SQL `SELECT` returns rows that match; search returns pages ranked by relevance), then where plain search stops, then the new approach. The is/could-be contrast lives inside each rung. Owner ruling, 2026-10-28 (Nov 6 agentic-search deck): "what I think you're missing is a simple what is Search, contrast it with SQL selects ... and THEN THE WHY AGENTIC Search". Check: the storyboard names its arc and its source, and the first frames teach the concept the claim depends on.
+
 The owner approves the storyboard before the brief goes to the designer. The designer still owns space, type and colour; the storyboard owns order, emphasis and the eye path.
 
 **Stage 3b is done when** every frame traces to the claim, no metric shows two values across frames, and the owner has approved it.
