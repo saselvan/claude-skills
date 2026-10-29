@@ -58,6 +58,23 @@ One entry per piece: the concept, the picture chosen, and the owner's verdict in
 - Verdict: "kinda boring and not creative and still feel like the causality and the sheer improvement Agentic Search gets you and the platform benefit isn't coming through".
 - Lesson: a log is not a story. One hero moment, few words, receipts at the end.
 
+## Graph Kit film v6: the care finder walk, muted first (2026-10-26 to 2026-10-29)
+- Picture: the kit's story on one stage (Delta → Spark SQL → Lakebase, inside Unity Catalog). The followed object is a patient's
+  question, "Who near me treats type 2 diabetes?"; the walk is the care finder app's four hops on the graph the kit builds
+  (words → condition → nearby doctors → co-conditions, keeping doctors with a line to all → similar-practice doctors). A bright mark
+  rides each edge; doctors without all three conditions go dark in place; one doctor lights as the answer. 107.5 s, 4:5, 60 fps, muted.
+- Verdicts: on the computer voice cut in separate takes, "correct mechanically but hardly flows as in these are disjoint sentences with
+  no narrative at all. What is the purpose of adding voice to this video?"; on the muted cut, "much better"; on the hops, "is the
+  language and visuals intuitive to show how the hops happen and what they mean … what exactly the 2 and 3 hops achieve?"; on a caption,
+  "I see whole patient, what is a whole patient, is there a half patient?"; on the framing, "kit just builds the graph bro".
+- Lessons: (1) a voice built from captions sounds like a list; the owner's own voice, written for the ear, comes first (target:
+  LinkedIn muted + Medium). (2) A walk needs a question that takes more than one hop; if hop 1 answers it, the later hops have no reason.
+  (3) Name what each hop gets the viewer, not the SQL rule. (4) Cutting sentences out of one long text-to-speech take leaves the next
+  word's first sound on the ending; record one take per sentence. (5) Never present the app's queries as the kit's own claim.
+- Process: seams with a carried frame hold 0.6 s then crossfade 0.5 s; an owner-ruled exception goes in `checks.json` with a reason
+  (`crossing_ok`), and a check without its reason must fail. `hyperframes check --strict` found what the probe did not (a headline
+  deadline, two code strips overlapping); run it before the render.
+
 ## Standing owner rulings
 - No guess-first or quiz moves: "infantile and disrespectful if a system architect is in the room".
 - References are cues to make the piece better, for example "using 3Blue1Brown to make ideas like Pareto or vectors look nice and associated with physics", and "if you're looking up data in a table as opposed to unstructured data the motion and graphics themselves should make those differences clear".
