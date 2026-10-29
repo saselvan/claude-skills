@@ -36,7 +36,7 @@ LAYOUT_KINDS = ("sliced", "outside-owner", "on-panel", "text-overlap")
 PRESENTATION = {"opacity", "autoAlpha", "color", "backgroundColor", "borderColor", "fill", "stroke", "filter",
                 "boxShadow", "textShadow"}
 # a small verb list beats a parser for a caption's "has a verb" test; extend per film in checks.json: verbs_extra
-VERBS = {"matched", "match", "matches", "switches", "switch", "switched", "is", "are", "was", "were", "be", "has", "have", "had", "goes", "go", "went", "gets", "get", "got", "sits",
+VERBS = {"turns", "turn", "turned", "treats", "treat", "treated", "matched", "match", "matches", "switches", "switch", "switched", "is", "are", "was", "were", "be", "has", "have", "had", "goes", "go", "went", "gets", "get", "got", "sits",
          "sit", "runs", "run", "ran", "reads", "read", "writes", "write", "wrote", "builds", "build", "built", "copies",
          "copy", "copied", "syncs", "sync", "lands", "land", "stays", "stay", "moves", "move", "shares", "share",
          "holds", "hold", "keeps", "keep", "kept", "adds", "add", "drops", "drop", "wins", "win", "answers", "answer",
@@ -369,6 +369,9 @@ def main() -> int:
             # tabs ([data-tab]) and the headline never count: a hard cut must not pass on them alone
             last = set(norm(pa["frames"][-1].get("cross", pa["frames"][-1]["text"])).split()) if pa["frames"] else set()
             first = set(norm(pb["frames"][0].get("cross", pb["frames"][0]["text"])).split()) if pb["frames"] else set()
+            # an owner ruling names the seam ("s12->s13") and needs a crossing_ok_reason; the carry is still drawn
+            if not (last & first) and f"{a['id']}->{b['id']}" in cfg.get("crossing_ok", []) and cfg.get("crossing_ok_reason"):
+                continue
             if not (last & first):
                 probs.append(f"{a['id']} → {b['id']}: no painted text crosses the seam (frame {pa['frames'][-1]['t']:.1f}/{pb['frames'][0]['t']:.1f})")
         rep.out("crossing", probs, "something crosses every scene boundary")

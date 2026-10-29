@@ -63,10 +63,13 @@ the first run; the selftest table is the proof.
   "allowed_eases": ["power2.inOut", "none"], "duration_set": [0.25, 0.75, 1.4],
   "hold_window": 20, "hold_min": 1.5,
   "hierarchy_ok": ["Who shares patients with Dr. A?"], "verbs_extra": [],
+  "crossing_ok": ["s12->s13"], "crossing_ok_reason": "owner ruling, dated, why the seam may carry no bright text",
   "transcript": "assets/voice/transcript.json"
 }
 ```
 
+- `crossing_ok` names a seam (`"sNN->sMM"`) the owner ruled may carry nothing the `crossing` check counts (a dimmed carry);
+  it takes effect only with a non-empty `crossing_ok_reason`. Without the reason the seam stays red.
 - `scenes[].start/duration` are the host clip's root times; `from`/`to` in `must_show` are scene-local seconds.
 - `claims`: the film's claims file and the claim register. `numbers_ok` is for structure numbers (a step count); keep
   it short, each entry is an unregistered claim.
