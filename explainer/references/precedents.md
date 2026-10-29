@@ -71,6 +71,10 @@ One entry per piece: the concept, the picture chosen, and the owner's verdict in
   LinkedIn muted + Medium). (2) A walk needs a question that takes more than one hop; if hop 1 answers it, the later hops have no reason.
   (3) Name what each hop gets the viewer, not the SQL rule. (4) Cutting sentences out of one long text-to-speech take leaves the next
   word's first sound on the ending; record one take per sentence. (5) Never present the app's queries as the kit's own claim.
+- Second layout (16:9, 1920x1080, made from the finished 4:5 in about an hour): move the whole stage to the right at full size
+  (a wrapper with `transform: translate(780px, -200px)`, scoped by scene id: a bare `[data-composition-id] .stage` selector is
+  rewritten by the scene runner and never matches); headline and scene kicker in a left column; captions full width at the bottom.
+  Text keeps its size, so every check passed on the first run. Letterboxing the tall film would have shrunk labels by 20 %.
 - Process: seams with a carried frame hold 0.6 s then crossfade 0.5 s; an owner-ruled exception goes in `checks.json` with a reason
   (`crossing_ok`), and a check without its reason must fail. `hyperframes check --strict` found what the probe did not (a headline
   deadline, two code strips overlapping); run it before the render.
